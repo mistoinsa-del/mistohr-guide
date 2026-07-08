@@ -2,558 +2,139 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="format-detection" content="telephone=no,email=no,address=no" />
-  <title>MISTO HR Assistant V2</title>
+  <title>MISTO HR Assistant V2 · V1 UI</title>
   <style>
-    :root{
-      --navy:#071a33;
-      --navy-2:#0d2a4d;
-      --red:#e3222d;
-      --red-2:#ffedf0;
-      --blue:#edf4ff;
-      --sky:#dbeafe;
-      --mint:#e9fbf4;
-      --yellow:#fff6d8;
-      --paper:#fbfcff;
-      --line:#d8e0ec;
-      --text:#1f2937;
-      --muted:#64748b;
-      --white:#ffffff;
-      --shadow:0 18px 50px rgba(7,26,51,.12);
-      --radius:22px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      background:
-        radial-gradient(circle at top left, rgba(227,34,45,.13), transparent 30%),
-        radial-gradient(circle at top right, rgba(13,42,77,.18), transparent 34%),
-        linear-gradient(180deg,#f6f8fc 0%,#eef3f9 100%);
-      color:var(--text);
-      font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic","Segoe UI",Arial,sans-serif;
-      -webkit-font-smoothing:antialiased;
-      word-break:keep-all;
-    }
-    button,input,textarea,select{font-family:inherit}
-    .app{
-      width:min(1460px,96vw);
-      min-height:calc(100vh - 40px);
-      margin:20px auto;
-      display:grid;
-      grid-template-columns:330px minmax(0,1fr);
-      gap:18px;
-    }
-    .side,.main{
-      background:rgba(255,255,255,.88);
-      border:1px solid rgba(216,224,236,.9);
-      box-shadow:var(--shadow);
-      border-radius:var(--radius);
-      overflow:hidden;
-      backdrop-filter:blur(12px);
-    }
-    .side{
-      display:flex;
-      flex-direction:column;
-      min-height:760px;
-    }
-    .brand{
-      padding:26px 24px 22px;
-      background:linear-gradient(145deg,var(--navy) 0%,#102e55 62%,#173c6a 100%);
-      color:var(--white);
-      position:relative;
-      overflow:hidden;
-    }
-    .brand:after{
-      content:"";
-      position:absolute;
-      width:180px;height:180px;border-radius:999px;
-      border:34px solid rgba(255,255,255,.07);
-      right:-78px;top:-52px;
-    }
-    .logoRow{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
-    .logoMark{
-      width:48px;height:48px;border-radius:16px;
-      background:linear-gradient(135deg,#fff 0%,#f7f7f8 58%,#ffccd1 100%);
-      color:var(--navy);
-      display:grid;place-items:center;
-      font-weight:900;letter-spacing:-.08em;font-size:20px;
-      box-shadow:0 10px 24px rgba(0,0,0,.16);
-    }
-    .logoText{line-height:1.08}
-    .logoText strong{display:block;font-size:20px;letter-spacing:-.04em}
-    .logoText span{display:block;margin-top:5px;font-size:12px;color:#c8d7ea;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-    .brand p{position:relative;z-index:1;margin:22px 0 0;color:#e8eef8;line-height:1.55;font-size:14px}
-    .versionPill{
-      position:relative;z-index:1;
-      display:inline-flex;align-items:center;gap:8px;
-      margin-top:18px;padding:8px 11px;border-radius:999px;
-      background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
-      font-size:12px;font-weight:800;color:#fff;
-    }
-    .dot{width:8px;height:8px;border-radius:99px;background:var(--red);box-shadow:0 0 0 4px rgba(227,34,45,.2)}
-    .sideBlock{padding:18px 18px;border-bottom:1px solid var(--line)}
-    .sideBlock h3{margin:0 0 12px;font-size:14px;letter-spacing:-.02em;color:var(--navy)}
-    .chips{display:flex;flex-wrap:wrap;gap:8px}
-    .chip,.quickBtn,.actionBtn{
-      border:1px solid var(--line);
-      background:#fff;
-      color:#26364b;
-      border-radius:999px;
-      padding:9px 12px;
-      font-size:13px;
-      font-weight:750;
-      cursor:pointer;
-      transition:.18s ease;
-      line-height:1;
-    }
-    .chip:hover,.quickBtn:hover,.actionBtn:hover{transform:translateY(-1px);border-color:#a9bad2;box-shadow:0 8px 18px rgba(7,26,51,.08)}
-    .chip.active{background:var(--navy);color:white;border-color:var(--navy)}
-    .guideList{display:grid;gap:10px;margin:0;padding:0;list-style:none}
-    .guideList li{
-      background:#f8fafc;border:1px solid #e5eaf2;border-radius:15px;
-      padding:11px 12px;font-size:13px;line-height:1.45;color:#40506a;
-    }
-    .guideList b{color:var(--navy)}
-    .privacyBox{
-      margin-top:auto;
-      padding:18px;
-      background:linear-gradient(180deg,#fff7f8 0%,#fff 100%);
-      border-top:1px solid #ffd9de;
-    }
-    .privacyBox h3{margin:0 0 8px;color:var(--red);font-size:14px}
-    .privacyBox p{margin:0;color:#7a3440;line-height:1.5;font-size:12.8px}
-    .main{display:flex;flex-direction:column;min-height:760px}
-    .topbar{
-      min-height:104px;
-      display:flex;align-items:center;justify-content:space-between;gap:18px;
-      padding:24px 26px;
-      border-bottom:1px solid var(--line);
-      background:linear-gradient(180deg,rgba(255,255,255,.94) 0%,rgba(251,252,255,.94) 100%);
-    }
-    .topbar h1{margin:0;font-size:30px;color:var(--navy);letter-spacing:-.055em;line-height:1.14}
-    .topbar p{margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.5}
-    .topActions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
-    .actionBtn.primary{background:var(--red);color:#fff;border-color:var(--red)}
-    .actionBtn.dark{background:var(--navy);color:#fff;border-color:var(--navy)}
-    .workspace{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) 360px;
-      min-height:656px;
-    }
-    .chatWrap{display:flex;flex-direction:column;min-width:0;background:#f8fbff}
-    .notice{
-      margin:18px 22px 0;
-      padding:14px 15px;
-      border:1px solid #cfe0fa;
-      background:linear-gradient(135deg,#f3f8ff 0%,#ffffff 100%);
-      border-radius:17px;
-      color:#36506e;
-      font-size:13.5px;
-      line-height:1.52;
-    }
-    .notice b{color:var(--navy)}
-    .messages{
-      flex:1;overflow:auto;padding:18px 22px 22px;scroll-behavior:smooth;
-    }
-    .msg{display:flex;gap:11px;margin:16px 0;align-items:flex-start}
-    .msg.user{justify-content:flex-end}
-    .avatar{
-      width:36px;height:36px;border-radius:14px;display:grid;place-items:center;
-      flex:0 0 36px;font-weight:900;font-size:13px;
-    }
-    .bot .avatar{background:var(--navy);color:white}
-    .user .avatar{background:#e2e8f0;color:#334155;order:2}
-    .bubble{
-      max-width:min(760px,85%);
-      background:#fff;border:1px solid #e3eaf4;border-radius:20px;
-      padding:15px 16px;box-shadow:0 8px 22px rgba(7,26,51,.06);
-      line-height:1.58;font-size:14.3px;
-    }
-    .user .bubble{background:var(--navy);color:white;border-color:var(--navy);border-top-right-radius:8px}
-    .bot .bubble{border-top-left-radius:8px}
-    .bubble h4{margin:0 0 10px;color:var(--navy);font-size:15px;letter-spacing:-.02em}
-    .user .bubble h4{color:white}
-    .bubble p{margin:8px 0}
-    .bubble ul,.bubble ol{margin:8px 0 0;padding-left:20px}
-    .bubble li{margin:4px 0}
-    .answerGrid{display:grid;gap:10px;margin-top:10px}
-    .answerCard{
-      border:1px solid #e2e8f0;background:#fbfdff;border-radius:16px;padding:12px 13px;
-    }
-    .answerCard strong{display:block;color:var(--navy);font-size:13.5px;margin-bottom:5px}
-    .answerCard.process{background:#f8fbff;border-color:#cfe0fa}
-    .answerCard.warn{background:#fff8f8;border-color:#ffd1d8}
-    .answerCard.ok{background:#f2fbf6;border-color:#c8efda}
-    .answerCard.note{background:#fffaf0;border-color:#f8df9b}
-    .miniTags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
-    .miniTag{font-size:12px;font-weight:800;color:#41546e;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:999px;padding:5px 8px}
-    .quickArea{
-      border-top:1px solid var(--line);background:#fff;padding:14px 18px 16px;
-    }
-    .quickArea .quickTitle{font-size:12px;color:var(--muted);font-weight:800;margin:0 0 9px 4px}
-    .quickBtns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-    .composer{display:flex;gap:10px;align-items:flex-end}
-    textarea{
-      flex:1;min-height:48px;max-height:118px;resize:vertical;
-      border:1px solid #cfd8e6;border-radius:17px;padding:14px 15px;
-      font-size:14px;line-height:1.45;outline:none;background:#fbfdff;color:var(--text);
-    }
-    textarea:focus{border-color:#8fb0de;box-shadow:0 0 0 4px rgba(59,130,246,.1)}
-    .sendBtn{
-      min-width:96px;height:48px;border:0;border-radius:17px;background:var(--red);color:#fff;
-      font-weight:900;cursor:pointer;box-shadow:0 10px 20px rgba(227,34,45,.2)
-    }
-    .sendBtn:hover{filter:brightness(.98);transform:translateY(-1px)}
-    .panel{
-      border-left:1px solid var(--line);
-      background:linear-gradient(180deg,#ffffff 0%,#fbfcff 100%);
-      padding:20px 18px;
-      overflow:auto;
-    }
-    .panelSection{margin-bottom:18px}
-    .panelSection h3{margin:0 0 10px;font-size:15px;color:var(--navy);letter-spacing:-.03em}
-    .flow{display:grid;gap:9px}
-    .flowStep{
-      position:relative;padding:12px 12px 12px 44px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;
-      min-height:50px;
-    }
-    .stepNo{
-      position:absolute;left:12px;top:12px;width:23px;height:23px;border-radius:9px;background:var(--navy);color:white;
-      display:grid;place-items:center;font-size:12px;font-weight:900;
-    }
-    .flowStep b{display:block;font-size:13px;color:#24344c;margin-bottom:2px}
-    .flowStep span{display:block;font-size:12.3px;color:#65758b;line-height:1.35}
-    .caseTable{width:100%;border-collapse:separate;border-spacing:0 8px;font-size:12.5px}
-    .caseTable td{padding:10px 9px;background:#f8fafc;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;vertical-align:top;line-height:1.38}
-    .caseTable td:first-child{border-left:1px solid #e2e8f0;border-radius:13px 0 0 13px;font-weight:900;color:var(--navy);width:80px}
-    .caseTable td:last-child{border-right:1px solid #e2e8f0;border-radius:0 13px 13px 0;color:#4b5d73}
-    .statusCard{
-      padding:14px;border-radius:18px;border:1px solid #e2e8f0;background:#fff;
-      display:grid;gap:8px;font-size:13px;color:#4a5f78;line-height:1.45;
-    }
-    .statusCard b{color:var(--navy)}
-    .footerNote{font-size:11.7px;color:#738197;line-height:1.45;margin-top:10px}
-    .toast{
-      position:fixed;right:24px;bottom:24px;background:var(--navy);color:#fff;padding:13px 15px;border-radius:14px;
-      box-shadow:0 18px 38px rgba(7,26,51,.2);font-size:13px;font-weight:800;opacity:0;pointer-events:none;transform:translateY(10px);transition:.22s ease;
-      z-index:99;
-    }
-    .toast.show{opacity:1;transform:translateY(0)}
-    .hide{display:none!important}
-    @media (max-width:1080px){
-      .app{grid-template-columns:1fr}.side{min-height:auto}.workspace{grid-template-columns:1fr}.panel{border-left:0;border-top:1px solid var(--line)}
-      .topbar{align-items:flex-start;flex-direction:column}.topActions{justify-content:flex-start}
-    }
-    @media (max-width:640px){
-      .app{width:100%;margin:0;min-height:100vh}.side,.main{border-radius:0}.topbar h1{font-size:24px}.bubble{max-width:92%}.composer{flex-direction:column}.sendBtn{width:100%}
-    }
-    @media print{
-      body{background:#fff}.app{width:100%;margin:0;display:block}.side,.topActions,.quickArea,.panel,.notice{display:none!important}.main{box-shadow:none;border:0}.topbar{border-bottom:2px solid #111}.messages{overflow:visible;padding:12px}.bubble{box-shadow:none;max-width:100%;page-break-inside:avoid}.msg.user{display:none}.avatar{display:none}.bot .bubble{border-color:#aaa}.topbar h1{font-size:22px}.topbar p{font-size:12px}
-    }
+@font-face{font-family:localFallback;src:local("Malgun Gothic");}
+:root{
+  --red:#e30613;--red-dark:#a90017;--navy:#10233f;--blue:#2c75ff;--cyan:#3fc6d5;--mint:#9be7d0;--yellow:#ffd66b;--purple:#b593ff;--peach:#ffb199;--ink:#111827;--muted:#687385;--line:rgba(16,35,63,.10);--card:rgba(255,255,255,.78);--glass:rgba(255,255,255,.66);--shadow:0 26px 80px rgba(16,35,63,.16);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",localFallback,Arial,sans-serif;color:var(--ink);background:radial-gradient(circle at 12% 10%,rgba(255,214,107,.36),transparent 32%),radial-gradient(circle at 82% 18%,rgba(63,198,213,.35),transparent 30%),linear-gradient(135deg,#fff8f5 0%,#f7fbff 48%,#fff 100%);overflow-x:hidden;word-break:keep-all;-webkit-font-smoothing:antialiased;}
+.orb{position:fixed;border-radius:999px;filter:blur(20px);opacity:.45;z-index:-1}.orb-a{width:260px;height:260px;background:var(--peach);top:120px;left:-80px}.orb-b{width:320px;height:320px;background:var(--cyan);top:250px;right:-110px}.orb-c{width:230px;height:230px;background:var(--purple);bottom:0;left:40%}
+.topbar{height:82px;padding:0 46px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;backdrop-filter:blur(18px);background:rgba(255,255,255,.78);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink)}.brand img{width:92px;height:auto}.brand strong{display:block;font-size:16px;letter-spacing:-.02em}.brand span{display:block;margin-top:3px;color:var(--muted);font-size:12px;font-weight:700}.topbar nav{display:flex;gap:22px}.topbar nav a{color:var(--muted);text-decoration:none;font-weight:800;font-size:14px}.topbar nav a:hover{color:var(--red)}
+main{width:100%}.hero{max-width:1240px;margin:0 auto;padding:76px 30px 58px;display:grid;grid-template-columns:.98fr 1.02fr;gap:48px;align-items:center}.eyebrow{margin:0 0 14px;color:var(--red);font-size:13px;letter-spacing:.14em;font-weight:950;text-transform:uppercase}h1{margin:0;font-size:64px;line-height:1.05;letter-spacing:-.065em;color:var(--navy)}h1 span{background:linear-gradient(90deg,var(--red),#ff7d47,#2c75ff);-webkit-background-clip:text;background-clip:text;color:transparent}.lead{margin:26px 0 0;max-width:610px;color:#475569;font-size:18px;line-height:1.75}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}button{font-family:inherit}.primary,.secondary,.ghost{border-radius:18px;padding:15px 20px;font-size:15px;font-weight:950;cursor:pointer;transition:.18s}.primary{border:0;background:var(--red);color:#fff;box-shadow:0 14px 26px rgba(227,6,19,.24)}.secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.ghost{background:rgba(255,255,255,.62);color:#334155;border:1px solid var(--line);padding:13px 17px;font-size:13px}.primary:hover,.secondary:hover,.ghost:hover{transform:translateY(-2px)}.stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}.stats div{min-width:120px;padding:16px 18px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.62)}.stats b{display:block;color:var(--navy);font-size:22px;letter-spacing:-.03em}.stats span{display:block;margin-top:3px;color:var(--muted);font-size:12px;font-weight:800}
+.assistant-card{border:1px solid rgba(255,255,255,.72);border-radius:34px;background:var(--glass);backdrop-filter:blur(18px);box-shadow:var(--shadow);overflow:hidden}.assistant-head{display:flex;align-items:center;gap:14px;padding:22px 24px;background:linear-gradient(135deg,var(--navy),#253d72);color:white}.bot-avatar{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,var(--red),#ff9a5a);font-weight:950}.assistant-head strong{display:block;font-size:17px}.assistant-head span{display:block;margin-top:4px;color:#cbd5e1;font-size:12px;font-weight:700}.assistant-head em{margin-left:auto;font-style:normal;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.14);font-size:12px;font-weight:950}.messages{height:435px;overflow:auto;padding:22px;background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,.85))}.msg{max-width:91%;margin:0 0 14px;padding:14px 16px;border-radius:19px;line-height:1.62;font-size:14px;box-shadow:0 10px 24px rgba(16,35,63,.06)}.msg small{display:block;margin-top:9px;color:#64748b;font-weight:700}.msg.bot{background:#fff;color:#1e293b;border-top-left-radius:6px;border:1px solid var(--line)}.msg.user{margin-left:auto;background:var(--red);color:white;border-top-right-radius:6px}.meta,.miniTags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.meta span,.miniTag{padding:6px 9px;border-radius:999px;background:#f1f5f9;color:#475569;font-size:11px;font-weight:900}.answer-title{font-weight:950;color:var(--navy);margin-bottom:4px}.answerGrid{display:grid;gap:9px;margin-top:10px}.answerCard{border-left:4px solid var(--red);background:#fff7f7;border-radius:14px;padding:10px 12px;color:#334155}.answerCard strong{display:block;color:var(--navy);margin-bottom:4px}.answerCard.process{border-left-color:var(--blue);background:#f5f8ff}.answerCard.note{border-left-color:#14b8a6;background:#f0fdfa}.answerCard.warn{border-left-color:#f59e0b;background:#fff7ed}.answerCard.ok{border-left-color:#16a34a;background:#f0fdf4}.suggestions{display:flex;gap:8px;flex-wrap:wrap;padding:0 18px 15px}.suggestions button{border:1px solid var(--line);background:#fff;color:#334155;border-radius:999px;padding:9px 11px;cursor:pointer;font-size:12px;font-weight:900}.askbar{display:flex;gap:10px;padding:18px;border-top:1px solid var(--line);background:rgba(255,255,255,.75)}.askbar input{flex:1;border:1px solid var(--line);border-radius:17px;padding:15px 16px;outline:none;font-size:14px;min-width:0}.askbar input:focus{border-color:rgba(44,117,255,.35);box-shadow:0 0 0 4px rgba(44,117,255,.08)}.askbar button{border:0;border-radius:17px;background:var(--navy);color:white;padding:0 22px;cursor:pointer;font-weight:950}
+.section{max-width:1240px;margin:0 auto;padding:56px 30px}.section-title{max-width:780px;margin-bottom:26px}.section-title.inline{max-width:none;display:flex;justify-content:space-between;align-items:flex-end;gap:24px}h2{margin:0;color:var(--navy);font-size:38px;line-height:1.24;letter-spacing:-.045em}.section-title p.desc{margin:12px 0 0;color:#64748b;line-height:1.6}.scenario-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}.scenario{text-align:left;border:1px solid var(--line);border-radius:24px;padding:18px;min-height:158px;background:rgba(255,255,255,.75);cursor:pointer;transition:.18s}.scenario:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(16,35,63,.11)}.scenario span{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:13px;background:linear-gradient(135deg,#fff0f1,#e7f5ff);color:var(--red);font-weight:950}.scenario b{display:block;margin-top:18px;font-size:18px;color:var(--navy)}.scenario em{display:block;margin-top:8px;font-style:normal;color:var(--muted);font-size:12px;line-height:1.5;font-weight:800}.search-mini input{min-width:320px;border:1px solid var(--line);border-radius:17px;padding:14px 16px;outline:none}.kb-list{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.kb-item{background:rgba(255,255,255,.76);border:1px solid var(--line);border-radius:22px;padding:18px;min-height:190px;cursor:pointer;transition:.18s}.kb-item:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(16,35,63,.09)}.kb-item .cat{display:inline-block;padding:6px 9px;border-radius:999px;background:#fff0f1;color:var(--red);font-size:11px;font-weight:950}.kb-item h3{margin:14px 0 8px;color:var(--navy);font-size:17px;letter-spacing:-.02em}.kb-item p{margin:0;color:var(--muted);font-size:13px;line-height:1.55}.kb-item .pages{margin-top:14px;color:#334155;font-size:12px;font-weight:900}.ops-card{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;background:linear-gradient(135deg,var(--navy),#293a66);color:white;border-radius:32px;padding:34px;box-shadow:var(--shadow)}.ops-card h2{color:white}.ops-card p{color:#dbeafe;line-height:1.75}.ops-card ul{margin:0;padding:0;list-style:none;display:grid;gap:12px}.ops-card li{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:14px 16px;font-weight:850;color:#eff6ff}.toast{position:fixed;right:22px;bottom:22px;background:var(--navy);color:white;padding:12px 15px;border-radius:14px;box-shadow:0 18px 38px rgba(16,35,63,.22);font-size:13px;font-weight:900;opacity:0;transform:translateY(10px);pointer-events:none;transition:.22s;z-index:50}.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:1060px){.hero{grid-template-columns:1fr}.scenario-grid{grid-template-columns:repeat(3,1fr)}.kb-list{grid-template-columns:repeat(2,1fr)}.ops-card{grid-template-columns:1fr}.messages{height:430px}}@media(max-width:760px){.topbar{padding:0 18px}.topbar nav{display:none}.brand img{width:76px}.hero{padding-top:46px}h1{font-size:42px}h2{font-size:29px}.scenario-grid,.kb-list{grid-template-columns:1fr}.section-title.inline{display:block}.search-mini input{min-width:0;width:100%;margin-top:14px}.askbar{flex-direction:column}.askbar button{padding:14px}.stats{display:grid;grid-template-columns:1fr}.assistant-head em{display:none}}
+@media print{body{background:#fff}.orb,.topbar nav,.hero-actions,.suggestions,.askbar,.search-mini,.toast{display:none!important}.topbar{position:static;height:auto;padding:16px 24px}.hero{display:block;padding:24px}.assistant-card{box-shadow:none;border:1px solid #bbb}.messages{height:auto;overflow:visible}.msg.user{display:none}.section{padding:24px}.scenario-grid,.kb-list{grid-template-columns:repeat(2,1fr)}.ops-card{box-shadow:none}.msg{max-width:100%;box-shadow:none;page-break-inside:avoid}}
   </style>
 </head>
 <body>
-  <div class="app">
-    <aside class="side">
-      <section class="brand">
-        <div class="logoRow">
-          <div class="logoMark">M</div>
-          <div class="logoText">
-            <strong>MISTO HR Assistant</strong>
-            <span>People Operation Guide</span>
-          </div>
+  <div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
+  <header class="topbar">
+    <a class="brand" href="#assistant"><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22240%22%20height%3D%2286%22%20viewBox%3D%220%200%20240%2086%22%20role%3D%22img%22%20aria-label%3D%22MISTO%20logo%22%3E%3Crect%20width%3D%22240%22%20height%3D%2286%22%20fill%3D%22none%22/%3E%3Ctext%20x%3D%220%22%20y%3D%2255%22%20font-family%3D%22Arial%20Black%2C%20Impact%2C%20sans-serif%22%20font-size%3D%2254%22%20font-weight%3D%22900%22%20letter-spacing%3D%22-2%22%20fill%3D%22%23E30613%22%3Emisto%3C/text%3E%3Ctext%20x%3D%224%22%20y%3D%2278%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22700%22%20fill%3D%22%23111827%22%3EMisto%20Korea%20LTD.%3C/text%3E%3C/svg%3E" alt="MISTO" /><div><strong>MISTO HR Assistant</strong><span>Guidebook V2 · V1 UI Fixed</span></div></a>
+    <nav><a href="#assistant">Assistant</a><a href="#scenarios">Scenarios</a><a href="#knowledge">Knowledge</a><a href="#ops">Ops Note</a></nav>
+  </header>
+
+  <main>
+    <section class="hero" id="assistant">
+      <div class="hero-copy">
+        <p class="eyebrow">NEW JOINER GUIDEBOOK AGENT</p>
+        <h1>물어보면 바로 안내하는<br><span>사내 HR 도우미 V2</span></h1>
+        <p class="lead">V1의 컬러풀한 랜딩 UI는 그대로 유지하고, 안쪽 답변 내용만 V2 방식으로 업데이트했습니다. 연차/근태, GERP, 제증명, 급여명세서, 경조, 복지, 법인카드, 사원증, 회의실, 밀케어 문의를 결론 → 처리 경로 → 단계 → CASE → 주의사항 중심으로 안내합니다.</p>
+        <div class="hero-actions">
+          <button class="primary" data-question="일반 연차 신청은 어떻게 해?">연차 CASE 물어보기</button>
+          <button class="secondary" data-question="ERP 가족정보 등록은 어떻게 안내해야 해?">ERP 가족정보</button>
+          <button class="ghost" id="copyLastBtn">최근 답변 복사</button>
+          <button class="ghost" id="printBtn">인쇄/PDF</button>
         </div>
-        <p>연차·근태·ERP 개인정보·증빙 제출 문의를 업무 처리 관점으로 정리하는 HR 가이드 챗봇입니다.</p>
-        <div class="versionPill"><span class="dot"></span> V2 · Process Driven</div>
-      </section>
+        <div class="stats"><div><b id="kbCount">0</b><span>process topics</span></div><div><b>92</b><span>guidebook pages</span></div><div><b>V2</b><span>content update</span></div></div>
+      </div>
 
-      <section class="sideBlock">
-        <h3>업무 유형</h3>
-        <div class="chips" id="intentChips">
-          <button class="chip active" data-intent="all">전체</button>
-          <button class="chip" data-intent="leave">연차</button>
-          <button class="chip" data-intent="attendance">근태</button>
-          <button class="chip" data-intent="erp">ERP</button>
-          <button class="chip" data-intent="privacy">개인정보</button>
-          <button class="chip" data-intent="payroll">급여</button>
+      <section class="assistant-card" aria-label="HR Assistant demo">
+        <div class="assistant-head"><div class="bot-avatar">HR</div><div><strong>MISTO HR Assistant</strong><span>결론 · 경로 · 단계 · CASE · 주의사항</span></div><em>Internal</em></div>
+        <div class="messages" id="messages"></div>
+        <div class="suggestions">
+          <button data-question="검진 휴가는 CASE 몇으로 올려?">검진 CASE</button>
+          <button data-question="출근 체크를 누락했을 때 어떻게 정정해?">출근 누락</button>
+          <button data-question="급여명세서는 어디서 조회해?">급여명세서</button>
+          <button data-question="주민등록번호를 채팅창에 입력해도 돼?">민감정보 보안</button>
+          <button id="clearBtn" type="button">대화 초기화</button>
         </div>
+        <div class="askbar"><input id="questionInput" placeholder="예: 신입 인턴 ERP 개인정보 업데이트 안내문 만들어줘" /><button id="sendBtn">전송</button></div>
       </section>
+    </section>
 
-      <section class="sideBlock">
-        <h3>V2 답변 원칙</h3>
-        <ul class="guideList">
-          <li><b>1. CASE 판단</b><br>질문을 연차·근태·개인정보·급여 등 실무 유형으로 먼저 분류합니다.</li>
-          <li><b>2. 처리 순서</b><br>담당자가 바로 안내할 수 있도록 신청 경로, 승인자, 제출물, 기한을 분리합니다.</li>
-          <li><b>3. 예외 관리</b><br>사전 승인 누락, 출퇴근 누락, 증빙 미제출 등 리스크 항목을 따로 표시합니다.</li>
-          <li><b>4. 보안 방어</b><br>주민등록번호, 계좌번호, 비밀번호 등은 채팅창 입력을 제한하고 ERP 보안 화면 입력만 안내합니다.</li>
-        </ul>
-      </section>
+    <section class="section scenarios" id="scenarios">
+      <div class="section-title"><p class="eyebrow">SCENARIO SHORTCUTS</p><h2>자주 들어오는 문의를 V2 프로세스로 바로 안내</h2><p class="desc">카드를 누르면 오른쪽 Assistant에 바로 질문이 입력되고, CASE 판단부터 주의사항까지 한 번에 정리됩니다.</p></div>
+      <div class="scenario-grid">
+        <button class="scenario" data-question="일반 연차 신청은 어떻게 해?"><span>01</span><b>일반연차</b><em>사전 신청 · 잔여 연차 · 승인권자</em></button>
+        <button class="scenario" data-question="검진 휴가는 CASE 몇으로 올려?"><span>02</span><b>검진휴가</b><em>증빙 필요 · 일반연차와 분리</em></button>
+        <button class="scenario" data-question="경조휴가 신청 방법 알려줘"><span>03</span><b>경조휴가</b><em>경조 구분 · 증빙 · 수신처</em></button>
+        <button class="scenario" data-question="출근 체크를 누락했을 때 어떻게 정정해야 해?"><span>04</span><b>출근누락</b><em>근태 정정 · 사유 기록</em></button>
+        <button class="scenario" data-question="ERP 가족정보 등록은 어떻게 안내해야 해?"><span>05</span><b>ERP 가족정보</b><em>주민번호 입력 · 보안 화면</em></button>
+        <button class="scenario" data-question="급여명세서는 어디서 조회하고 어떻게 안내해?"><span>06</span><b>급여명세서</b><em>MetaPay · 항목별 확인</em></button>
+        <button class="scenario" data-question="제증명 발급 방법 알려줘"><span>07</span><b>제증명</b><em>신청 경로 · 발급 목적</em></button>
+        <button class="scenario" data-question="법인카드 발급 신청은 어떻게 해?"><span>08</span><b>법인카드</b><em>발급 요청 · 사용 기준</em></button>
+        <button class="scenario" data-question="사원증 신청이나 재발급은 어떻게 해?"><span>09</span><b>사원증</b><em>신규 · 분실 · 재발급</em></button>
+        <button class="scenario" data-question="회의실 예약은 어떤 식으로 안내해?"><span>10</span><b>회의실</b><em>예약 · 변경 · 취소</em></button>
+        <button class="scenario" data-question="밀케어 가입 인증 방법 알려줘"><span>11</span><b>밀케어</b><em>가입 인증 · 복지 이용</em></button>
+        <button class="scenario" data-question="증빙서류 제출해야 하는 케이스 정리해줘"><span>12</span><b>증빙서류</b><em>마스킹 · 제출 경로 · 보관</em></button>
+      </div>
+    </section>
 
-      <section class="privacyBox">
-        <h3>민감정보 입력 금지</h3>
-        <p>이 화면에는 주민등록번호 전체, 계좌번호 전체, 비밀번호, 가족의 상세 개인정보를 입력하지 마세요. 필요한 경우 ERP·사내 승인된 보안 경로에서만 처리합니다.</p>
-      </section>
-    </aside>
+    <section class="section knowledge" id="knowledge">
+      <div class="section-title inline"><div><p class="eyebrow">KNOWLEDGE BASE</p><h2>가이드북 기반 지식베이스 V2</h2></div><div class="search-mini"><input id="kbSearch" placeholder="지식베이스 검색: 연차, GERP, 법인카드..." /></div></div>
+      <div class="kb-list" id="kbList"></div>
+    </section>
 
-    <main class="main">
-      <header class="topbar">
-        <div>
-          <h1>MISTO HR Assistant V2</h1>
-          <p>FAQ형 요약 답변이 아니라, 실제 HR 담당자가 안내할 수 있는 <b>업무처리형 답변</b>으로 정리합니다.</p>
-        </div>
-        <div class="topActions">
-          <button class="actionBtn" id="copyLastBtn">최근 답변 복사</button>
-          <button class="actionBtn" id="clearBtn">대화 초기화</button>
-          <button class="actionBtn primary" id="printBtn">인쇄/PDF</button>
-        </div>
-      </header>
-
-      <section class="workspace">
-        <section class="chatWrap">
-          <div class="notice"><b>운영 메모</b> · 가이드북 원문 연동 전에도 사용할 수 있도록 Rule 기반으로 구성했습니다. 사내 규정이 별도로 있는 항목은 최종적으로 해당 규정을 우선 적용하세요.</div>
-          <div class="messages" id="messages"></div>
-          <div class="quickArea">
-            <p class="quickTitle">자주 쓰는 업무 질문</p>
-            <div class="quickBtns">
-              <button class="quickBtn" data-q="연차를 사용하려면 어떤 순서로 처리해야 하나요?">연차 신청 절차</button>
-              <button class="quickBtn" data-q="출근 체크를 누락했을 때 어떻게 정정해야 하나요?">출근 누락 정정</button>
-              <button class="quickBtn" data-q="ERP 개인정보 업데이트는 어떤 항목을 확인해야 하나요?">ERP 개인정보 업데이트</button>
-              <button class="quickBtn" data-q="가족 정보를 등록할 때 주민등록번호 뒷자리도 입력해야 하나요?">가족정보 등록</button>
-              <button class="quickBtn" data-q="반차와 외출은 어떤 기준으로 안내하면 되나요?">반차/외출 기준</button>
-              <button class="quickBtn" data-q="증빙서류를 제출해야 하는 케이스를 정리해줘">증빙서류 케이스</button>
-            </div>
-            <div class="composer">
-              <textarea id="input" placeholder="예: 신입 인턴이 가족정보 ERP 업데이트를 해야 하는데, 어떤 식으로 안내하면 될까?"></textarea>
-              <button class="sendBtn" id="sendBtn">전송</button>
-            </div>
-          </div>
-        </section>
-
-        <aside class="panel">
-          <section class="panelSection">
-            <h3>표준 답변 구조</h3>
-            <div class="flow">
-              <div class="flowStep"><span class="stepNo">1</span><b>문의 유형 판단</b><span>연차·근태·ERP·급여·증빙 중 어디에 해당하는지 분류</span></div>
-              <div class="flowStep"><span class="stepNo">2</span><b>CASE 분기</b><span>정상 신청, 사후 정정, 예외 승인, 민감정보 포함 여부 확인</span></div>
-              <div class="flowStep"><span class="stepNo">3</span><b>처리 프로세스</b><span>신청 경로 → 승인자 → 제출물 → 마감기한 순서 안내</span></div>
-              <div class="flowStep"><span class="stepNo">4</span><b>주의사항</b><span>개인정보·증빙·급여 영향·반려 가능 사유 고지</span></div>
-            </div>
-          </section>
-
-          <section class="panelSection">
-            <h3>CASE 판단 예시</h3>
-            <table class="caseTable" aria-label="CASE 판단 예시">
-              <tr><td>연차</td><td>사전 신청 원칙. 잔여 연차, 팀 승인, 업무 공백 여부 확인.</td></tr>
-              <tr><td>반차</td><td>오전/오후 기준을 명확히 하고 근무시간 산정 기준 확인.</td></tr>
-              <tr><td>근태</td><td>출퇴근 누락·지각·조퇴·외근은 사유와 증빙을 남겨 정정.</td></tr>
-              <tr><td>ERP</td><td>주소, 연락처, 계좌, 가족정보 등 변경 항목별 입력 경로 안내.</td></tr>
-              <tr><td>보안</td><td>주민등록번호·계좌번호 등은 채팅창 수집 금지. ERP 보안 화면만 사용.</td></tr>
-            </table>
-          </section>
-
-          <section class="panelSection">
-            <h3>현재 버전</h3>
-            <div class="statusCard">
-              <div><b>Version</b> · V2.0</div>
-              <div><b>Mode</b> · 업무처리형 / 프로세스형</div>
-              <div><b>Scope</b> · 연차, 근태, ERP 개인정보, 증빙, 급여 기본 문의</div>
-              <div><b>Security</b> · 민감정보 입력 차단 및 안전 경로 안내</div>
-            </div>
-            <p class="footerNote">내부 가이드북 문구를 추가하면 답변 데이터셋을 더 촘촘하게 확장할 수 있습니다.</p>
-          </section>
-        </aside>
-      </section>
-    </main>
-  </div>
+    <section class="section ops" id="ops">
+      <div class="ops-card"><div><p class="eyebrow">IMPLEMENTATION NOTE</p><h2>UI는 V1로 고정하고, 내용만 V2로 업데이트했습니다.</h2><p>이 파일은 서버 없이 열리는 단일 HTML입니다. 실제 GPT API가 연결된 것은 아니지만, 질문 키워드와 프로세스 카드 기반으로 AI처럼 답변하도록 구성했습니다. 운영형으로 확장할 때는 이 UI를 그대로 두고, 답변 데이터만 사내 문서 검색/RAG로 교체하면 됩니다.</p></div><ul><li>V1의 상단바 · 히어로 · 챗봇 카드 · 시나리오 카드 구조 유지</li><li>V2의 CASE 판단 → 처리 프로세스 → 필요 자료 → 주의사항 답변 방식 적용</li><li>연차/근태/ERP/급여/증빙/복지/업무지원 주제 확대</li><li>주민등록번호·계좌번호·비밀번호 등 민감정보 입력 방어</li><li>브라우저 단독 실행, UTF-8, 한글 시스템 폰트 기반</li></ul></div>
+    </section>
+  </main>
   <div class="toast" id="toast">처리되었습니다.</div>
 
 <script>
 (function(){
   const messages = document.getElementById('messages');
-  const input = document.getElementById('input');
+  const input = document.getElementById('questionInput');
   const sendBtn = document.getElementById('sendBtn');
   const clearBtn = document.getElementById('clearBtn');
-  const printBtn = document.getElementById('printBtn');
   const copyLastBtn = document.getElementById('copyLastBtn');
+  const printBtn = document.getElementById('printBtn');
   const toast = document.getElementById('toast');
+  const kbList = document.getElementById('kbList');
+  const kbSearch = document.getElementById('kbSearch');
+  const kbCount = document.getElementById('kbCount');
   let lastBotText = '';
-  let activeIntent = 'all';
 
-  const escapeHtml = (str) => String(str)
-    .replaceAll('&','&amp;')
-    .replaceAll('<','&lt;')
-    .replaceAll('>','&gt;')
-    .replaceAll('"','&quot;')
-    .replaceAll("'",'&#039;');
-
-  function showToast(text){
-    toast.textContent = text;
-    toast.classList.add('show');
-    setTimeout(()=>toast.classList.remove('show'), 1600);
-  }
-
-  function addMessage(role, html, plainText){
-    const msg = document.createElement('div');
-    msg.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
-    const avatar = document.createElement('div');
-    avatar.className = 'avatar';
-    avatar.textContent = role === 'user' ? '나' : 'HR';
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.innerHTML = html;
-    msg.appendChild(avatar);
-    msg.appendChild(bubble);
-    messages.appendChild(msg);
-    messages.scrollTop = messages.scrollHeight;
-    if(role === 'bot') lastBotText = plainText || bubble.innerText;
-  }
-
-  function formatAnswer(title, cards, tags){
-    const cardHtml = cards.map(c=>`<div class="answerCard ${c.type||''}"><strong>${escapeHtml(c.head)}</strong>${c.body}</div>`).join('');
-    const tagHtml = tags && tags.length ? `<div class="miniTags">${tags.map(t=>`<span class="miniTag">${escapeHtml(t)}</span>`).join('')}</div>` : '';
-    return `<h4>${escapeHtml(title)}</h4><div class="answerGrid">${cardHtml}</div>${tagHtml}`;
-  }
-
-  function hasSensitiveInfo(q){
-    const compact = q.replace(/[\s-]/g,'');
-    const rrnLike = /\d{6}[1-4]\d{6}/.test(compact);
-    const longAccountLike = /\d{10,}/.test(compact);
-    const passwordLike = /(비밀번호|패스워드|password|pwd|pw)\s*[:：=]/i.test(q);
-    return rrnLike || passwordLike || (longAccountLike && /(계좌|주민|등록번호|번호|통장|은행)/.test(q));
-  }
-
-  function detectIntent(q){
-    if(activeIntent !== 'all') return activeIntent;
-    if(/연차|월차|반차|휴가|휴무|휴직|외출|조퇴/.test(q)) return 'leave';
-    if(/근태|출근|퇴근|지각|결근|누락|정정|외근|출장|재택/.test(q)) return 'attendance';
-    if(/ERP|개인정보|주소|연락처|가족|계좌|주민등록|주민번호|사번/.test(q)) return 'erp';
-    if(/급여|월급|공제|4대보험|소득세|원천|연말정산|수당/.test(q)) return 'payroll';
-    if(/증빙|서류|제출|첨부|확인서|등본|가족관계/.test(q)) return 'document';
-    return 'general';
-  }
-
-  function privacyAnswer(){
-    return formatAnswer('민감정보 포함 가능성이 있어 안전 경로로 안내합니다', [
-      {type:'warn', head:'판단', body:'입력 내용에 주민등록번호, 계좌번호, 비밀번호 등 민감정보가 포함되었거나 포함될 가능성이 있습니다. 이 챗봇 화면에서는 해당 정보를 수집하지 않는 것이 원칙입니다.'},
-      {type:'process', head:'처리 절차', body:'① 채팅창 입력을 중단합니다.<br>② ERP 또는 회사가 지정한 보안 입력 화면으로 이동합니다.<br>③ 필요한 항목만 직접 입력합니다.<br>④ HR 담당자는 입력 완료 여부만 확인하고, 번호 전체를 메신저나 메일로 요구하지 않습니다.'},
-      {type:'note', head:'지원자/임직원 안내 문구', body:'“개인정보 보호를 위해 주민등록번호 전체 또는 계좌번호 전체는 메신저·메일로 전달하지 마시고, ERP 내 지정된 항목에 직접 입력 부탁드립니다.”'},
-      {type:'ok', head:'HR 체크포인트', body:'처리 완료 여부, 누락 항목, 제출 기한만 확인하고 원본 민감정보를 별도로 저장하지 않습니다.'}
-    ], ['민감정보 방어', 'ERP 입력', '메일 수집 금지']);
-  }
-
-  const answers = {
-    leave(q){
-      const isHalf = /반차/.test(q);
-      const isOut = /외출|조퇴/.test(q);
-      const title = isHalf ? '반차 사용 문의 처리 기준' : isOut ? '외출·조퇴 문의 처리 기준' : '연차 사용 문의 처리 기준';
-      return formatAnswer(title, [
-        {type:'ok', head:'CASE 판단', body:isHalf ? '반차는 오전/오후 중 어느 시간대에 사용하는지, 사전 승인을 받았는지, 근무시간 산정 기준과 충돌하지 않는지를 먼저 확인합니다.' : isOut ? '외출·조퇴는 개인 사유인지, 업무상 사유인지, 사전 승인 여부와 근태 시스템 반영 필요 여부를 구분합니다.' : '연차는 원칙적으로 사전 신청 건입니다. 잔여 연차, 팀 내 업무 공백, 승인권자 확인이 먼저 필요합니다.'},
-        {type:'process', head:'처리 프로세스', body:'① ERP/근태 시스템에서 휴가 신청 메뉴 확인<br>② 사용일자와 사용 단위 선택<br>③ 사유 입력은 과도하게 상세히 쓰지 않고 필요한 수준으로 작성<br>④ 팀장 또는 승인권자 승인<br>⑤ 승인 완료 후 캘린더/팀 공유 필요 여부 확인'},
-        {type:'note', head:'필요 확인 항목', body:'잔여 연차, 사용 가능 단위, 사전 승인 여부, 업무 인수인계 필요 여부, 팀별 공유 방식입니다.'},
-        {type:'warn', head:'주의사항', body:'사후 신청은 반려되거나 근태 정정으로 분류될 수 있습니다. 병가·경조 등 별도 증빙이 필요한 휴가는 일반 연차와 분리해서 안내하는 것이 안전합니다.'}
-      ], ['사전 승인', '잔여 연차 확인', '팀 공유', '증빙 분리']);
-    },
-    attendance(q){
-      const missed = /누락|안 찍|미체크|정정/.test(q);
-      const late = /지각|조퇴|결근/.test(q);
-      return formatAnswer(missed ? '출퇴근 누락 정정 처리 기준' : late ? '지각·조퇴·결근 근태 처리 기준' : '근태 문의 처리 기준', [
-        {type:'ok', head:'CASE 판단', body:missed ? '출퇴근 기록 자체가 누락된 건인지, 실제 근무시간이 달라진 건인지 먼저 구분합니다. 단순 체크 누락이면 근태 정정 프로세스로 안내합니다.' : late ? '지각·조퇴·결근은 사유, 사전 보고 여부, 승인권자 확인 여부, 급여/근태 반영 여부를 함께 확인합니다.' : '근태 문의는 출퇴근 기록, 승인 상태, 사유 증빙, 급여 반영 가능성을 분리해서 봐야 합니다.'},
-        {type:'process', head:'처리 프로세스', body:'① 근태 시스템에서 해당 일자 확인<br>② 정정 신청 또는 HR 문의 접수<br>③ 실제 출근·퇴근 시간과 사유 작성<br>④ 승인권자 확인<br>⑤ HR이 근태 반영 결과 확인'},
-        {type:'note', head:'필요 자료', body:'정정 대상 일자, 실제 근무시간, 누락 사유, 승인권자 확인 내용, 필요 시 업무 수행 증빙입니다.'},
-        {type:'warn', head:'주의사항', body:'반복 누락은 단순 오류가 아니라 근태 관리 이슈로 볼 수 있습니다. 안내 시 “이번 건 정정”과 “향후 재발 방지”를 함께 전달하는 것이 좋습니다.'}
-      ], ['근태 정정', '승인권자 확인', '사유 기록', '재발 방지']);
-    },
-    erp(q){
-      const family = /가족|주민|등본|가족관계/.test(q);
-      return formatAnswer(family ? 'ERP 가족정보 등록 처리 기준' : 'ERP 개인정보 업데이트 처리 기준', [
-        {type:'ok', head:'CASE 판단', body:family ? '가족정보 등록은 일반 연락처 변경보다 민감도가 높습니다. 가족관계, 주민등록번호 입력 필요 여부, 증빙 제출 여부를 구분해서 안내합니다.' : 'ERP 개인정보 업데이트는 주소, 연락처, 계좌, 비상연락처, 가족정보 등 항목별로 입력 위치와 검증 방식이 다릅니다.'},
-        {type:'process', head:'처리 프로세스', body:family ? '① ERP 내 가족정보 메뉴 접속<br>② 가족 구성원 정보 입력<br>③ 주민등록번호가 필요한 항목은 ERP 보안 화면에서만 직접 입력<br>④ 저장 후 누락 항목 확인<br>⑤ 증빙 제출이 필요한 경우 지정 경로로 제출' : '① ERP 접속<br>② 개인정보/인사정보 메뉴 확인<br>③ 변경 항목별 최신 정보 입력<br>④ 저장 후 반영 상태 확인<br>⑤ HR 요청 항목이 남아 있으면 기한 내 보완'},
-        {type:'note', head:'안내 문구 예시', body:family ? '“ERP 내 가족정보 입력 시 필요한 항목은 시스템에서 직접 입력 부탁드립니다. 개인정보 보호를 위해 주민등록번호 전체는 메일이나 메신저로 전달하지 말아주세요.”' : '“ERP 개인정보는 급여, 4대보험, 증명서 발급 등과 연결될 수 있으므로 공지된 기한 내 최신 정보로 업데이트 부탁드립니다.”'},
-        {type:'warn', head:'주의사항', body:'주민등록번호, 계좌번호, 가족의 상세 개인정보는 채팅·메일 본문에 쓰지 않도록 안내합니다. HR은 입력 완료 여부와 누락 항목만 확인하는 방식이 안전합니다.'}
-      ], family ? ['가족정보', '주민등록번호', 'ERP 보안입력', '증빙'] : ['개인정보 업데이트', 'ERP', '급여 연동', '기한 준수']);
-    },
-    payroll(q){
-      return formatAnswer('급여·공제 문의 처리 기준', [
-        {type:'ok', head:'CASE 판단', body:'급여 문의는 기본급, 수당, 비과세/과세 항목, 4대보험, 소득세, 정산월을 나누어 확인해야 합니다. 단순 금액 문의라도 개인정보와 급여정보가 섞일 수 있습니다.'},
-        {type:'process', head:'처리 프로세스', body:'① 문의 대상 월 확인<br>② 급여명세서 항목 구분<br>③ 과세/비과세 여부 확인<br>④ 4대보험 및 원천세 반영 여부 확인<br>⑤ 정정 필요 시 급여 담당자에게 근거 자료와 함께 전달'},
-        {type:'note', head:'필요 확인 항목', body:'근무기간, 계약 형태, 수당 발생월, 지급월, 비과세 항목 여부, 4대보험 가입 여부, 부양가족 수입니다.'},
-        {type:'warn', head:'주의사항', body:'개인의 급여명세서, 주민등록번호, 계좌번호 전체는 공개 채팅창에 입력하지 않도록 안내합니다. 추정 계산은 가능하지만 최종 지급액은 급여 담당자의 확정 자료가 우선입니다.'}
-      ], ['급여명세서', '과세/비과세', '4대보험', '원천세']);
-    },
-    document(q){
-      return formatAnswer('증빙서류 제출 CASE 정리', [
-        {type:'ok', head:'CASE 판단', body:'증빙은 휴가, 경조, 가족정보, 급여/보험, 근태 정정 등 어떤 업무에 연결되는지 먼저 분류합니다.'},
-        {type:'process', head:'처리 프로세스', body:'① 필요한 증빙 종류 확인<br>② 제출 경로 확인<br>③ 파일명 또는 제출자 식별 정보 최소화<br>④ HR 확인 후 보완 요청 여부 안내<br>⑤ 보관 기간과 접근 권한은 내부 기준에 따름'},
-        {type:'note', head:'자주 필요한 증빙', body:'가족관계 확인 서류, 경조 관련 증빙, 병가 관련 확인서, 근태 정정 증빙, 급여/보험 반영에 필요한 서류 등입니다.'},
-        {type:'warn', head:'주의사항', body:'서류에 주민등록번호 뒷자리 등 불필요한 민감정보가 포함되어 있으면 마스킹본 제출 가능 여부를 먼저 확인합니다. 단, ERP 필수 입력 항목은 시스템 안내 기준을 따릅니다.'}
-      ], ['증빙', '제출경로', '마스킹', '보관권한']);
-    },
-    general(q){
-      return formatAnswer('문의 내용을 업무처리형으로 정리했습니다', [
-        {type:'ok', head:'분류', body:'현재 질문은 특정 업무 유형이 명확하지 않습니다. HR 안내에서는 먼저 연차, 근태, ERP, 급여, 증빙, 기타 문의 중 하나로 분류하는 것이 좋습니다.'},
-        {type:'process', head:'권장 답변 방식', body:'① 문의 목적 확인<br>② 필요한 처리 경로 안내<br>③ 제출 자료와 기한 안내<br>④ 예외·주의사항 고지<br>⑤ 담당자 확인이 필요한 부분 분리'},
-        {type:'note', head:'사용 예시', body:'“이 건은 먼저 ERP 개인정보 업데이트 건으로 분류됩니다. 아래 순서대로 처리해주시고, 주민등록번호 등 민감정보는 시스템 내에서만 입력 부탁드립니다.”'},
-        {type:'warn', head:'확인 필요', body:'사내 가이드북에 별도 기준이 있는 경우, 이 답변보다 가이드북 원문과 최신 공지가 우선입니다.'}
-      ], ['업무분류', '절차화', '가이드북 우선']);
-    }
+  const escapeHtml = (str) => String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+  function showToast(text){toast.textContent=text;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1600)}
+  function addMessage(role, html, plainText){const msg=document.createElement('div');msg.className='msg '+(role==='user'?'user':'bot');msg.innerHTML=html;messages.appendChild(msg);messages.scrollTop=messages.scrollHeight;if(role==='bot')lastBotText=plainText||msg.innerText;}
+  function formatAnswer(title,cards,tags){const cardHtml=cards.map(c=>`<div class="answerCard ${c.type||''}"><strong>${escapeHtml(c.head)}</strong>${c.body}</div>`).join('');const tagHtml=tags&&tags.length?`<div class="miniTags">${tags.map(t=>`<span class="miniTag">${escapeHtml(t)}</span>`).join('')}</div>`:'';return `<div class="answer-title">${escapeHtml(title)}</div><div class="answerGrid">${cardHtml}</div>${tagHtml}`;}
+  function hasSensitiveInfo(q){const compact=q.replace(/[\s-]/g,'');const rrnLike=/\d{6}[1-4]\d{6}/.test(compact);const longAccountLike=/\d{10,}/.test(compact);const passwordLike=/(비밀번호|패스워드|password|pwd|pw)\s*[:：=]/i.test(q);return rrnLike||passwordLike||(longAccountLike&&/(계좌|주민|등록번호|번호|통장|은행)/.test(q));}
+  function detectIntent(q){if(/연차|월차|반차|휴가|휴무|검진|경조|외출|조퇴/.test(q))return'leave';if(/근태|출근|퇴근|지각|결근|누락|정정|외근|출장|재택/.test(q))return'attendance';if(/ERP|GERP|개인정보|주소|연락처|가족|계좌|주민등록|주민번호|사번/.test(q))return'erp';if(/급여|월급|명세서|공제|4대보험|소득세|원천|연말정산|수당|MetaPay|메타페이/i.test(q))return'payroll';if(/증빙|서류|제출|첨부|확인서|등본|가족관계|제증명/.test(q))return'document';if(/법인카드|사원증|회의실|밀케어|복지|업무지원/.test(q))return'support';return'general';}
+  function privacyAnswer(){return formatAnswer('민감정보 포함 가능성이 있어 안전 경로로 안내합니다',[{type:'warn',head:'판단',body:'입력 내용에 주민등록번호, 계좌번호, 비밀번호 등 민감정보가 포함되었거나 포함될 가능성이 있습니다. 이 화면에서는 해당 정보를 수집하지 않는 것이 원칙입니다.'},{type:'process',head:'처리 절차',body:'① 채팅창 입력을 중단합니다.<br>② ERP 또는 회사가 지정한 보안 입력 화면으로 이동합니다.<br>③ 필요한 항목만 직접 입력합니다.<br>④ HR 담당자는 입력 완료 여부만 확인하고, 번호 전체를 메신저나 메일로 요구하지 않습니다.'},{type:'note',head:'안내 문구',body:'“개인정보 보호를 위해 주민등록번호 전체 또는 계좌번호 전체는 메신저·메일로 전달하지 마시고, ERP 내 지정된 항목에 직접 입력 부탁드립니다.”'},{type:'ok',head:'HR 체크포인트',body:'처리 완료 여부, 누락 항목, 제출 기한만 확인하고 원본 민감정보를 별도로 저장하지 않습니다.'}],['민감정보 방어','ERP 입력','메일 수집 금지']);}
+  const answers={
+    leave(q){const isHalf=/반차/.test(q), isOut=/외출|조퇴/.test(q), isCheck=/검진/.test(q), isFamily=/경조/.test(q);const title=isCheck?'검진휴가 CASE 처리 기준':isFamily?'경조휴가 신청 처리 기준':isHalf?'반차 사용 문의 처리 기준':isOut?'외출·조퇴 문의 처리 기준':'연차 사용 문의 처리 기준';return formatAnswer(title,[{type:'ok',head:'CASE 판단',body:isCheck?'검진휴가는 일반 연차와 다르게 증빙 및 수신처 확인이 필요한 휴가로 분리해서 안내하는 것이 안전합니다.':isFamily?'경조휴가는 경조 유형, 대상 가족 범위, 사용 가능 일수, 증빙 제출 여부를 먼저 확인해야 합니다.':isHalf?'반차는 오전/오후 중 어느 시간대에 사용하는지, 사전 승인을 받았는지, 근무시간 산정 기준과 충돌하지 않는지를 확인합니다.':isOut?'외출·조퇴는 개인 사유인지 업무상 사유인지, 사전 승인 여부와 근태 시스템 반영 필요 여부를 구분합니다.':'연차는 원칙적으로 사전 신청 건입니다. 잔여 연차, 팀 내 업무 공백, 승인권자 확인이 먼저 필요합니다.'},{type:'process',head:'처리 프로세스',body:'① GERP/근태 시스템에서 휴가·근태 신청 메뉴 확인<br>② 사용일자와 근태유형 선택<br>③ 필요한 경우 사유 및 증빙 첨부<br>④ 팀장 또는 승인권자 승인<br>⑤ 승인 완료 후 캘린더/팀 공유 필요 여부 확인'},{type:'note',head:'필요 확인 항목',body:'잔여 연차, 사용 가능 단위, 사전 승인 여부, 업무 인수인계 필요 여부, 증빙 필요 여부, 팀별 공유 방식입니다.'},{type:'warn',head:'주의사항',body:'사후 신청은 반려되거나 근태 정정으로 분류될 수 있습니다. 병가·경조·검진 등 별도 증빙이 필요한 휴가는 일반 연차와 분리해서 안내하세요.'}],['GERP','사전 승인','증빙 분리','CASE 판단']);},
+    attendance(q){const missed=/누락|안 찍|미체크|정정/.test(q), late=/지각|조퇴|결근/.test(q);return formatAnswer(missed?'출퇴근 누락 정정 처리 기준':late?'지각·조퇴·결근 근태 처리 기준':'근태 문의 처리 기준',[{type:'ok',head:'CASE 판단',body:missed?'출퇴근 기록 자체가 누락된 건인지, 실제 근무시간이 달라진 건인지 먼저 구분합니다. 단순 체크 누락이면 근태 정정 프로세스로 안내합니다.':late?'지각·조퇴·결근은 사유, 사전 보고 여부, 승인권자 확인 여부, 급여/근태 반영 여부를 함께 확인합니다.':'근태 문의는 출퇴근 기록, 승인 상태, 사유 증빙, 급여 반영 가능성을 분리해서 봐야 합니다.'},{type:'process',head:'처리 프로세스',body:'① 근태 시스템에서 해당 일자 확인<br>② 정정 신청 또는 HR 문의 접수<br>③ 실제 출근·퇴근 시간과 사유 작성<br>④ 승인권자 확인<br>⑤ HR이 근태 반영 결과 확인'},{type:'note',head:'필요 자료',body:'정정 대상 일자, 실제 근무시간, 누락 사유, 승인권자 확인 내용, 필요 시 업무 수행 증빙입니다.'},{type:'warn',head:'주의사항',body:'반복 누락은 단순 오류가 아니라 근태 관리 이슈로 볼 수 있습니다. “이번 건 정정”과 “향후 재발 방지”를 함께 전달하는 것이 좋습니다.'}],['근태 정정','승인권자 확인','사유 기록','재발 방지']);},
+    erp(q){const family=/가족|주민|등본|가족관계/.test(q);return formatAnswer(family?'ERP 가족정보 등록 처리 기준':'ERP 개인정보 업데이트 처리 기준',[{type:'ok',head:'CASE 판단',body:family?'가족정보 등록은 일반 연락처 변경보다 민감도가 높습니다. 가족관계, 주민등록번호 입력 필요 여부, 증빙 제출 여부를 구분해서 안내합니다.':'ERP 개인정보 업데이트는 주소, 연락처, 계좌, 비상연락처, 가족정보 등 항목별로 입력 위치와 검증 방식이 다릅니다.'},{type:'process',head:'처리 프로세스',body:family?'① ERP 내 가족정보 메뉴 접속<br>② 가족 구성원 정보 입력<br>③ 주민등록번호가 필요한 항목은 ERP 보안 화면에서만 직접 입력<br>④ 저장 후 누락 항목 확인<br>⑤ 증빙 제출이 필요한 경우 지정 경로로 제출':'① ERP 접속<br>② 개인정보/인사정보 메뉴 확인<br>③ 변경 항목별 최신 정보 입력<br>④ 저장 후 반영 상태 확인<br>⑤ HR 요청 항목이 남아 있으면 기한 내 보완'},{type:'note',head:'안내 문구 예시',body:family?'“ERP 내 가족정보 입력 시 필요한 항목은 시스템에서 직접 입력 부탁드립니다. 개인정보 보호를 위해 주민등록번호 전체는 메일이나 메신저로 전달하지 말아주세요.”':'“ERP 개인정보는 급여, 4대보험, 증명서 발급 등과 연결될 수 있으므로 공지된 기한 내 최신 정보로 업데이트 부탁드립니다.”'},{type:'warn',head:'주의사항',body:'주민등록번호, 계좌번호, 가족의 상세 개인정보는 채팅·메일 본문에 쓰지 않도록 안내합니다. HR은 입력 완료 여부와 누락 항목만 확인하는 방식이 안전합니다.'}],family?['가족정보','주민등록번호','ERP 보안입력','증빙']:['개인정보 업데이트','ERP','급여 연동','기한 준수']);},
+    payroll(q){return formatAnswer('급여·공제·급여명세서 문의 처리 기준',[{type:'ok',head:'CASE 판단',body:'급여 문의는 기본급, 수당, 과세/비과세 항목, 4대보험, 소득세, 정산월을 나누어 확인해야 합니다. 단순 금액 문의라도 개인정보와 급여정보가 섞일 수 있습니다.'},{type:'process',head:'처리 프로세스',body:'① 문의 대상 월 확인<br>② MetaPay 또는 급여명세서 확인 경로 안내<br>③ 항목별 과세/비과세 여부 확인<br>④ 4대보험 및 원천세 반영 여부 확인<br>⑤ 정정 필요 시 급여 담당자에게 근거 자료와 함께 전달'},{type:'note',head:'필요 확인 항목',body:'근무기간, 계약 형태, 수당 발생월, 지급월, 비과세 항목 여부, 4대보험 가입 여부, 부양가족 수입니다.'},{type:'warn',head:'주의사항',body:'개인의 급여명세서, 주민등록번호, 계좌번호 전체는 공개 채팅창에 입력하지 않도록 안내합니다. 최종 지급액은 급여 담당자의 확정 자료가 우선입니다.'}],['MetaPay','급여명세서','과세/비과세','4대보험']);},
+    document(q){return formatAnswer('증빙서류·제증명 제출 CASE 정리',[{type:'ok',head:'CASE 판단',body:'증빙은 휴가, 경조, 가족정보, 급여/보험, 근태 정정, 제증명 발급 등 어떤 업무에 연결되는지 먼저 분류합니다.'},{type:'process',head:'처리 프로세스',body:'① 필요한 증빙 종류 확인<br>② 제출 또는 발급 경로 확인<br>③ 파일명 또는 제출자 식별 정보 최소화<br>④ HR 확인 후 보완 요청 여부 안내<br>⑤ 보관 기간과 접근 권한은 내부 기준에 따름'},{type:'note',head:'자주 필요한 증빙',body:'가족관계 확인 서류, 경조 관련 증빙, 병가 관련 확인서, 근태 정정 증빙, 급여/보험 반영에 필요한 서류 등입니다.'},{type:'warn',head:'주의사항',body:'서류에 주민등록번호 뒷자리 등 불필요한 민감정보가 포함되어 있으면 마스킹본 제출 가능 여부를 먼저 확인합니다. 단, ERP 필수 입력 항목은 시스템 안내 기준을 따릅니다.'}],['증빙','제출경로','마스킹','보관권한']);},
+    support(q){const card=/법인카드/.test(q), badge=/사원증/.test(q), room=/회의실/.test(q), meal=/밀케어|복지/.test(q);return formatAnswer(card?'법인카드 신청·사용 문의 처리 기준':badge?'사원증 신규·재발급 문의 처리 기준':room?'회의실 예약 문의 처리 기준':meal?'밀케어·복지 이용 문의 처리 기준':'업무지원 문의 처리 기준',[{type:'ok',head:'CASE 판단',body:card?'신규 발급, 한도/사용처 문의, 증빙 제출, 분실/정지 중 어느 케이스인지 분리합니다.':badge?'신규 입사자 발급인지, 분실에 따른 재발급인지, 출입권한 변경인지 구분합니다.':room?'회의실 예약, 일정 변경, 취소, 장비 사용 여부를 구분합니다.':meal?'가입 인증, 이용 방법, 오류 문의, 대상자 여부를 분리해서 확인합니다.':'업무지원 문의는 신청 대상, 승인 필요 여부, 증빙·반납 여부를 먼저 구분합니다.'},{type:'process',head:'처리 프로세스',body:'① 문의 유형 확인<br>② 사내 신청 경로 또는 담당 부서 확인<br>③ 필요한 정보와 증빙만 최소 수집<br>④ 승인 또는 처리 결과 안내<br>⑤ 분실·오류·반려 케이스는 후속 조치 안내'},{type:'note',head:'필요 확인 항목',body:'신청자, 소속, 필요한 일자, 사용 목적, 승인자, 증빙 또는 회수 여부입니다.'},{type:'warn',head:'주의사항',body:'법인카드·사원증 등은 분실 및 오사용 리스크가 있으므로, 처리 경로와 책임 범위를 명확히 안내해야 합니다.'}],['업무지원','신청경로','승인','후속조치']);},
+    general(q){return formatAnswer('문의 내용을 업무처리형으로 정리했습니다',[{type:'ok',head:'분류',body:'현재 질문은 특정 업무 유형이 명확하지 않습니다. HR 안내에서는 먼저 연차, 근태, ERP, 급여, 증빙, 복지/업무지원 중 하나로 분류하는 것이 좋습니다.'},{type:'process',head:'권장 답변 방식',body:'① 문의 목적 확인<br>② 필요한 처리 경로 안내<br>③ 제출 자료와 기한 안내<br>④ 예외·주의사항 고지<br>⑤ 담당자 확인이 필요한 부분 분리'},{type:'note',head:'사용 예시',body:'“이 건은 먼저 ERP 개인정보 업데이트 건으로 분류됩니다. 아래 순서대로 처리해주시고, 주민등록번호 등 민감정보는 시스템 내에서만 입력 부탁드립니다.”'},{type:'warn',head:'확인 필요',body:'사내 가이드북에 별도 기준이 있는 경우, 이 답변보다 가이드북 원문과 최신 공지가 우선입니다.'}],['업무분류','절차화','가이드북 우선']);}
   };
-
-  function getBotAnswer(q){
-    if(hasSensitiveInfo(q)) return privacyAnswer();
-    const intent = detectIntent(q);
-    const fn = answers[intent] || answers.general;
-    return fn(q);
-  }
-
-  function send(q){
-    const text = (q || input.value).trim();
-    if(!text) return;
-    addMessage('user', escapeHtml(text));
-    input.value = '';
-    setTimeout(()=> addMessage('bot', getBotAnswer(text)), 180);
-  }
-
-  sendBtn.addEventListener('click', ()=>send());
-  input.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); }
-  });
-  document.querySelectorAll('.quickBtn').forEach(btn=>{
-    btn.addEventListener('click', ()=>send(btn.dataset.q));
-  });
-  document.querySelectorAll('.chip').forEach(chip=>{
-    chip.addEventListener('click', ()=>{
-      document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-      chip.classList.add('active');
-      activeIntent = chip.dataset.intent;
-      showToast(`업무 유형: ${chip.textContent}`);
-    });
-  });
-  clearBtn.addEventListener('click', ()=>{
-    messages.innerHTML = '';
-    init();
-    showToast('대화를 초기화했습니다.');
-  });
-  printBtn.addEventListener('click', ()=>window.print());
-  copyLastBtn.addEventListener('click', async ()=>{
-    if(!lastBotText){ showToast('복사할 답변이 없습니다.'); return; }
-    try{
-      await navigator.clipboard.writeText(lastBotText);
-      showToast('최근 답변을 복사했습니다.');
-    }catch(e){
-      showToast('브라우저 권한상 복사에 실패했습니다.');
-    }
-  });
-
-  function init(){
-    addMessage('bot', formatAnswer('안녕하세요. MISTO HR Assistant V2입니다', [
-      {type:'ok', head:'사용 방식', body:'연차, 근태, ERP 개인정보, 가족정보, 증빙, 급여 문의를 입력하면 실무 처리 순서에 맞춰 답변합니다.'},
-      {type:'process', head:'V2 개선점', body:'요약형 답변을 줄이고, CASE 판단 → 처리 프로세스 → 필요 자료 → 주의사항 구조로 안내합니다.'},
-      {type:'warn', head:'보안 안내', body:'주민등록번호 전체, 계좌번호 전체, 비밀번호 등은 이 화면에 입력하지 마세요. ERP 보안 화면 또는 회사 지정 경로를 사용해야 합니다.'}
-    ], ['업무처리형', 'CASE 분기', '민감정보 방어']), '안녕하세요. MISTO HR Assistant V2입니다. 연차, 근태, ERP 개인정보, 가족정보, 증빙, 급여 문의를 입력하면 실무 처리 순서에 맞춰 답변합니다.');
-  }
-  init();
+  const kb=[
+    {cat:'연차/근태',title:'휴가·근태 신청 방법',pages:'p.18-19',q:'휴가 근태 신청 방법 알려줘',desc:'GERP 휴가/근태 신청 경로, 근태그룹·근태유형 선택, 품의요청 흐름을 안내합니다.'},
+    {cat:'연차/근태',title:'일반연차 CASE',pages:'p.18-19',q:'일반 연차 신청은 어떻게 해?',desc:'사전 신청, 잔여 연차, 승인권자, 팀 공유 등 일반연차 안내 기준을 정리합니다.'},
+    {cat:'연차/근태',title:'검진·경조 등 증빙 휴가',pages:'p.19-20',q:'검진 휴가는 CASE 몇으로 올려?',desc:'일반연차와 달리 첨부파일·수신처·증빙 확인이 필요한 휴가를 분리합니다.'},
+    {cat:'근태',title:'출퇴근 누락 정정',pages:'p.근태',q:'출근 체크를 누락했을 때 어떻게 정정해야 해?',desc:'누락 일자, 실제 근무시간, 사유, 승인권자 확인 절차를 안내합니다.'},
+    {cat:'ERP/개인정보',title:'개인정보 업데이트',pages:'p.ERP',q:'ERP 개인정보 업데이트는 어떤 항목을 확인해야 해?',desc:'주소, 연락처, 계좌, 비상연락처, 가족정보 등 항목별 최신화 기준을 정리합니다.'},
+    {cat:'ERP/개인정보',title:'가족정보 등록',pages:'p.ERP',q:'ERP 가족정보 등록은 어떻게 안내해야 해?',desc:'가족 구성원 정보, 주민등록번호 입력, 증빙 제출, 보안 입력 원칙을 안내합니다.'},
+    {cat:'급여',title:'급여명세서 조회',pages:'p.MetaPay',q:'급여명세서는 어디서 조회하고 어떻게 안내해?',desc:'MetaPay 등 급여명세서 확인 경로와 항목별 확인 기준을 안내합니다.'},
+    {cat:'증빙/제증명',title:'제증명 발급',pages:'p.증명',q:'제증명 발급 방법 알려줘',desc:'발급 목적, 신청 경로, 개인정보 노출 최소화 기준을 정리합니다.'},
+    {cat:'업무지원',title:'법인카드',pages:'p.지원',q:'법인카드 발급 신청은 어떻게 해?',desc:'신규 발급, 사용 기준, 증빙, 분실/정지 케이스를 분리합니다.'},
+    {cat:'업무지원',title:'사원증',pages:'p.지원',q:'사원증 신청이나 재발급은 어떻게 해?',desc:'신규 발급, 분실 재발급, 출입권한 변경 문의를 안내합니다.'},
+    {cat:'업무지원',title:'회의실 예약',pages:'p.지원',q:'회의실 예약은 어떤 식으로 안내해?',desc:'예약, 변경, 취소, 장비 사용 여부를 확인하는 업무지원 항목입니다.'},
+    {cat:'복지',title:'밀케어',pages:'p.복지',q:'밀케어 가입 인증 방법 알려줘',desc:'복지 서비스 가입 인증, 이용 방법, 오류 문의 대응 기준을 안내합니다.'}
+  ];
+  function getBotAnswer(q){if(hasSensitiveInfo(q))return privacyAnswer();const intent=detectIntent(q);return (answers[intent]||answers.general)(q);}
+  function send(q){const text=(q||input.value).trim();if(!text)return;addMessage('user',escapeHtml(text));input.value='';setTimeout(()=>addMessage('bot',getBotAnswer(text)),120);}
+  function renderKb(){const s=(kbSearch.value||'').trim().toLowerCase();const items=kb.filter(x=>!s||[x.cat,x.title,x.desc,x.pages].join(' ').toLowerCase().includes(s));kbList.innerHTML=items.map(x=>`<article class="kb-item" data-q="${escapeHtml(x.q)}"><span class="cat">${escapeHtml(x.cat)}</span><h3>${escapeHtml(x.title)}</h3><p>${escapeHtml(x.desc)}</p><div class="pages">${escapeHtml(x.pages)}</div></article>`).join('')||`<article class="kb-item"><span class="cat">검색</span><h3>결과 없음</h3><p>다른 키워드로 검색해 주세요.</p><div class="pages">No result</div></article>`;document.querySelectorAll('.kb-item[data-q]').forEach(el=>el.addEventListener('click',()=>send(el.dataset.q)));}
+  function init(){kbCount.textContent=kb.length;renderKb();addMessage('bot',formatAnswer('안녕하세요. MISTO HR Assistant V2입니다',[{type:'ok',head:'사용 방식',body:'V1 UI를 유지한 상태에서 V2 답변 로직을 넣었습니다. 질문을 입력하면 HR 실무자가 바로 안내할 수 있게 업무 유형부터 분류합니다.'},{type:'process',head:'답변 구조',body:'결론 → 처리 경로 → 단계 → CASE 판단 → 주의사항 순서로 정리합니다.'},{type:'warn',head:'보안 안내',body:'주민등록번호 전체, 계좌번호 전체, 비밀번호 등은 이 화면에 입력하지 마세요. ERP 보안 화면 또는 회사 지정 경로를 사용해야 합니다.'}],['V1 UI 고정','V2 내용 업데이트','민감정보 방어']));}
+  sendBtn.addEventListener('click',()=>send());input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();send();}});document.querySelectorAll('[data-question]').forEach(btn=>btn.addEventListener('click',()=>send(btn.dataset.question)));clearBtn.addEventListener('click',()=>{messages.innerHTML='';init();showToast('대화를 초기화했습니다.');});copyLastBtn.addEventListener('click',async()=>{if(!lastBotText){showToast('복사할 답변이 없습니다.');return;}try{await navigator.clipboard.writeText(lastBotText);showToast('최근 답변을 복사했습니다.');}catch(e){showToast('브라우저 권한상 복사에 실패했습니다.');}});printBtn.addEventListener('click',()=>window.print());kbSearch.addEventListener('input',renderKb);init();
 })();
 </script>
 </body>
