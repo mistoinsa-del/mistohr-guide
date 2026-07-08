@@ -4,223 +4,209 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="format-detection" content="telephone=no,email=no,address=no" />
-  <title>MISTO Guidebook Assistant</title>
+  <title>MISTO HR AI AGENT · Compact Guidebook Chat</title>
   <style>
     @font-face{font-family:localFallback;src:local("Malgun Gothic");}
     :root{
-      --red:#e30613; --navy:#10233f; --blue:#2f6df6; --cyan:#39bfd3; --peach:#ffb59f; --purple:#bda0ff;
-      --ink:#101828; --muted:#667085; --line:rgba(16,35,63,.12); --soft:#f7f9fc; --card:rgba(255,255,255,.78);
-      --shadow:0 26px 80px rgba(16,35,63,.16);
+      --red:#e30613;--navy:#10233f;--ink:#101828;--muted:#667085;--line:rgba(16,35,63,.12);
+      --soft:#f7f9fc;--white:#fff;--shadow:0 22px 70px rgba(16,35,63,.14);--round:28px;
+      --blue:#2f6df6;--peach:#ffb59f;--cyan:#39bfd3;--purple:#bda0ff;
     }
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
+    html,body{height:100%;overflow:hidden}
     body{
-      margin:0; color:var(--ink); min-height:100vh;
+      margin:0;color:var(--ink);
       font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",localFallback,Arial,sans-serif;
       background:
-        radial-gradient(circle at 8% 8%,rgba(255,214,107,.36),transparent 30%),
-        radial-gradient(circle at 92% 10%,rgba(57,191,211,.32),transparent 30%),
-        radial-gradient(circle at 55% 92%,rgba(189,160,255,.22),transparent 35%),
-        linear-gradient(135deg,#fff8f6 0%,#f7fbff 46%,#ffffff 100%);
-      overflow-x:hidden; word-break:keep-all; -webkit-font-smoothing:antialiased;
+        radial-gradient(circle at 0% 10%,rgba(255,181,159,.36),transparent 32%),
+        radial-gradient(circle at 100% 2%,rgba(57,191,211,.28),transparent 30%),
+        radial-gradient(circle at 50% 100%,rgba(189,160,255,.22),transparent 38%),
+        linear-gradient(135deg,#fff8f6 0%,#f8fbff 48%,#ffffff 100%);
+      word-break:keep-all;-webkit-font-smoothing:antialiased;
     }
     button,input,select{font-family:inherit}
-    .orb{position:fixed;border-radius:999px;filter:blur(22px);opacity:.4;z-index:-1;pointer-events:none}
-    .orb.a{width:260px;height:260px;background:var(--peach);top:90px;left:-100px}
-    .orb.b{width:330px;height:330px;background:var(--cyan);top:220px;right:-130px}
-    .orb.c{width:240px;height:240px;background:var(--purple);bottom:-30px;left:42%}
-    .wrap{max-width:1440px;margin:0 auto;padding:28px 26px 58px}
-    .hero{display:grid;grid-template-columns:360px 1fr;gap:24px;align-items:stretch}
-    .panel,.assistant,.process-area{background:rgba(255,255,255,.72);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.72);box-shadow:var(--shadow)}
-    .panel{border-radius:32px;padding:24px;min-height:760px}
-    .mini-title{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-    .mark{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,var(--red),#ff9a5a);display:grid;place-items:center;color:#fff;font-weight:950;letter-spacing:-.02em}
-    .mini-title strong{display:block;color:var(--navy);font-size:19px;letter-spacing:-.03em}
-    .mini-title span{display:block;margin-top:4px;color:var(--muted);font-size:12px;font-weight:900}
-    .panel h1{margin:0;color:var(--navy);font-size:36px;line-height:1.08;letter-spacing:-.06em}
-    .panel h1 span{background:linear-gradient(90deg,var(--red),#ff824a,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
-    .lead{margin:18px 0 0;color:#475467;font-size:15px;line-height:1.7}
-    .utility{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0 20px}
-    .utility button{border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px;color:#344054;font-weight:950;cursor:pointer}
-    .utility button:hover{transform:translateY(-1px);border-color:rgba(227,6,19,.35);color:var(--red)}
-    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-    .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 10px;color:#475467;font-size:12px;font-weight:950;cursor:pointer}
-    .chip.active,.chip:hover{background:#fff0f1;color:var(--red);border-color:rgba(227,6,19,.25)}
-    .quick{margin-top:24px}
-    .quick h3,.filter h3{margin:0 0 10px;color:var(--navy);font-size:15px;letter-spacing:-.02em}
-    .quick-list{display:grid;gap:8px}
-    .quick-list button{text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.82);border-radius:16px;padding:12px;cursor:pointer;color:#344054;font-weight:900;font-size:13px;line-height:1.35}
-    .quick-list button:hover{background:#fff;box-shadow:0 12px 24px rgba(16,35,63,.08)}
-    .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
-    .stat{border:1px solid var(--line);background:rgba(255,255,255,.68);border-radius:18px;padding:14px}
-    .stat b{display:block;color:var(--navy);font-size:22px;letter-spacing:-.04em}
-    .stat span{display:block;color:var(--muted);font-size:11px;font-weight:900;margin-top:2px}
-    .assistant{border-radius:34px;overflow:hidden;display:flex;flex-direction:column;min-height:760px}
-    .assistant-head{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,var(--navy),#263f72);color:white;padding:18px 22px}
-    .avatar{width:50px;height:50px;border-radius:17px;background:linear-gradient(135deg,var(--red),#ff9a5a);display:grid;place-items:center;font-weight:950}
-    .assistant-head strong{display:block;font-size:19px;letter-spacing:-.02em}
-    .assistant-head span{display:block;margin-top:4px;color:#dbeafe;font-size:12px;font-weight:800}
-    .assistant-head em{margin-left:auto;font-style:normal;padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.14);font-size:12px;font-weight:950}
-    .messages{height:620px;overflow:auto;padding:22px;background:linear-gradient(180deg,rgba(255,255,255,.54),rgba(255,255,255,.92));flex:1}
-    .msg{max-width:94%;margin:0 0 16px;padding:16px 18px;border-radius:21px;line-height:1.66;font-size:15px;box-shadow:0 12px 28px rgba(16,35,63,.07)}
-    .msg.bot{background:#fff;border:1px solid var(--line);border-top-left-radius:7px;color:#1e293b}
-    .msg.user{margin-left:auto;background:var(--red);color:#fff;border-top-right-radius:7px;max-width:78%}
-    .answer-title{font-weight:950;color:var(--navy);font-size:18px;margin:0 0 10px;letter-spacing:-.03em}
-    .answer-summary{margin:0 0 12px;color:#344054}
-    .answer-row{display:grid;grid-template-columns:86px 1fr;gap:10px;margin:9px 0}
-    .answer-row b{color:var(--navy)}
-    .answer-row div{color:#344054}
-    .answer-steps{margin:10px 0 0;padding-left:22px}
-    .answer-steps li{margin:5px 0}
-    .subhead{margin:14px 0 6px;color:var(--navy);font-weight:950}
-    .meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
-    .meta span{display:inline-flex;align-items:center;border-radius:999px;background:#f2f4f7;color:#475467;font-size:11px;font-weight:950;padding:6px 9px}
-    .composer{display:flex;gap:10px;padding:18px;background:rgba(255,255,255,.78);border-top:1px solid var(--line)}
-    .composer input{flex:1;border:1px solid var(--line);border-radius:18px;padding:16px 17px;font-size:15px;outline:none;min-width:0;background:#fff}
+    .app{height:100vh;width:100vw;padding:24px;display:grid;grid-template-columns:minmax(320px,410px) minmax(680px,1fr);gap:22px}
+    .brand{
+      min-width:0;height:calc(100vh - 48px);border-radius:var(--round);padding:26px;
+      background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.8);box-shadow:var(--shadow);backdrop-filter:blur(16px);
+      display:flex;flex-direction:column;overflow:hidden;
+    }
+    .kicker{display:inline-flex;width:max-content;gap:8px;align-items:center;border-radius:999px;background:#fff0f1;color:var(--red);font-size:12px;font-weight:950;padding:8px 11px;border:1px solid rgba(227,6,19,.12)}
+    .brand h1{margin:20px 0 0;color:var(--navy);font-size:42px;line-height:.96;letter-spacing:-.075em;font-weight:950}
+    .brand h1 span{display:block;background:linear-gradient(90deg,var(--red),#ff824a,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .desc{margin:17px 0 18px;color:#475467;font-size:14px;line-height:1.62;font-weight:700}
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px}
+    .stat{border:1px solid var(--line);background:rgba(255,255,255,.74);border-radius:18px;padding:13px 14px}
+    .stat b{display:block;color:var(--navy);font-size:24px;letter-spacing:-.04em;line-height:1}
+    .stat span{display:block;margin-top:5px;color:var(--muted);font-size:11px;font-weight:950}
+    .tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+    .tools button{border:1px solid var(--line);background:#fff;border-radius:15px;padding:11px 10px;color:#344054;font-size:12px;font-weight:950;cursor:pointer}
+    .tools button:hover{border-color:rgba(227,6,19,.28);color:var(--red);transform:translateY(-1px)}
+    .searchBox{display:grid;gap:8px;margin-bottom:12px}
+    .searchBox input,.searchBox select{width:100%;border:1px solid var(--line);background:#fff;border-radius:16px;padding:13px 14px;outline:none;color:#344054;font-size:13px;font-weight:800}
+    .searchBox input:focus,.searchBox select:focus{border-color:rgba(47,109,246,.45);box-shadow:0 0 0 4px rgba(47,109,246,.08)}
+    .chips{display:flex;gap:7px;flex-wrap:wrap;margin:2px 0 12px;max-height:76px;overflow:auto;padding-right:4px}
+    .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 9px;color:#475467;font-size:11px;font-weight:950;cursor:pointer;white-space:nowrap}
+    .chip.active,.chip:hover{background:#fff0f1;color:var(--red);border-color:rgba(227,6,19,.24)}
+    .processList{flex:1;min-height:0;overflow:auto;display:grid;gap:7px;padding-right:4px}
+    .processBtn{text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.82);border-radius:15px;padding:10px 12px;cursor:pointer;color:#344054;transition:.14s}
+    .processBtn:hover{background:#fff;box-shadow:0 10px 22px rgba(16,35,63,.07);border-color:rgba(47,109,246,.22)}
+    .processBtn strong{display:block;color:var(--navy);font-size:13px;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .processBtn span{display:block;margin-top:3px;color:var(--muted);font-size:11px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .chat{
+      min-width:0;height:calc(100vh - 48px);border-radius:var(--round);overflow:hidden;
+      background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.84);box-shadow:var(--shadow);backdrop-filter:blur(16px);
+      display:flex;flex-direction:column;
+    }
+    .chatHead{display:flex;align-items:center;gap:12px;padding:16px 19px;background:linear-gradient(135deg,var(--navy),#263f72);color:#fff}
+    .avatar{width:42px;height:42px;border-radius:15px;background:linear-gradient(135deg,var(--red),#ff9a5a);display:grid;place-items:center;font-weight:950;letter-spacing:-.02em;flex:0 0 auto}
+    .chatHead strong{display:block;font-size:17px;letter-spacing:-.03em}
+    .chatHead span{display:block;margin-top:3px;color:#dbeafe;font-size:11px;font-weight:850}
+    .status{margin-left:auto;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);padding:7px 10px;font-size:11px;font-weight:950;white-space:nowrap}
+    .answerWrap{flex:1;min-height:0;padding:18px;background:linear-gradient(180deg,rgba(247,249,252,.82),rgba(255,255,255,.58));display:grid;grid-template-rows:auto 1fr;gap:12px;overflow:hidden}
+    .questionBar{min-height:46px;border:1px solid var(--line);background:rgba(255,255,255,.86);border-radius:18px;padding:12px 15px;color:#344054;font-size:13px;font-weight:900;display:flex;align-items:center;gap:10px}
+    .questionBar b{color:var(--red);font-size:12px;white-space:nowrap}
+    .questionBar span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .answerCard{
+      min-height:0;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:24px;padding:20px 22px;
+      box-shadow:0 16px 38px rgba(16,35,63,.08);line-height:1.55;
+    }
+    .answerTitle{margin:0 0 8px;color:var(--navy);font-size:24px;line-height:1.18;letter-spacing:-.055em;font-weight:950}
+    .summary{margin:0 0 13px;color:#344054;font-size:14.5px;font-weight:700}
+    .infoGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0 13px}
+    .info{border:1px solid var(--line);background:#f9fafb;border-radius:16px;padding:11px 12px;min-width:0}
+    .info b{display:block;color:var(--navy);font-size:11px;margin-bottom:4px;letter-spacing:-.01em}
+    .info span{display:block;color:#344054;font-size:13px;font-weight:800;line-height:1.45}
+    .compactSection{margin-top:10px;border:1px solid var(--line);border-radius:17px;background:#fff;overflow:hidden}
+    .sectionLabel{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0;padding:11px 13px;background:#f7f9fc;color:var(--navy);font-size:13px;font-weight:950;letter-spacing:-.02em}
+    .steps{margin:0;padding:10px 12px 12px 33px;color:#344054;font-size:13.2px;font-weight:700}
+    .steps li{margin:3px 0}
+    details.compactSection summary{cursor:pointer;list-style:none}
+    details.compactSection summary::-webkit-details-marker{display:none}
+    details.compactSection summary::after{content:'열기';font-size:10px;color:#667085;background:#fff;border:1px solid var(--line);padding:4px 7px;border-radius:999px}
+    details.compactSection[open] summary::after{content:'닫기'}
+    .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:13px}
+    .meta span{display:inline-flex;align-items:center;border-radius:999px;background:#f2f4f7;color:#475467;font-size:10.5px;font-weight:950;padding:6px 8px}
+    .related{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
+    .related button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 9px;margin:0 5px 5px 0;color:#475467;font-size:11px;font-weight:900;cursor:pointer}
+    .related button:hover{color:var(--red);border-color:rgba(227,6,19,.25)}
+    .allGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+    .allGroup{border:1px solid var(--line);border-radius:17px;background:#fff;overflow:hidden}
+    .allGroup h3{margin:0;padding:10px 12px;background:#f7f9fc;color:var(--navy);font-size:13px}
+    .allGroup ul{margin:0;padding:10px 12px 11px 28px;color:#344054;font-size:12.5px;font-weight:750}
+    .allGroup li{margin:3px 0}
+    .composer{display:flex;gap:10px;padding:15px 17px;background:rgba(255,255,255,.84);border-top:1px solid var(--line)}
+    .composer input{flex:1;min-width:0;border:1px solid var(--line);border-radius:17px;padding:14px 16px;font-size:14px;outline:none;background:#fff;color:#344054;font-weight:760}
     .composer input:focus{border-color:rgba(47,109,246,.42);box-shadow:0 0 0 4px rgba(47,109,246,.08)}
-    .composer button{border:0;border-radius:18px;background:var(--navy);color:#fff;font-weight:950;padding:0 24px;cursor:pointer}
-    .section{margin-top:26px}
-    .process-area{border-radius:34px;padding:26px}
-    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:20px}
-    .section-head h2{margin:0;color:var(--navy);font-size:32px;line-height:1.2;letter-spacing:-.05em}
-    .section-head p{margin:8px 0 0;color:#667085;font-size:14px}
-    .tools{display:flex;gap:10px;flex-wrap:wrap}
-    .tools input,.tools select{border:1px solid var(--line);background:#fff;border-radius:16px;padding:13px 14px;outline:none;color:#344054;font-weight:800}
-    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
-    .card{border:1px solid var(--line);background:rgba(255,255,255,.78);border-radius:22px;padding:16px;min-height:158px;cursor:pointer;transition:.18s}
-    .card:hover{transform:translateY(-3px);box-shadow:0 18px 38px rgba(16,35,63,.10);background:#fff}
-    .card .cat{display:inline-block;background:#fff0f1;color:var(--red);border-radius:999px;padding:6px 9px;font-size:11px;font-weight:950}
-    .card h3{margin:13px 0 8px;color:var(--navy);font-size:17px;letter-spacing:-.03em}
-    .card p{margin:0;color:#667085;font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-    .card .page{margin-top:13px;color:#344054;font-size:12px;font-weight:950}
-    .toast{position:fixed;right:24px;bottom:24px;background:var(--navy);color:#fff;padding:13px 15px;border-radius:15px;font-size:13px;font-weight:900;box-shadow:0 18px 38px rgba(16,35,63,.24);opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none}
+    .composer button{border:0;border-radius:17px;background:var(--navy);color:#fff;font-weight:950;padding:0 24px;cursor:pointer}
+    .composer button:hover{background:#1d355c}
+    .toast{position:fixed;right:26px;bottom:26px;background:var(--navy);color:#fff;padding:12px 14px;border-radius:14px;font-size:12px;font-weight:900;box-shadow:0 18px 38px rgba(16,35,63,.24);opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none}
     .toast.show{opacity:1;transform:translateY(0)}
-    @media(max-width:1120px){.hero{grid-template-columns:1fr}.panel{min-height:auto}.cards{grid-template-columns:repeat(2,1fr)}.messages{height:560px}}
-    @media(max-width:680px){.wrap{padding:14px 12px 38px}.cards{grid-template-columns:1fr}.section-head{display:block}.tools{margin-top:14px}.composer{flex-direction:column}.composer button{height:48px}.msg{max-width:100%}.msg.user{max-width:90%}.answer-row{grid-template-columns:1fr}.assistant-head em{display:none}.panel h1{font-size:30px}}
-    @media print{body{background:#fff}.wrap{max-width:none;padding:0}.panel,.composer,.process-area,.toast{display:none!important}.hero{display:block}.assistant{box-shadow:none;border:0;border-radius:0}.assistant-head{background:#fff;color:#111;border-bottom:2px solid #111}.messages{height:auto;overflow:visible;background:#fff}.msg.user{display:none}.msg.bot{box-shadow:none;page-break-inside:avoid;max-width:100%}}
+    @media(max-width:980px){html,body{overflow:auto}.app{height:auto;min-height:100vh;grid-template-columns:1fr;padding:14px;gap:14px}.brand,.chat{height:auto}.brand{max-height:none}.processList{max-height:260px}.chat{min-height:680px}.answerWrap{min-height:540px}.allGrid,.infoGrid{grid-template-columns:1fr}}
+    @media(max-width:560px){.brand h1{font-size:34px}.chatHead .status{display:none}.composer{flex-direction:column}.composer button{height:48px}.answerCard{padding:17px}.answerTitle{font-size:21px}}
+    @media print{html,body{overflow:visible;background:#fff}.app{display:block;height:auto;padding:0}.brand,.composer,.toast,.questionBar,.chatHead .status{display:none!important}.chat{height:auto;box-shadow:none;border:0;border-radius:0}.chatHead{background:#fff;color:#111;border-bottom:2px solid #111}.answerWrap{display:block;padding:0;background:#fff}.answerCard{box-shadow:none;border:0;overflow:visible}}
   </style>
 </head>
 <body>
-  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
-  <div class="wrap">
-    <section class="hero">
-      <aside class="panel">
-        <div class="mini-title"><div class="mark">HR</div><div><strong>MISTO Guidebook Assistant</strong><span>2026 New Joiner Guide Book only</span></div></div>
-        <h1>가이드북 기준<br><span>프로세스 챗봇</span></h1>
-        <p class="lead">답변은 우선 2026 미스토코리아 가이드북에 있는 항목만 기준으로 구성했습니다. 질문을 입력하거나 아래 버튼을 누르면 경로, 단계, CASE, 주의사항, 담당자, 근거 페이지를 V1 스타일 답변으로 보여줍니다.</p>
-        <div class="utility">
-          <button id="allBtn">전체 프로세스</button>
-          <button id="clearBtn">대화 초기화</button>
-          <button id="copyBtn">최근 답변 복사</button>
-          <button id="printBtn">인쇄/PDF</button>
-        </div>
-        <div class="filter">
-          <h3>카테고리</h3>
-          <div class="chips" id="catChips"></div>
-        </div>
-        <div class="quick">
-          <h3>자주 묻는 프로세스</h3>
-          <div class="quick-list">
-            <button data-q="휴가 근태 신청 방법 알려줘">휴가/근태 신청</button>
-            <button data-q="제증명 발급 방법 알려줘">제증명 발급</button>
-            <button data-q="급여명세서 어디서 봐?">급여명세서 조회</button>
-            <button data-q="경조금 신청 어떻게 해?">경조금 신청</button>
-            <button data-q="복지포인트 사용신청 방법 알려줘">복지포인트 사용신청</button>
-            <button data-q="건강검진 공가 신청 방법 알려줘">건강검진 지원</button>
-            <button data-q="회의실 예약 방법 알려줘">회의실 예약</button>
-            <button data-q="사원증 재발급 어떻게 해?">사원증 재발급</button>
-            <button data-q="법인카드 신청 방법 알려줘">개인 법인카드 신청</button>
-            <button data-q="밀케어 가입 인증 방법 알려줘">밀케어 가입/인증</button>
-            <button data-q="담당자 알려줘">각 파트별 담당자</button>
-          </div>
-        </div>
-        <div class="stats"><div class="stat"><b id="processCount">0</b><span>guidebook topics</span></div><div class="stat"><b>V3</b><span>guidebook only</span></div></div>
-      </aside>
-
-      <main class="assistant" id="assistant">
-        <div class="assistant-head"><div class="avatar">HR</div><div><strong>MISTO HR Assistant</strong><span>가이드북 원문 기준 · 경로/단계/담당자 중심 답변</span></div><em>Guidebook Only</em></div>
-        <div class="messages" id="messages"></div>
-        <form class="composer" id="askForm"><input id="question" placeholder="예: 복지포인트 사용신청은 어떻게 해? / 회의실 예약 방법 알려줘" autocomplete="off" /><button type="submit">질문</button></form>
-      </main>
-    </section>
-
-    <section class="section">
-      <div class="process-area">
-        <div class="section-head"><div><h2>가이드북 프로세스 전체 목록</h2><p>카드를 누르면 해당 프로세스를 챗봇 답변 형태로 바로 출력합니다.</p></div><div class="tools"><input id="search" placeholder="검색: 연차, 법인카드, 밀케어, 담당자..." /><select id="category"><option value="">전체 카테고리</option></select></div></div>
-        <div class="cards" id="cards"></div>
+  <div class="app">
+    <aside class="brand">
+      <div class="kicker">Guidebook Only · Local HTML</div>
+      <h1>MISTO HR <span>AI AGENT</span></h1>
+      <p class="desc">채팅 기록이 계속 길어지지 않도록, 화면 오른쪽에 <b>현재 질문과 최신 답변만 크게</b> 보여주는 콤팩트 버전입니다.</p>
+      <div class="stats"><div class="stat"><b id="processCount">0</b><span>guidebook topics</span></div><div class="stat"><b>V4</b><span>compact layout</span></div></div>
+      <div class="tools">
+        <button id="allBtn">전체 목록</button>
+        <button id="clearBtn">초기화</button>
+        <button id="copyBtn">답변 복사</button>
+        <button id="printBtn">인쇄/PDF</button>
       </div>
-    </section>
+      <div class="searchBox">
+        <input id="search" placeholder="검색: 연차, 법인카드, 밀케어, 담당자..." />
+        <select id="category"><option value="">전체 카테고리</option></select>
+      </div>
+      <div class="chips" id="catChips"></div>
+      <div class="processList" id="processList"></div>
+    </aside>
+
+    <main class="chat" id="chat">
+      <div class="chatHead">
+        <div class="avatar">HR</div>
+        <div><strong>MISTO HR Assistant</strong><span>한 화면 고정 · 최신 답변 중심 · 가이드북 기준</span></div>
+        <div class="status">No API Cost</div>
+      </div>
+      <div class="answerWrap">
+        <div class="questionBar" id="questionBar"><b>READY</b><span>왼쪽 항목을 누르거나 아래에 질문을 입력하세요.</span></div>
+        <div class="answerCard" id="answerCard"></div>
+      </div>
+      <form class="composer" id="askForm"><input id="question" placeholder="예: 연차 신청 방법 알려줘 / 급여명세서 어디서 봐?" autocomplete="off" /><button type="submit">질문</button></form>
+    </main>
   </div>
   <div class="toast" id="toast">복사했습니다.</div>
 <script>
 const PROCESSES = [{"id": "history", "category": "회사소개", "title": "회사 연혁", "page": "p.1", "keywords": ["연혁", "역사", "회사연혁", "1911", "1973", "1991", "2007", "2010", "2015", "2022", "2025", "2026"], "conclusion": "미스토코리아는 1911년 이태리 비엘라 섬유 제조업에서 시작된 헤리티지를 바탕으로 FILA Korea 설립, 글로벌 상표권 인수, MISTOKOREA 사명 변경, 글로벌 확장 흐름을 이어가고 있습니다.", "path": "가이드북 STEP 01 > 회사연혁", "steps": ["1911년 이태리 비엘라에서 섬유 제조업 시작", "1973년 테니스를 통한 스포츠마케팅 시장 진출", "1991년 FILA KOREA 설립", "2007년 전세계 FILA 상표권 인수", "2010년 KOSPI 상장", "2015년 Renewal ‘FILA ODYSSEY 2020’", "2022년 ‘Winning Together’ 5개년 전략", "2025년 MISTOKOREA 사명 변경", "2026년 글로벌 확장"], "cases": [], "cautions": [], "owner": "", "source": "2026 미스토코리아 가이드북 p.1"}, {"id": "brand", "category": "회사소개", "title": "FILA 브랜드 메시지", "page": "p.2", "keywords": ["브랜드", "FILA", "휠라", "Change the Game", "Team FILA", "Winning Together"], "conclusion": "가이드북은 FILA 브랜드 메시지를 ‘Change the Game with Team FILA’와 ‘Winning Together’로 소개합니다.", "path": "가이드북 STEP 01 > 미스토코리아 브랜드", "steps": ["110년 이상의 헤리티지를 가진 미스토코리아(FILA)의 일원으로서 고객 문제를 빠르고 정확하게 파악합니다.", "주도적으로 해결하는 미스토코리아(FILA)인으로 성장하는 방향을 제시합니다.", "함께하는 즐거움과 함께하는 성장의 첫걸음을 강조합니다."], "cases": [], "cautions": [], "owner": "", "source": "2026 미스토코리아 가이드북 p.2"}, {"id": "talent", "category": "회사소개", "title": "인재상", "page": "p.3", "keywords": ["인재상", "고객중심", "문제해결", "협력", "협업", "주도적", "Needs"], "conclusion": "미스토코리아 인재상은 고객을 먼저 생각하고, 고객의 문제(Needs)를 정확하게 찾아 주도적으로 해결하며, 함께 더 나은 결과를 만드는 사람입니다.", "path": "가이드북 STEP 01 > 인재상", "steps": ["우리의 고객이 누구인지 아는 사람", "고객의 문제(Needs)를 정확하고 빠르게 찾아낼 수 있는 사람", "개인의 성과보다 팀의 승리를 위해 협업할 수 있는 사람", "스스로 해결해내는 주도적인 사람"], "cases": [], "cautions": [], "owner": "", "source": "2026 미스토코리아 가이드북 p.3"}, {"id": "groupware", "category": "업무시스템", "title": "그룹웨어 주요 메뉴", "page": "p.4-6", "keywords": ["그룹웨어", "메일", "Outlook", "아웃룩", "전자결재", "e-Accounting", "법인카드", "통합게시", "ITSM", "FILA 자사몰", "GERP", "복지플러스", "잔여연차", "휴가관리"], "conclusion": "그룹웨어는 메일, 전자결재, e-Accounting, 통합게시, ITSM 등 사내 업무를 처리하는 기본 플랫폼입니다.", "path": "MISTO 그룹웨어", "steps": ["메일 메뉴에서 Outlook 웹버전으로 이동해 메일을 확인합니다.", "전자결재 메뉴에서 품의서 작성 및 결재 현황을 확인합니다.", "e-Accounting 메뉴에서 법인카드 사용내역, 일반경비 신청 등을 확인합니다.", "통합게시에서 공지사항과 타부서 안내사항을 확인합니다.", "ITSM에서 IT 인프라 및 접근권한을 요청합니다.", "시스템 바로가기에서 FILA 자사몰, GERP, 복지플러스로 이동할 수 있습니다.", "휴가관리에서 잔여연차 일수를 확인할 수 있습니다."], "cases": ["링크는 Ctrl을 누른 채 클릭하거나 마우스 휠로 클릭하면 새 창으로 연결됩니다."], "cautions": [], "owner": "인사팀 김석은님, 임승준님", "source": "2026 미스토코리아 가이드북 p.4-6"}, {"id": "gerp", "category": "업무시스템", "title": "GERP / ESS 기능", "page": "p.7-8", "keywords": ["GERP", "ERP", "ESS", "인사관리", "근태관리", "평가관리", "개인인사정보", "휴복직", "임산부", "시간외", "외근", "근무시간변경", "근로시간단축"], "conclusion": "GERP는 휴가 신청 및 근태 현황을 관리하는 사내 인사관리 시스템이며, ESS에서 인사관리·근태관리·평가관리 업무를 처리합니다.", "path": "GERP > ESS", "steps": ["인사관리: 개인 인사정보 조회/변경, 휴·복직 신청, 임산부 신청을 처리합니다.", "근태관리: 휴가/근태 신청 및 신청내역 확인, 시간외근무 신청, 외근 신청을 처리합니다.", "근태관리에서 근로시간 단축 및 근무시간 변경 신청을 처리합니다.", "평가관리: 개인/역량목표 수립 및 내역 확인, 중간점검, 이동평가, 다면평가, 정기평가 기능을 사용합니다."], "cases": [], "cautions": ["링크는 Ctrl+클릭 또는 마우스 휠 클릭 시 새 창으로 연결됩니다."], "owner": "인사팀 김석은님, 임승준님", "source": "2026 미스토코리아 가이드북 p.7-8"}, {"id": "it-equipment", "category": "업무시스템", "title": "직무별 IT 집기 지급", "page": "p.9", "keywords": ["IT집기", "노트북", "랩탑", "그램", "LG Gram", "X1 Carbon", "맥", "Mac", "디자이너", "마케터", "포토그래퍼", "전산장비"], "conclusion": "직무별 IT 집기는 업무 특성에 따라 지급 기준이 다르게 안내되어 있습니다.", "path": "가이드북 STEP 02 > 직무별 IT 집기 지급 현황", "steps": ["일반사무 직무는 LG Gram 기준으로 안내되어 있습니다.", "MD/기획/마케팅 직무는 X1 Carbon 기준으로 안내되어 있습니다.", "디자인 직무는 고사양 장비 기준으로 안내되어 있습니다.", "Mac은 예외 지급 항목으로 안내되어 있습니다."], "cases": [], "cautions": ["실제 지급 장비는 운영 상황에 따라 동일 또는 유사 사양 모델로 변경될 수 있습니다."], "owner": "인사팀 위상우님", "source": "2026 미스토코리아 가이드북 p.9"}, {"id": "workhours", "category": "근태/휴가", "title": "근무시간 및 근무타입 변경", "page": "p.10-11", "keywords": ["근무시간", "출근", "퇴근", "근무타입", "근무시간변경", "월단위", "주40", "8시간", "유연근무", "09시", "10시", "08시"], "conclusion": "근무시간 관련 사항은 GERP/ESS 근태관리에서 확인하고, 근무시간 변경 신청도 근태관리 메뉴를 통해 처리합니다.", "path": "GERP > ESS > 근태관리 > 근무시간 변경 신청", "steps": ["현재 본인의 근무시간 또는 근무타입을 확인합니다.", "GERP > ESS > 근태관리로 이동합니다.", "근무시간 변경 신청 메뉴를 선택합니다.", "변경하려는 근무타입과 적용 기간을 입력합니다.", "품의/결재 요청 후 승인 상태를 확인합니다."], "cases": ["GERP의 근태관리 영역에는 휴가/근태 신청, 시간외근무 신청, 외근 신청, 근로시간 단축, 근무시간 변경 신청이 포함됩니다."], "cautions": ["팀별 운영 기준과 승인권자 확인이 필요합니다."], "owner": "인사팀 김석은님, 임승준님", "source": "2026 미스토코리아 가이드북 p.10-11"}, {"id": "leave", "category": "근태/휴가", "title": "휴가/근태 신청", "page": "p.10-18", "keywords": ["휴가", "근태", "연차", "반차", "휴가신청", "근태신청", "품의요청", "근태그룹", "근태종류", "발생일자", "종료일자", "검진", "예비군", "민방위", "공가", "병가", "외근", "시간외"], "conclusion": "휴가와 근태는 GERP의 휴가/근태신청 화면에서 근태그룹과 근태종류를 선택해 신청합니다.", "path": "GERP > ESS > 근태관리 > 휴가/근태관리 > 휴가/근태신청", "steps": ["GERP > ESS > 근태관리 > 휴가/근태관리 > 휴가/근태신청으로 이동합니다.", "신청할 날짜를 클릭합니다.", "근태그룹을 선택합니다.", "근태종류를 선택합니다.", "발생일자와 종료일자를 확인합니다.", "필요한 경우 사유를 작성하고 증빙을 첨부합니다.", "품의요청 또는 결재 요청을 진행합니다.", "신청내역에서 승인 상태를 확인합니다."], "cases": ["일반 연차/반차: 근태유형과 사용일자를 정확히 선택합니다.", "검진/경조/예비군·민방위 등 증빙성 휴가는 일반 연차와 구분해 증빙 첨부 여부를 확인합니다.", "외근과 시간외근무는 GERP 근태관리의 별도 신청 기능에서 처리합니다."], "cautions": ["가이드북 기준과 팀별 승인 절차가 함께 적용될 수 있습니다.", "증빙이 필요한 휴가는 첨부 누락 시 보완 요청이 발생할 수 있습니다."], "owner": "인사팀 김석은님, 임승준님", "source": "2026 미스토코리아 가이드북 p.10-18"}, {"id": "newleave", "category": "근태/휴가", "title": "신입연차 사용기한 연장", "page": "p.19", "keywords": ["신입연차", "사용기한", "연장신청", "만료예정", "erp@mistobrand.com", "소멸", "12월31일", "동의"], "conclusion": "신입연차는 입사일 기준 1년 내 미사용 시 소멸되지만, 별도 연장신청을 통해 입사 이듬해 12월 31일까지 사용기한 연장이 가능합니다.", "path": "GERP > ESS > 근태관리 > 휴가/근태관리 > 휴가/근태신청", "steps": ["신입연차 만료 안내 메일을 확인합니다.", "GERP의 휴가/근태신청 화면에 접속합니다.", "조회 버튼을 클릭합니다.", "신입연차연장신청 버튼을 클릭합니다.", "신입연차 연장신청 동의 창에서 동의란에 체크합니다.", "제출합니다."], "cases": ["안내 메일 발신자는 가이드북상 erp@mistobrand.com으로 안내되어 있습니다."], "cautions": ["신입연차는 기한 내 미사용 시 소멸되므로 만료 예정일을 확인해야 합니다."], "owner": "인사팀 김석은님, 임승준님", "source": "2026 미스토코리아 가이드북 p.19"}, {"id": "cert", "category": "제증명/급여", "title": "제증명 발급", "page": "p.20-21", "keywords": ["제증명", "증명서", "재직증명서", "경력증명서", "근로소득원천징수영수증", "급여명세서", "MetaPay", "메타페이", "발급"], "conclusion": "제증명은 그룹웨어에서 MetaPay로 이동한 뒤 제증명신청 메뉴에서 필요한 증명서를 선택하여 발급합니다.", "path": "그룹웨어 > METAPAY > 로그인 > 제증명신청 > 증명서 선택", "steps": ["그룹웨어에서 METAPAY를 클릭합니다.", "MetaPay에 로그인합니다.", "제증명신청을 클릭합니다.", "필요한 증명서를 선택합니다.", "신청 정보를 확인한 뒤 발급을 진행합니다."], "cases": ["발급 가능 제증명: 경력증명서, 급여명세서, 재직증명서, 근로소득원천징수영수증 등"], "cautions": ["로그인 정보나 주민번호 관련 정보는 채팅창에 입력하지 말고 가이드북/공식 안내 기준으로 확인하세요."], "owner": "인사팀 김석은님, 임승준님", "source": "2026 미스토코리아 가이드북 p.20-21"}, {"id": "salary", "category": "제증명/급여", "title": "급여명세서 조회 및 급여 지급일", "page": "p.22-23", "keywords": ["급여명세서", "급여", "월급", "명세서", "지급일", "25일", "10일 이후 입사", "소급", "MetaPay", "메타페이"], "conclusion": "급여명세서는 MetaPay에서 조회하며, 급여는 매월 25일에 1일~당월 말일분까지 지급됩니다.", "path": "그룹웨어 > METAPAY > 로그인 > 급여명세서 클릭 > 상세내역 확인", "steps": ["그룹웨어에서 METAPAY를 클릭합니다.", "MetaPay에 로그인합니다.", "급여명세서를 클릭합니다.", "상세내역을 확인합니다."], "cases": ["매월 10일 이후 입사자는 익월 급여에 소급 지급됩니다."], "cautions": ["개별 급여 금액과 공제내역은 실제 급여명세서 기준으로 확인해야 합니다."], "owner": "인사팀 김석은님, 임승준님", "source": "2026 미스토코리아 가이드북 p.22-23"}, {"id": "benefit", "category": "복리후생", "title": "복리후생 한눈에 보기", "page": "p.24", "keywords": ["복리후생", "복지", "복지포인트", "경조금", "차량유지비", "교통비", "통신비", "직원할인", "건강검진", "건강상담", "건강보험료", "단체상해보험", "동호회", "조식", "중식"], "conclusion": "미스토 복리후생은 복지포인트, 경조금/경조휴가, 차량유지비/교통비/통신비, 직원할인, 건강검진, 건강상담, 건강보험료 지원, 단체상해보험, 동호회, 조/중식 제공 등으로 구성됩니다.", "path": "가이드북 STEP 03 > 더 건강하게 더 즐겁게 미스토 복지 한눈에 보기", "steps": ["복지포인트: 복지플러스(APP)에서 사용합니다.", "경조금/경조휴가: 경조 관련 페이지와 그룹웨어 결재를 확인합니다.", "차량유지비/교통비/통신비: 담당자 문의 및 관련 서류 제출 기준입니다.", "직원할인: 지정매장 또는 자사몰 기준입니다.", "조/중식 제공: 밀케어(아워홈)를 통해 안내됩니다."], "cases": ["복지포인트 공통 600,000원, 건강검진 200,000원이 안내되어 있습니다.", "사내동호회 지원은 축구/농구/러닝/테니스/댄스 기준으로 안내되어 있습니다."], "cautions": [], "owner": "인사팀 김석은님, 임승준님", "source": "2026 미스토코리아 가이드북 p.24"}, {"id": "condolence-money", "category": "복리후생", "title": "경조금 신청", "page": "p.25-26", "keywords": ["경조금", "경조", "결혼", "조의", "부고", "출산", "증빙", "e-Accounting", "직원경비신청", "일반경비신청", "복리후생비"], "conclusion": "경조금은 그룹웨어 e-Accounting의 일반경비신청에서 신청하며, 청구금액과 증빙서류를 첨부합니다.", "path": "그룹웨어 > e-Accounting > 직원경비신청 > 일반경비신청", "steps": ["e-Accounting에 접속합니다.", "직원경비신청 > 일반경비신청으로 이동합니다.", "제목을 ‘경조금신청_(구분/사유)_(신청자이름)’ 형식으로 작성합니다.", "금액과 신청일자를 지정합니다.", "표준적요는 복리후생비(경조금)로 선택합니다.", "코스트센터, 세금코드, 경조사 구분/사유를 입력합니다.", "경조사 증빙문서를 추가합니다.", "결재선을 확인하고 상신합니다."], "cases": ["절차 완료 시 결재선은 본인–직상위자, 합의는 인사팀 임승준 > 인사팀장으로 안내되어 있습니다."], "cautions": ["경조사 증빙문서 첨부가 필요합니다."], "owner": "인사팀 김석은님, 임승준님", "source": "2026 미스토코리아 가이드북 p.25-26"}, {"id": "condolence-leave", "category": "복리후생", "title": "경조휴가 신청", "page": "p.27-28", "keywords": ["경조휴가", "경조", "휴가", "근태그룹", "경조휴가신청", "증빙", "청첩장", "가족관계", "부고", "조의"], "conclusion": "경조휴가는 GERP 휴가/근태신청에서 근태그룹을 경조휴가로 선택해 신청합니다.", "path": "GERP > ESS > 근태관리 > 휴가/근태관리 > 휴가/근태신청 > 휴가/근태신청등록", "steps": ["GERP의 휴가/근태신청 화면으로 이동합니다.", "해당 날짜를 클릭합니다.", "근태그룹을 경조휴가로 선택합니다.", "근태종류를 선택합니다.", "발생일자와 근태종료일자를 선택합니다.", "필요한 증빙문서를 첨부합니다.", "제목 및 사유를 경조휴가 기준에 맞춰 작성한 후 신청합니다."], "cases": ["본인 결혼, 조부모/외조부모 조의, 배우자 출산 등 경조 유형별 기준은 가이드북 경조휴가/경조금 규정 페이지를 확인합니다."], "cautions": ["경조휴가는 일반연차와 구분하여 신청합니다."], "owner": "인사팀 김석은님, 임승준님", "source": "2026 미스토코리아 가이드북 p.27-28"}, {"id": "vehicle-traffic-comm", "category": "복리후생", "title": "차량유지비/교통비/통신비 지원", "page": "p.30", "keywords": ["차량유지비", "교통비", "통신비", "차량", "교통", "모바일폰", "아톡비즈", "서류제출"], "conclusion": "차량유지비, 교통비, 통신비는 담당자 문의 및 관련 서류 제출 기준으로 안내되어 있습니다.", "path": "가이드북 STEP 03 > 차량유지비/교통비&통신비 지원", "steps": ["차량 등록 여부를 확인합니다.", "당사 차량 등록 시 차량유지비 지원 대상으로 분류합니다.", "차량 미등록 시 교통비 지원 대상으로 분류합니다.", "통신비는 아톡비즈 설치 또는 개인 모바일폰 사용 기준을 확인합니다.", "담당자에게 문의하고 관련 서류를 제출합니다."], "cases": ["차량유지비 180만원/년, 차량 미등록 시 교통비 66만원/년, 통신비 36만원/년으로 안내되어 있습니다."], "cautions": [], "owner": "인사팀 김석은님, 임승준님", "source": "2026 미스토코리아 가이드북 p.30"}, {"id": "fila-discount", "category": "복리후생", "title": "FILA 직원할인", "page": "p.31-34", "keywords": ["FILA", "휠라", "직원할인", "사원판매", "자사몰", "지정매장", "구매한도", "할인", "과세"], "conclusion": "FILA 직원할인은 지정매장 또는 자사몰 기준으로 안내되며, 소비자가 50% 할인과 연간 혜택환산액 200만원이 안내되어 있습니다.", "path": "지정매장 또는 FILA 자사몰", "steps": ["FILA 직원할인 대상 여부를 확인합니다.", "지정매장 또는 자사몰 이용 경로를 확인합니다.", "연간 구매한도 및 할인 기준을 확인합니다.", "구매 후 필요한 경우 담당자 안내를 따릅니다."], "cases": ["사원판매 구매한도 증액은 1년에 최대 100만원까지 가능하다고 안내되어 있습니다."], "cautions": ["임직원 할인금액이 연간 240만원 이상인 경우 세법상 과세가 적용될 수 있습니다."], "owner": "인사팀 최주영님", "source": "2026 미스토코리아 가이드북 p.31-34"}, {"id": "acushnet", "category": "복리후생", "title": "ACUSHNET 직원할인", "page": "p.31-34", "keywords": ["ACUSHNET", "아쿠쉬네트", "타이틀리스트", "풋조이", "직원할인", "임직원몰", "사원증", "배송주소", "만3개월"], "conclusion": "ACUSHNET 임직원몰은 입사 후 만 3개월 경과 시 직원가 구매가 가능하며, 계정 생성 완료 후 인사팀이 개별 안내합니다.", "path": "ACUSHNET KOREA 임직원몰 / 지정매장", "steps": ["입사 후 만 3개월 경과 여부를 확인합니다.", "아쿠쉬네트코리아 측 등록 일정에 따라 계정 생성이 진행됩니다.", "계정 생성 완료 후 인사팀 개별 안내를 확인합니다.", "연간 구매수량 한도는 HOME > MYPAGE > 정보수정 하단에서 확인합니다.", "오프라인 구매는 사원증을 지참한 본인 방문 기준입니다."], "cases": ["타이틀리스트 어패럴: 소매가 30% 할인, 연간한도 500만원", "풋조이 전품목: 제품별 할인율 상이, 연간한도 400만원"], "cautions": ["초기 배송주소는 본사주소로 기본 세팅되어 있습니다.", "배송주소 변경은 GERP > ESS > 인사관리 > 개인정보변경신청 후 인사팀 담당자 확인 반영이 필요합니다.", "지인 단독 구매는 불가합니다."], "owner": "인사팀 최주영님", "source": "2026 미스토코리아 가이드북 p.31-34"}, {"id": "points", "category": "복리후생", "title": "복지포인트 / 복지카드", "page": "p.35-38", "keywords": ["복지포인트", "복지카드", "삼성카드", "포인트", "복지플러스", "건강검진", "포인트사용신청", "잔여포인트", "사용신청"], "conclusion": "복지포인트는 삼성카드 발급 후 복지플러스 APP에서 포인트 사용신청 및 결과 조회를 진행합니다.", "path": "복지플러스 APP > 메인화면 복지포인트 > 포인트사용신청", "steps": ["삼성카드 발급신청 링크를 통해 카드 발급을 신청합니다.", "복지플러스 APP에 로그인합니다.", "메인화면에서 복지포인트를 클릭합니다.", "포인트사용신청을 클릭합니다.", "사용내역을 조회하고 신청 항목을 선택합니다.", "포인트사용신청을 클릭합니다.", "팝업 내용을 확인합니다.", "신청결과조회에서 결과를 확인합니다.", "메인화면에서 차감 후 잔여포인트를 확인합니다."], "cases": ["기본 공통 포인트 600,000원 + 건강검진 200,000원이 안내되어 있습니다.", "근속연수와 직책에 따라 추가 포인트가 산정됩니다.", "중도입사자/복직자는 입사·복직월 기준 만근 가정으로 월할 지급됩니다."], "cautions": ["이용/결제 후 반드시 포인트사용신청을 해야 지급된 포인트에서 결제가 가능합니다.", "연말 오프라인 이용 결제 시 인사팀 최주영님에게 문의하도록 안내되어 있습니다."], "owner": "인사팀 최주영님", "source": "2026 미스토코리아 가이드북 p.35-38"}, {"id": "healthcheck", "category": "복리후생", "title": "건강검진 지원", "page": "p.39-41", "keywords": ["건강검진", "검진", "비타브릿지", "VitaBridge", "공가", "4시간", "예약내역", "복지포인트", "검진공가"], "conclusion": "건강검진은 비타브릿지 사이트에서 예약하며, 검진 시간은 공가 4시간으로 안내되어 있습니다.", "path": "비타브릿지 사이트 > 카테고리 > 건강 > 건강검진 > 예약검진보기", "steps": ["비타브릿지 사이트에 접속합니다.", "카테고리 > 건강 > 건강검진 > 예약검진보기로 이동합니다.", "검진기관정보를 확인합니다.", "병원을 선택한 후 검진항목보기를 확인합니다.", "GERP > ESS > 휴가/근태관리 > 휴가/근태신청에서 공가를 신청합니다.", "근태그룹은 검진, 근태구분은 건강검진으로 선택합니다.", "증빙으로 예약내역을 첨부합니다."], "cases": ["2026년도 운영은 2026.09.30까지 예약 및 검진으로 안내되어 있습니다.", "검진비용 20만원은 복지포인트 항목으로 안내되어 있습니다."], "cautions": ["로그인 정보는 가이드북과 공식 사이트 기준으로 확인합니다."], "owner": "인사팀 최주영님", "source": "2026 미스토코리아 가이드북 p.39-41"}, {"id": "health-counseling", "category": "복리후생", "title": "건강상담", "page": "p.42", "keywords": ["건강상담", "상담", "정기상담", "건강검진결과지", "예약"], "conclusion": "건강상담은 매월 정기 건강상담 지원으로 안내되어 있으며, 공지 확인 및 건강검진 결과지 동봉 후 예약 필수로 진행합니다.", "path": "가이드북 STEP 03 > 건강상담", "steps": ["건강상담 관련 공지를 확인합니다.", "상담 예약 필요 여부를 확인합니다.", "건강검진 결과지를 준비합니다.", "담당자 문의 후 상담을 진행합니다."], "cases": [], "cautions": ["건강검진 결과지 등 건강정보는 필요한 경로에서만 제출합니다."], "owner": "인사팀 신정훈님", "source": "2026 미스토코리아 가이드북 p.42"}, {"id": "health-insurance", "category": "복리후생", "title": "건강보험료 지원", "page": "p.43", "keywords": ["건강보험료", "건강보험료지원", "금연서약", "흡연", "4대보험", "연봉3500", "만근", "퇴직자"], "conclusion": "건강보험료 지원은 금연서약 시 4대보험 중 건강보험료를 지원하는 제도입니다.", "path": "가이드북 STEP 03 > 건강보험료 지원", "steps": ["금연서약 제출 여부를 확인합니다.", "지원 기준 연봉 구간을 확인합니다.", "신규 입사자는 만근한 월부터 지원 대상 여부를 확인합니다.", "퇴직자는 일할계산 기준을 확인합니다.", "담당자에게 문의하고 관련 서류를 제출합니다."], "cases": ["연봉 3,500만원 이하: 100% 지원", "연봉 3,500만원 초과: 50% 지원"], "cautions": ["흡연 3회 적발 시 지원대상에서 제외된다고 안내되어 있습니다."], "owner": "인사팀 김석은님, 임승준님", "source": "2026 미스토코리아 가이드북 p.43"}, {"id": "accident-insurance", "category": "복리후생", "title": "단체상해보험", "page": "p.44, p.78", "keywords": ["단체상해보험", "상해보험", "실비", "보험금", "보험금신청서", "배우자", "자녀", "보장내용"], "conclusion": "단체상해보험은 직원, 배우자, 자녀를 대상으로 하며 가입내역별 상이한 보장과 실비청구가 안내되어 있습니다.", "path": "가이드북 STEP 03 > 단체상해보험 / 부록 > 단체상해보험 보장내용", "steps": ["본인 또는 가족이 단체상해보험 대상에 해당하는지 확인합니다.", "가입내역과 보장내용을 확인합니다.", "보험금신청서를 작성합니다.", "필요 서류를 준비해 청구 절차를 진행합니다."], "cases": ["대상자: 직원, 배우자, 자녀"], "cautions": ["보장내용은 가입내역별로 상이하므로 부록의 보장내용을 확인해야 합니다."], "owner": "인사팀 위상우님", "source": "2026 미스토코리아 가이드북 p.44, p.78"}, {"id": "condo-birthday", "category": "복리후생", "title": "회사콘도 & 생일자 축하", "page": "p.45", "keywords": ["회사콘도", "콘도", "생일", "생일자", "축하"], "conclusion": "회사콘도와 생일자 축하는 가이드북 복리후생 항목에 포함되어 있습니다.", "path": "가이드북 STEP 03 > 회사콘도 & 생일자 축하", "steps": ["회사콘도 또는 생일자 축하 항목을 확인합니다.", "이용 가능 여부와 신청 기준은 담당자에게 문의합니다.", "공지 또는 담당자 안내에 따라 신청/이용합니다."], "cases": [], "cautions": ["세부 이용 가능 기간, 신청 방식, 제공 방식은 담당자 확인이 필요합니다."], "owner": "인사팀 신정훈님", "source": "2026 미스토코리아 가이드북 p.45"}, {"id": "club", "category": "복리후생", "title": "동호회", "page": "p.46", "keywords": ["동호회", "축구", "농구", "러닝", "테니스", "댄스", "총무", "지원"], "conclusion": "사내동호회는 축구, 농구, 러닝, 테니스, 댄스 등이 안내되어 있으며 각 동호회 총무에게 문의하는 방식입니다.", "path": "가이드북 STEP 03 > 동호회", "steps": ["참여하고 싶은 동호회를 확인합니다.", "해당 동호회 총무에게 문의합니다.", "운영 방식과 참여 기준을 확인합니다."], "cases": ["사내동호회 지원은 약 12만원/년으로 안내되어 있습니다."], "cautions": [], "owner": "인사팀 신정훈님", "source": "2026 미스토코리아 가이드북 p.46"}, {"id": "approval", "category": "업무지원", "title": "위임전결규정", "page": "p.49", "keywords": ["위임전결", "전결", "결재", "결재권자", "승인권자", "업무연락전"], "conclusion": "위임전결규정은 업무별 결재권자와 전결 기준을 확인하기 위한 항목입니다.", "path": "가이드북 STEP 04 > 위임전결규정", "steps": ["처리하려는 업무 유형을 확인합니다.", "해당 업무의 전결권자와 결재선을 확인합니다.", "필요 시 업무연락전 또는 전자결재 문서로 상신합니다.", "결재 완료 후 후속 처리를 진행합니다."], "cases": [], "cautions": ["구체 결재선은 업무 종류별로 달라질 수 있으므로 해당 규정 페이지 기준으로 확인합니다."], "owner": "", "source": "2026 미스토코리아 가이드북 p.49"}, {"id": "meeting", "category": "업무지원", "title": "아웃룩 회의실 예약현황 확인 및 예약", "page": "p.50-54", "keywords": ["회의실", "아웃룩", "Outlook", "예약", "예약현황", "캘린더", "디렉터리", "회의실찾기", "MISTO Holdings", "Convention", "Unique", "Challenge", "Disruptor"], "conclusion": "회의실 예약현황은 Outlook 캘린더에서 회의실 캘린더를 추가해 확인하고, 예약은 회의실찾기에서 MISTO Holdings 건물의 사용 가능 회의실을 선택하여 진행합니다.", "path": "Outlook 앱 > 캘린더 > 일정추가 > 디렉터리에서 추가 / 회의실찾기", "steps": ["Outlook 앱에서 캘린더를 선택합니다.", "일정추가 > 디렉터리에서 추가를 선택합니다.", "회의실 캘린더를 추가해 예약현황을 확인합니다.", "예약 시 회의실찾기를 통해 건물명을 MISTO Holdings로 설정합니다.", "사용가능으로 표시된 일정 중 예약할 회의실을 선택하고 저장합니다."], "cases": [], "cautions": [], "owner": "인사팀 신정훈님", "source": "2026 미스토코리아 가이드북 p.50-54"}, {"id": "idcard", "category": "업무지원", "title": "사원증 발급/재발급", "page": "p.55", "keywords": ["사원증", "출입증", "방문증", "식사", "구내식당", "리더기", "분실", "재발급", "지문등록", "사번", "영문이름"], "conclusion": "입사 시 사원증은 인사팀에서 개별 제작하여 제공하며, 분실 재제작은 인사팀 신정훈님에게 요청합니다.", "path": "입사 시 인사팀 제공 / 분실 시 인사팀 신정훈님 개별 요청", "steps": ["입사 시 인사팀에서 사원증을 제작하여 제공합니다.", "당일 발급이 어려운 경우 방문증으로 우선 사용합니다.", "사원증 수령 후 오전 10~11시 또는 오후 2~3시 사이 지하1층 영양사님 사무실을 방문하여 사원증 등록을 진행합니다.", "분실 재제작 시 사번과 영문이름을 함께 작성하여 인사팀 신정훈님에게 요청합니다.", "수령은 3층 인사팀으로 내방하여 진행합니다."], "cases": [], "cautions": ["사원증 등록을 하지 않으면 구내식당 리더기 태깅이 불가합니다.", "출입 지문등록은 사원증 수령 후 인사팀 신정훈님에게 연락 후 방문하여 등록 가능합니다."], "owner": "인사팀 신정훈님", "source": "2026 미스토코리아 가이드북 p.55"}, {"id": "business-card", "category": "업무지원", "title": "명함 신청", "page": "p.56", "keywords": ["명함", "명함신청", "명함발급", "전자결재", "명함신청의뢰서", "D+14", "사내번호", "휴대폰", "이메일"], "conclusion": "명함은 그룹웨어 전자결재에서 명함신청의뢰서를 작성하여 신청합니다.", "path": "그룹웨어 > 전자결재 > 신청서 > 명함신청의뢰서", "steps": ["그룹웨어 전자결재로 이동합니다.", "신청서에서 명함신청의뢰서를 선택합니다.", "직원을 검색합니다.", "이메일, 휴대폰번호, 사내번호 등 명함 정보를 확인합니다.", "1인 결재로 상신합니다.", "인사팀 담당자 확인 후 진행됩니다."], "cases": [], "cautions": ["명함은 최소 10개 이상 시 발주됩니다.", "신청 결재 완료 후 D+14일 내 별도 안내하여 제공됩니다."], "owner": "인사팀 신정훈님", "source": "2026 미스토코리아 가이드북 p.56"}, {"id": "corp-card", "category": "업무지원", "title": "개인 법인카드 신청", "page": "p.57-60", "keywords": ["법인카드", "개인법인카드", "교통카드", "교통결제", "대중교통", "외근", "출장", "파견직", "계약직", "자금팀"], "conclusion": "개인 법인카드는 교통결제 기능 여부에 따라 신청 링크가 구분되며, 외근/출장으로 대중교통 이용이 잦은 경우 교통카드 기능 포함 링크로 신청합니다.", "path": "가이드북 내 개인 법인카드 신청 링크", "steps": ["대중교통 이용 필요 여부를 확인합니다.", "외근이나 출장으로 대중교통 이용이 필요한 경우 교통카드 기능 O 링크로 신청합니다.", "그 외의 경우 교통카드 기능 X 링크로 신청합니다.", "파견직/계약직은 업무연락전으로 실장/사업부장 전결 후 발급 가능합니다.", "신청 관련 문의는 자금팀 김혜화님에게 확인합니다."], "cases": [], "cautions": ["법인카드 사용 및 정산 기준은 회사 비용처리 정책과 자금팀 안내를 따릅니다."], "owner": "자금팀 김혜화님", "source": "2026 미스토코리아 가이드북 p.57-60"}, {"id": "atok", "category": "업무지원", "title": "아톡비즈 모바일 내선전화", "page": "p.61", "keywords": ["아톡비즈", "내선전화", "모바일내선", "전화", "앱설치", "구글플레이", "앱스토어", "조직도", "내선번호"], "conclusion": "아톡비즈는 자리마다 설치된 유선전화가 아닌 모바일 내선전화 서비스를 이용하기 위한 앱입니다.", "path": "Google Play 또는 App Store > 아톡비즈 검색 > 아톡비즈 기업용 설치", "steps": ["구글 플레이스토어 또는 앱스토어에서 ‘아톡비즈’를 검색합니다.", "‘아톡비즈 기업용’을 설치합니다.", "개인 내선번호를 확인합니다.", "가이드북의 로그인 정보 안내 기준에 따라 로그인합니다.", "사내 연락 시 조직도 내 소속으로 연락처를 검색해 연락할 수 있습니다."], "cases": [], "cautions": ["내선번호와 로그인 정보는 공식 안내 화면에서만 확인하고 공개 채팅에 입력하지 않습니다."], "owner": "인사팀 위상우님", "source": "2026 미스토코리아 가이드북 p.61"}, {"id": "company-car", "category": "업무지원", "title": "법인차량 이용 가이드", "page": "p.62", "keywords": ["법인차량", "차량예약", "자원예약", "운행일지", "공용카드", "차량키", "벌과금", "교통범칙금", "파우치"], "conclusion": "법인차량은 그룹웨어 자원예약에서 예약 신청 후 인사팀 승인 및 파우치 수령 절차를 거쳐 이용합니다.", "path": "그룹웨어 > 자원예약 > 예약신청", "steps": ["그룹웨어 자원예약으로 이동합니다.", "예약신청을 진행합니다.", "인사팀 승인을 확인합니다.", "인사팀을 방문하여 파우치를 수령합니다.", "파우치에는 운행일지, 공용카드, 차량키가 포함됩니다."], "cases": [], "cautions": ["교통법규 위반 시 벌과금은 개인 부담 원칙입니다.", "벌과금은 기한 내 납부해야 하며 급여차감은 불가합니다."], "owner": "인사팀 위상우님", "source": "2026 미스토코리아 가이드북 p.62"}, {"id": "purchase", "category": "업무지원", "title": "비상품 구매 프로세스", "page": "p.63", "keywords": ["비상품", "구매", "구매프로세스", "품의", "발주", "비용처리", "구매요청"], "conclusion": "비상품 구매는 가이드북의 비상품 구매 프로세스에 따라 신청 및 결재 절차를 확인해야 합니다.", "path": "가이드북 STEP 04 > 비상품 구매 프로세스", "steps": ["구매하려는 품목이 비상품 구매에 해당하는지 확인합니다.", "구매 목적과 필요 수량을 정리합니다.", "가이드북의 비상품 구매 프로세스에 따라 신청 또는 품의를 진행합니다.", "승인 후 구매/정산 절차를 진행합니다."], "cases": [], "cautions": ["구체 구매 권한과 결재선은 위임전결규정 및 구매 프로세스 기준을 함께 확인합니다."], "owner": "", "source": "2026 미스토코리아 가이드북 p.63"}, {"id": "legal", "category": "업무지원", "title": "법무감사팀 안내사항", "page": "p.64", "keywords": ["법무", "감사", "법무감사팀", "Legal", "Compliance", "금품", "선물", "신고서", "이해관계자"], "conclusion": "법무감사팀 안내사항에는 업무 관련 협력업체 또는 이해관계자로부터 수수한 금품/선물 신고 절차가 포함됩니다.", "path": "그룹웨어 > 통합게시 > Legal&Compliance > 금품접수신고서", "steps": ["수수한 금품/선물이 업무 관련 협력업체 또는 이해관계자로부터 온 것인지 확인합니다.", "불가피하게 수수한 경우 3영업일 이내 신고합니다.", "그룹웨어 통합게시의 Legal&Compliance로 이동합니다.", "금품접수신고서를 작성합니다.", "법무감사팀에 서면으로 신고합니다."], "cases": [], "cautions": [], "owner": "법무감사팀 김윤재님", "source": "2026 미스토코리아 가이드북 p.64"}, {"id": "bizreg", "category": "업무지원", "title": "미스토코리아 사업자등록증 확인", "page": "p.65", "keywords": ["사업자등록증", "사업자", "등록증", "통합게시", "검색", "첨부파일", "회계팀"], "conclusion": "사업자등록증은 그룹웨어 통합게시 우측 상단 검색창에서 ‘사업자등록증’을 검색해 게시물 첨부파일로 확인합니다.", "path": "그룹웨어 > 통합게시 > 우측 상단 검색창 ‘사업자등록증’ 검색", "steps": ["그룹웨어 통합게시로 이동합니다.", "우측 상단 검색창에 ‘사업자등록증’을 입력합니다.", "최근 게시물을 클릭합니다.", "첨부파일을 클릭하여 사업자등록증을 확인합니다."], "cases": [], "cautions": [], "owner": "회계팀 최승준님", "source": "2026 미스토코리아 가이드북 p.65"}, {"id": "holiday", "category": "기타지원", "title": "MISTO Holiday Calendar / 단체휴무", "page": "p.66", "keywords": ["Holiday Calendar", "홀리데이", "단체연차", "단체휴무", "창립기념일", "7/10", "1/2", "5/4", "12/31", "연차소진"], "conclusion": "MISTO는 매년 Holiday Calendar를 운영하며, 단체연차일은 별도 근태신청 없이 일괄 반영됩니다.", "path": "가이드북 STEP 05 > MISTO Holiday Calendar", "steps": ["Holiday Calendar를 확인합니다.", "단체연차일은 별도 근태신청 없이 일괄 반영됩니다.", "업무 및 개인 휴가계획 수립 시 미리 참고합니다."], "cases": ["2026년 기준 1/2, 5/4, 12/31 총 3일은 단체휴무일로 개인연차가 소진됩니다.", "창립기념일 7/10은 별도 개인연차가 소진되지 않습니다."], "cautions": ["연도별 단체휴무일은 매년 Holiday Calendar 기준으로 확인해야 합니다."], "owner": "인사팀 최주영님", "source": "2026 미스토코리아 가이드북 p.66"}, {"id": "office", "category": "기타지원", "title": "사무실 층별 안내 & 공용공간", "page": "p.67-69", "keywords": ["사무실", "층별", "공용공간", "층", "오피스", "공간", "위치"], "conclusion": "사무실 층별 안내와 공용공간 안내는 가이드북 STEP 05의 기타지원 영역에서 확인합니다.", "path": "가이드북 STEP 05 > 사무실 층별 안내 & 공용공간 안내", "steps": ["본인이 방문하거나 이용하려는 공간을 확인합니다.", "가이드북의 층별 안내에서 해당 층과 위치를 확인합니다.", "공용공간 이용 시 사내 안내 기준을 따릅니다."], "cases": [], "cautions": [], "owner": "", "source": "2026 미스토코리아 가이드북 p.67-69"}, {"id": "lunch", "category": "기타지원", "title": "층별 점심시간 안내", "page": "p.70", "keywords": ["점심", "점심시간", "구내식당", "식당", "층별", "11:30", "12:00", "분기", "고객지원팀"], "conclusion": "원활한 식당 이용을 위해 층별 점심시간을 분기 단위로 구분하여 운영합니다.", "path": "가이드북 STEP 05 > 층별 점심시간 안내", "steps": ["본인이 근무하는 층을 확인합니다.", "해당 분기의 층별 점심시간을 확인합니다.", "지정된 점심시간에 구내식당을 이용합니다."], "cases": ["1~3월: 3~5층 11:30~12:30, 6~8층 12:00~13:00", "4~6월: 6~8층 11:30~12:30, 3~5층 및 고객지원팀 12:00~13:00", "7~9월: 3~5층 및 고객지원팀 11:30~12:30, 6~8층 12:00~13:00", "10~12월: 6~8층 11:30~12:30, 3~5층 및 고객지원팀 12:00~13:00"], "cautions": ["층별 점심시간은 분기 단위로 조정될 수 있습니다."], "owner": "인사팀 위상우님", "source": "2026 미스토코리아 가이드북 p.70"}, {"id": "mealcare", "category": "기타지원", "title": "밀케어(MEAL CARE) 가입/인증 및 스마트오더", "page": "p.71-74", "keywords": ["밀케어", "MEAL CARE", "Meal Care", "가입", "인증", "스마트오더", "사이렌오더", "음료", "카카오톡", "미스토홀딩스", "사번"], "conclusion": "밀케어는 앱 다운로드 후 점포고객 인증에서 미스토홀딩스를 검색하고 사번을 입력하여 인증합니다.", "path": "Google Play 또는 Apple App Store > 밀케어 검색 및 다운로드", "steps": ["앱스토어 또는 구글플레이에서 밀케어를 검색해 다운로드합니다.", "점포고객 인증을 클릭합니다.", "‘미스토홀딩스’를 검색합니다.", "미스토코리아를 선택합니다.", "사번을 입력합니다.", "최초화면에서 스마트오더를 클릭합니다.", "원하는 음료를 선택하고 결제합니다.", "제조 완료 시 카카오톡 알림으로 확인합니다."], "cases": [], "cautions": ["사번 등 개인 식별정보는 공식 앱에서만 입력하세요."], "owner": "인사팀 위상우님", "source": "2026 미스토코리아 가이드북 p.71-74"}, {"id": "partners", "category": "기타지원", "title": "본사 인근 제휴업체 안내", "page": "p.75-76", "keywords": ["제휴업체", "본사인근", "근처", "할인업체", "제휴", "식당", "카페", "병원"], "conclusion": "본사 인근 제휴업체는 가이드북 STEP 05의 제휴업체 안내에서 확인합니다.", "path": "가이드북 STEP 05 > 본사 인근 제휴업체 안내", "steps": ["이용하려는 업종 또는 업체를 확인합니다.", "가이드북의 본사 인근 제휴업체 안내를 확인합니다.", "제휴 적용 조건이 있는 경우 업체 또는 담당자 안내를 확인합니다."], "cases": [], "cautions": ["제휴 조건은 변경될 수 있으므로 이용 전 확인이 필요합니다."], "owner": "인사팀 신정훈님", "source": "2026 미스토코리아 가이드북 p.75-76"}, {"id": "contacts", "category": "기타지원", "title": "각 파트별 담당자", "page": "p.77", "keywords": ["담당자", "파트별", "김석은", "임승준", "신정훈", "위상우", "최주영", "김윤재", "김혜화", "최승준", "문의"], "conclusion": "각 업무별 담당자는 가이드북 p.77의 각 파트별 담당자 표를 기준으로 확인합니다.", "path": "가이드북 STEP 05 > 각 파트별 담당자", "steps": ["문의하려는 업무 분야를 먼저 분류합니다.", "가이드북 p.77의 담당자 표에서 담당 부서와 이름을 확인합니다.", "해당 담당자에게 문의합니다."], "cases": ["김석은님/임승준님: 그룹웨어&GERP, 제증명발급, 근무시간, 휴가/근태, 경조규정, 차량유지비/교통비&통신비지원, 건강보험료지원금", "신정훈님: 건강상담, 회사콘도&생일자 축하, 동호회, 사원증/지문등록, 명함발급, 제휴업체", "위상우님: 직무별 IT집기, 단체상해보험, 아톡비즈 모바일 내선전화, 법인차량, 밀케어", "최주영님: 사원판매, 복지포인트, 건강검진지원", "김윤재님: 법무 관련 지원", "김혜화님: 법인카드 신청/발급", "최승준님: 미스토코리아 사업자등록증"], "cautions": [], "owner": "", "source": "2026 미스토코리아 가이드북 p.77"}];
 const CATEGORIES = ["회사소개", "업무시스템", "근태/휴가", "제증명/급여", "복리후생", "업무지원", "기타지원"];
 const $ = (id)=>document.getElementById(id);
-const messages = $('messages'), input = $('question'), cards = $('cards'), search = $('search'), category = $('category'), chips = $('catChips'), toast = $('toast');
-let activeCat = ''; let lastBotText = '';
+const input=$('question'), answerCard=$('answerCard'), questionBar=$('questionBar'), processList=$('processList'), search=$('search'), category=$('category'), chips=$('catChips'), toast=$('toast');
+let activeCat=''; let lastBotText=''; let lastQuestion='';
 const sensitive = /(\d{6}[-\s]?\d{7}|주민등록번호\s*[:=]?\s*\d|비밀번호\s*[:=]|계좌번호\s*[:=]|카드번호\s*[:=]|password\s*[:=]|pw\s*[:=])/i;
 function esc(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));}
 function showToast(t){toast.textContent=t;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1500)}
-function addMsg(role, html, plain){const div=document.createElement('div');div.className='msg '+role;div.innerHTML=html;messages.appendChild(div);messages.scrollTop=messages.scrollHeight;if(role==='bot')lastBotText=plain||div.innerText;}
+function setQuestion(text,label='Q'){lastQuestion=text||'';questionBar.innerHTML=`<b>${esc(label)}</b><span>${esc(text||'왼쪽 항목을 누르거나 아래에 질문을 입력하세요.')}</span>`;}
+function setAnswer(html,plain){answerCard.innerHTML=html;answerCard.scrollTop=0;lastBotText=plain||answerCard.innerText;}
 function processText(p){
   const parts=[p.title, '결론: '+p.conclusion, '경로: '+p.path, '단계:', ...p.steps.map((s,i)=>(i+1)+'. '+s)];
-  if(p.cases && p.cases.length) parts.push('CASE/기준:', ...p.cases.map(s=>'• '+s));
-  if(p.cautions && p.cautions.length) parts.push('주의사항:', ...p.cautions.map(s=>'• '+s));
+  if(p.cases&&p.cases.length) parts.push('CASE/기준:',...p.cases.map(s=>'• '+s));
+  if(p.cautions&&p.cautions.length) parts.push('주의사항:',...p.cautions.map(s=>'• '+s));
   parts.push('담당자: '+(p.owner||'가이드북 해당 항목 확인'), '근거: '+p.source);
   return parts.join('\n');
 }
+function listItems(items,type='ol'){if(!items||!items.length)return ''; const tag=type==='ul'?'ul':'ol'; return `<${tag} class="steps">${items.map(s=>`<li>${esc(s)}</li>`).join('')}</${tag}>`;}
 function renderAnswer(p){
-  const steps = p.steps?.length ? `<div class="subhead">처리 단계</div><ol class="answer-steps">${p.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>` : '';
-  const cases = p.cases?.length ? `<div class="subhead">CASE / 기준</div><ul class="answer-steps">${p.cases.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>` : '';
-  const cautions = p.cautions?.length ? `<div class="subhead">주의사항</div><ul class="answer-steps">${p.cautions.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>` : '';
-  return `<div class="answer-title">${esc(p.title)}</div><p class="answer-summary">${esc(p.conclusion)}</p><div class="answer-row"><b>처리 경로</b><div>${esc(p.path||'가이드북 해당 항목 확인')}</div></div>${steps}${cases}${cautions}<div class="meta"><span>${esc(p.category)}</span><span>${esc(p.source)}</span>${p.owner?`<span>담당자: ${esc(p.owner)}</span>`:''}</div>`;
+  const steps = p.steps?.length ? `<div class="compactSection"><div class="sectionLabel">처리 단계 <span>${p.steps.length} steps</span></div>${listItems(p.steps,'ol')}</div>` : '';
+  const cases = p.cases?.length ? `<details class="compactSection" open><summary class="sectionLabel">CASE / 기준</summary>${listItems(p.cases,'ul')}</details>` : '';
+  const cautions = p.cautions?.length ? `<details class="compactSection"><summary class="sectionLabel">주의사항</summary>${listItems(p.cautions,'ul')}</details>` : '';
+  return `<h2 class="answerTitle">${esc(p.title)}</h2><p class="summary">${esc(p.conclusion)}</p><div class="infoGrid"><div class="info"><b>처리 경로</b><span>${esc(p.path||'가이드북 해당 항목 확인')}</span></div><div class="info"><b>담당/근거</b><span>${esc(p.owner||'가이드북 해당 항목 확인')} · ${esc(p.source)}</span></div></div>${steps}${cases}${cautions}<div class="meta"><span>${esc(p.category)}</span><span>${esc(p.page)}</span><span>Guidebook Only</span></div>`;
 }
-function tokenize(q){
-  return String(q).toLowerCase().replace(new RegExp("[()\\[\\]{}.,!?/\\\\|·>&<:;\"'`~]","g"),' ').split(/\s+/).filter(Boolean);
-}
-function score(p,q){const lower=q.toLowerCase();let s=0;if(lower.includes(p.title.toLowerCase()))s+=20;if(lower.includes(p.category.toLowerCase()))s+=4;for(const k of p.keywords){const kk=String(k).toLowerCase();if(lower.includes(kk))s+=8;}for(const t of tokenize(q)){if(p.title.toLowerCase().includes(t))s+=4;if(p.conclusion.toLowerCase().includes(t))s+=2;if(p.path.toLowerCase().includes(t))s+=2;if(p.keywords.join(' ').toLowerCase().includes(t))s+=3;}return s;}
+function tokenize(q){return String(q).toLowerCase().replace(/[^\uAC00-\uD7A3a-zA-Z0-9]+/g,' ').split(/\s+/).filter(Boolean);}
+function score(p,q){const lower=q.toLowerCase();let s=0;if(lower.includes(p.title.toLowerCase()))s+=22;if(lower.includes(p.category.toLowerCase()))s+=4;for(const k of p.keywords){const kk=String(k).toLowerCase();if(lower.includes(kk))s+=9;}for(const t of tokenize(q)){if(p.title.toLowerCase().includes(t))s+=5;if(p.conclusion.toLowerCase().includes(t))s+=2;if(p.path.toLowerCase().includes(t))s+=2;if(p.keywords.join(' ').toLowerCase().includes(t))s+=3;}return s;}
 function findBest(q){return PROCESSES.map(p=>[score(p,q),p]).filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]);}
 function allProcessAnswer(){
-  const grouped = CATEGORIES.map(cat=>`<div class="subhead">${esc(cat)}</div><ul class="answer-steps">${PROCESSES.filter(p=>p.category===cat).map(p=>`<li><b>${esc(p.title)}</b> <span style="color:#667085">${esc(p.page)}</span></li>`).join('')}</ul>`).join('');
-  const plain = CATEGORIES.map(cat=>cat+'\n'+PROCESSES.filter(p=>p.category===cat).map(p=>`- ${p.title} (${p.page})`).join('\n')).join('\n\n');
-  return [`<div class="answer-title">가이드북 전체 프로세스 목록</div><p class="answer-summary">현재 HTML에는 가이드북 목차와 확인된 프로세스 기준으로 총 ${PROCESSES.length}개 항목을 넣었습니다. 항목명을 질문하면 바로 해당 프로세스를 답변합니다.</p>${grouped}<div class="meta"><span>Guidebook Only</span><span>총 ${PROCESSES.length}개 항목</span></div>`, plain];
+  const grouped=CATEGORIES.map(cat=>`<div class="allGroup"><h3>${esc(cat)}</h3><ul>${PROCESSES.filter(p=>p.category===cat).map(p=>`<li><b>${esc(p.title)}</b> <span style="color:#667085">${esc(p.page)}</span></li>`).join('')}</ul></div>`).join('');
+  const plain=CATEGORIES.map(cat=>cat+'\n'+PROCESSES.filter(p=>p.category===cat).map(p=>`- ${p.title} (${p.page})`).join('\n')).join('\n\n');
+  return [`<h2 class="answerTitle">가이드북 전체 프로세스 목록</h2><p class="summary">총 ${PROCESSES.length}개 항목입니다. 왼쪽 검색창에서 키워드로 좁히거나 항목명을 질문하면 해당 프로세스를 바로 보여줍니다.</p><div class="allGrid">${grouped}</div><div class="meta"><span>Guidebook Only</span><span>총 ${PROCESSES.length}개 항목</span></div>`, plain];
 }
-function safeAnswer(){return `<div class="answer-title">민감정보는 이 화면에 입력하지 마세요.</div><p class="answer-summary">주민등록번호, 계좌번호, 카드번호, 비밀번호 등은 공식 시스템 또는 회사 지정 경로에만 입력해야 합니다.</p><div class="answer-row"><b>처리 방식</b><div>질문에서 업무명만 남기고 다시 입력해주세요. 예: “제증명 발급 방법 알려줘”, “아톡비즈 설치 방법 알려줘”.</div></div><div class="meta"><span>보안 입력 차단</span><span>Guidebook Only</span></div>`;}
-function ask(q){const text=(q||input.value).trim(); if(!text)return; addMsg('user',esc(text)); input.value=''; setTimeout(()=>{
-  if(sensitive.test(text)){addMsg('bot',safeAnswer(),'민감정보는 공식 시스템 또는 회사 지정 경로에만 입력해야 합니다.');return;}
-  if(/전체|목록|모든|프로세스 전부|all/i.test(text)){const [h,plain]=allProcessAnswer(); addMsg('bot',h,plain); return;}
+function safeAnswer(){return `<h2 class="answerTitle">민감정보는 이 화면에 입력하지 마세요.</h2><p class="summary">주민등록번호, 계좌번호, 카드번호, 비밀번호 등은 공식 시스템 또는 회사 지정 경로에만 입력해야 합니다.</p><div class="infoGrid"><div class="info"><b>처리 방식</b><span>질문에서 업무명만 남기고 다시 입력해주세요.</span></div><div class="info"><b>예시</b><span>“제증명 발급 방법 알려줘”, “아톡비즈 설치 방법 알려줘”</span></div></div><div class="meta"><span>보안 입력 차단</span><span>Guidebook Only</span></div>`;}
+function ask(q){const text=(q||input.value).trim(); if(!text)return; input.value=''; setQuestion(text,'QUESTION');
+  if(sensitive.test(text)){setAnswer(safeAnswer(),'민감정보는 공식 시스템 또는 회사 지정 경로에만 입력해야 합니다.');return;}
+  if(/전체|목록|모든|프로세스 전부|all/i.test(text)){const [h,plain]=allProcessAnswer();setAnswer(h,plain);return;}
   const matches=findBest(text);
-  if(!matches.length){
-    const [h,plain]=allProcessAnswer();
-    addMsg('bot',`<div class="answer-title">가이드북에서 바로 매칭되는 항목을 찾지 못했습니다.</div><p class="answer-summary">질문을 ‘연차’, ‘법인카드’, ‘밀케어’, ‘제증명’, ‘담당자’처럼 가이드북 항목명 중심으로 다시 입력해 주세요. 아래는 현재 반영된 전체 프로세스입니다.</p>${h.replace('<div class="answer-title">가이드북 전체 프로세스 목록</div>','')}`, plain);
-    return;
-  }
+  if(!matches.length){const [h,plain]=allProcessAnswer();setAnswer(`<h2 class="answerTitle">매칭되는 항목을 찾지 못했습니다.</h2><p class="summary">질문을 ‘연차’, ‘법인카드’, ‘밀케어’, ‘제증명’, ‘담당자’처럼 가이드북 항목명 중심으로 다시 입력해 주세요.</p>${h.replace('<h2 class="answerTitle">가이드북 전체 프로세스 목록</h2>','')}`,plain);return;}
   const p=matches[0][1];
-  let related='';
   const rel=matches.slice(1,4).map(x=>x[1]).filter(x=>x.id!==p.id);
-  if(rel.length) related=`<div class="subhead">관련 항목</div><div class="meta">${rel.map(r=>`<span>${esc(r.title)} · ${esc(r.page)}</span>`).join('')}</div>`;
-  addMsg('bot', renderAnswer(p)+related, processText(p));
-},120);}
-function renderCards(){
+  let related='';
+  if(rel.length) related=`<div class="related"><div class="sectionLabel" style="border-radius:14px;margin-bottom:8px">관련 항목</div>${rel.map(r=>`<button type="button" data-rel="${esc(r.id)}">${esc(r.title)} · ${esc(r.page)}</button>`).join('')}</div>`;
+  setAnswer(renderAnswer(p)+related,processText(p));
+  answerCard.querySelectorAll('[data-rel]').forEach(btn=>btn.addEventListener('click',()=>{const r=PROCESSES.find(x=>x.id===btn.dataset.rel);if(r){setQuestion(r.title,'RELATED');setAnswer(renderAnswer(r),processText(r));}}));
+}
+function renderList(){
   const q=(search.value||'').toLowerCase().trim(); const cat=category.value||activeCat;
-  const list=PROCESSES.filter(p=>(!cat||p.category===cat) && (!q || [p.category,p.title,p.conclusion,p.page,p.path,...p.keywords].join(' ').toLowerCase().includes(q)));
-  cards.innerHTML=list.map(p=>`<article class="card" data-id="${esc(p.id)}"><span class="cat">${esc(p.category)}</span><h3>${esc(p.title)}</h3><p>${esc(p.conclusion)}</p><div class="page">${esc(p.page)} · ${esc(p.owner||'가이드북')}</div></article>`).join('') || `<article class="card"><span class="cat">검색</span><h3>검색 결과 없음</h3><p>다른 키워드로 검색해 주세요.</p><div class="page">No result</div></article>`;
-  document.querySelectorAll('.card[data-id]').forEach(el=>el.addEventListener('click',()=>{const p=PROCESSES.find(x=>x.id===el.dataset.id); addMsg('user',esc(p.title)); addMsg('bot',renderAnswer(p),processText(p)); window.scrollTo({top:0,behavior:'smooth'});}));
+  const list=PROCESSES.filter(p=>(!cat||p.category===cat)&&(!q||[p.category,p.title,p.conclusion,p.page,p.path,...p.keywords].join(' ').toLowerCase().includes(q)));
+  processList.innerHTML=list.map(p=>`<button class="processBtn" data-id="${esc(p.id)}"><strong>${esc(p.title)}</strong><span>${esc(p.category)} · ${esc(p.page)} · ${esc(p.owner||'가이드북')}</span></button>`).join('') || `<button class="processBtn"><strong>검색 결과 없음</strong><span>다른 키워드로 검색해 주세요.</span></button>`;
+  processList.querySelectorAll('[data-id]').forEach(btn=>btn.addEventListener('click',()=>{const p=PROCESSES.find(x=>x.id===btn.dataset.id);if(p){setQuestion(p.title,'SELECT');setAnswer(renderAnswer(p),processText(p));}}));
 }
 function renderFilters(){
   category.innerHTML='<option value="">전체 카테고리</option>'+CATEGORIES.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
   chips.innerHTML=`<button class="chip active" data-cat="">전체</button>`+CATEGORIES.map(c=>`<button class="chip" data-cat="${esc(c)}">${esc(c)}</button>`).join('');
-  chips.querySelectorAll('.chip').forEach(btn=>btn.addEventListener('click',()=>{activeCat=btn.dataset.cat;category.value=activeCat;chips.querySelectorAll('.chip').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderCards();}));
+  chips.querySelectorAll('.chip').forEach(btn=>btn.addEventListener('click',()=>{activeCat=btn.dataset.cat;category.value=activeCat;chips.querySelectorAll('.chip').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderList();}));
 }
 function init(){
-  $('processCount').textContent=PROCESSES.length; renderFilters(); renderCards();
-  addMsg('bot', `<div class="answer-title">안녕하세요. MISTO HR Assistant입니다.</div><p class="answer-summary">이번 버전은 2026 미스토코리아 가이드북에 있는 항목만 우선 반영했습니다. 질문을 입력하면 V1처럼 한 장의 답변 카드 안에서 <b>결론 → 처리 경로 → 단계 → CASE/기준 → 주의사항 → 담당자/근거 페이지</b> 순서로 안내합니다.</p><div class="meta"><span>Guidebook Only</span><span>${PROCESSES.length}개 프로세스</span><span>채팅 화면 확대</span></div>`, `MISTO HR Assistant. 가이드북 기준 ${PROCESSES.length}개 프로세스가 반영되어 있습니다.`);
+  $('processCount').textContent=PROCESSES.length;renderFilters();renderList();setQuestion('', 'READY');
+  setAnswer(`<h2 class="answerTitle">안녕하세요. MISTO HR Assistant입니다.</h2><p class="summary">이번 V4는 채팅 기록을 계속 쌓지 않고, <b>최신 질문과 최신 답변만</b> 한 화면에 고정해서 보여줍니다.</p><div class="infoGrid"><div class="info"><b>사용 방식</b><span>왼쪽 프로세스 목록을 누르거나 아래 채팅창에 질문을 입력하세요.</span></div><div class="info"><b>답변 범위</b><span>2026 미스토코리아 가이드북에 반영된 ${PROCESSES.length}개 프로세스 기준입니다.</span></div></div><div class="meta"><span>Compact View</span><span>Guidebook Only</span><span>No API Cost</span></div>`, `MISTO HR Assistant V4. 가이드북 기준 ${PROCESSES.length}개 프로세스가 반영되어 있습니다.`);
 }
 $('askForm').addEventListener('submit',e=>{e.preventDefault();ask();});
-search.addEventListener('input',renderCards); category.addEventListener('change',()=>{activeCat=category.value;chips.querySelectorAll('.chip').forEach(b=>b.classList.toggle('active',b.dataset.cat===activeCat));renderCards();});
-document.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>ask(b.dataset.q)));
-$('allBtn').addEventListener('click',()=>{const [h,plain]=allProcessAnswer();addMsg('user','전체 프로세스 보여줘');addMsg('bot',h,plain);});
-$('clearBtn').addEventListener('click',()=>{messages.innerHTML='';init();showToast('대화를 초기화했습니다.');});
+search.addEventListener('input',renderList); category.addEventListener('change',()=>{activeCat=category.value;chips.querySelectorAll('.chip').forEach(b=>b.classList.toggle('active',b.dataset.cat===activeCat));renderList();});
+$('allBtn').addEventListener('click',()=>{setQuestion('전체 프로세스 보여줘','ACTION');const [h,plain]=allProcessAnswer();setAnswer(h,plain);});
+$('clearBtn').addEventListener('click',()=>{init();showToast('초기화했습니다.');});
 $('copyBtn').addEventListener('click',async()=>{if(!lastBotText)return showToast('복사할 답변이 없습니다.');try{await navigator.clipboard.writeText(lastBotText);showToast('최근 답변을 복사했습니다.');}catch(e){showToast('복사 권한이 없습니다.');}});
 $('printBtn').addEventListener('click',()=>window.print());
 init();
