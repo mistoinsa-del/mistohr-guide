@@ -2,1409 +2,559 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>MISTO HR Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="format-detection" content="telephone=no,email=no,address=no" />
+  <title>MISTO HR Assistant V2</title>
   <style>
-@font-face {
-  font-family: localFallback;
-  src: local("Malgun Gothic");
-}
-
-:root{
-  --red:#e30613;
-  --red-dark:#a90017;
-  --navy:#10233f;
-  --blue:#2c75ff;
-  --cyan:#3fc6d5;
-  --mint:#9be7d0;
-  --yellow:#ffd66b;
-  --purple:#b593ff;
-  --peach:#ffb199;
-  --ink:#111827;
-  --muted:#687385;
-  --line:rgba(16,35,63,.10);
-  --card:rgba(255,255,255,.78);
-  --glass:rgba(255,255,255,.66);
-  --shadow: 0 26px 80px rgba(16,35,63,.16);
-}
-
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  font-family: "Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",localFallback,Arial,sans-serif;
-  color:var(--ink);
-  background:
-    radial-gradient(circle at 12% 10%, rgba(255,214,107,.36), transparent 32%),
-    radial-gradient(circle at 82% 18%, rgba(63,198,213,.35), transparent 30%),
-    linear-gradient(135deg,#fff8f5 0%,#f7fbff 48%,#fff 100%);
-  overflow-x:hidden;
-}
-
-.orb{position:fixed;border-radius:999px;filter:blur(20px);opacity:.45;z-index:-1}
-.orb-a{width:260px;height:260px;background:var(--peach);top:120px;left:-80px}
-.orb-b{width:320px;height:320px;background:var(--cyan);top:250px;right:-110px}
-.orb-c{width:230px;height:230px;background:var(--purple);bottom:0;left:40%}
-
-.topbar{
-  height:82px;
-  padding:0 46px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  position:sticky;
-  top:0;
-  z-index:20;
-  backdrop-filter:blur(18px);
-  background:rgba(255,255,255,.78);
-  border-bottom:1px solid var(--line);
-}
-.brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink)}
-.brand img{width:92px;height:auto}
-.brand strong{display:block;font-size:16px;letter-spacing:-.02em}
-.brand span{display:block;margin-top:3px;color:var(--muted);font-size:12px;font-weight:700}
-.topbar nav{display:flex;gap:22px}
-.topbar nav a{color:var(--muted);text-decoration:none;font-weight:800;font-size:14px}
-.topbar nav a:hover{color:var(--red)}
-
-main{width:100%}
-.hero{
-  max-width:1240px;
-  margin:0 auto;
-  padding:76px 30px 58px;
-  display:grid;
-  grid-template-columns: .98fr 1.02fr;
-  gap:48px;
-  align-items:center;
-}
-.eyebrow{
-  margin:0 0 14px;
-  color:var(--red);
-  font-size:13px;
-  letter-spacing:.14em;
-  font-weight:950;
-}
-h1{
-  margin:0;
-  font-size:64px;
-  line-height:1.05;
-  letter-spacing:-.065em;
-  color:var(--navy);
-}
-h1 span{
-  background:linear-gradient(90deg,var(--red),#ff7d47,#2c75ff);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-}
-.lead{
-  margin:26px 0 0;
-  max-width:610px;
-  color:#475569;
-  font-size:18px;
-  line-height:1.75;
-  word-break:keep-all;
-}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
-button{font-family:inherit}
-.primary,.secondary{
-  border:0;
-  border-radius:18px;
-  padding:15px 20px;
-  font-size:15px;
-  font-weight:950;
-  cursor:pointer;
-}
-.primary{background:var(--red);color:#fff;box-shadow:0 14px 26px rgba(227,6,19,.24)}
-.secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}
-.stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
-.stats div{
-  min-width:120px;
-  padding:16px 18px;
-  border:1px solid var(--line);
-  border-radius:22px;
-  background:rgba(255,255,255,.62);
-}
-.stats b{display:block;color:var(--navy);font-size:22px;letter-spacing:-.03em}
-.stats span{display:block;margin-top:3px;color:var(--muted);font-size:12px;font-weight:800}
-
-.assistant-card{
-  border:1px solid rgba(255,255,255,.72);
-  border-radius:34px;
-  background:var(--glass);
-  backdrop-filter:blur(18px);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.assistant-head{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:22px 24px;
-  background:linear-gradient(135deg,var(--navy),#253d72);
-  color:white;
-}
-.bot-avatar{
-  width:46px;height:46px;border-radius:16px;
-  display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--red),#ff9a5a);
-  font-weight:950;
-}
-.assistant-head strong{display:block;font-size:17px}
-.assistant-head span{display:block;margin-top:4px;color:#cbd5e1;font-size:12px;font-weight:700}
-.assistant-head em{
-  margin-left:auto;
-  font-style:normal;
-  padding:7px 11px;
-  border-radius:999px;
-  background:rgba(255,255,255,.14);
-  font-size:12px;
-  font-weight:950;
-}
-.messages{
-  height:435px;
-  overflow:auto;
-  padding:22px;
-  background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,.85));
-}
-.msg{
-  max-width:88%;
-  margin:0 0 14px;
-  padding:14px 16px;
-  border-radius:19px;
-  line-height:1.62;
-  font-size:14px;
-  word-break:keep-all;
-  box-shadow:0 10px 24px rgba(16,35,63,.06);
-}
-.msg small{display:block;margin-top:9px;color:#64748b;font-weight:700}
-.msg.bot{background:#fff;color:#1e293b;border-top-left-radius:6px;border:1px solid var(--line)}
-.msg.user{margin-left:auto;background:var(--red);color:white;border-top-right-radius:6px}
-.meta{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:12px;
-}
-.meta span{
-  padding:6px 9px;
-  border-radius:999px;
-  background:#f1f5f9;
-  color:#475569;
-  font-size:11px;
-  font-weight:900;
-}
-.answer-title{font-weight:950;color:var(--navy);margin-bottom:4px}
-.suggestions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  padding:0 18px 15px;
-}
-.suggestions button{
-  border:1px solid var(--line);
-  background:#fff;
-  color:#334155;
-  border-radius:999px;
-  padding:9px 11px;
-  cursor:pointer;
-  font-size:12px;
-  font-weight:900;
-}
-.askbar{
-  display:flex;
-  gap:10px;
-  padding:18px;
-  border-top:1px solid var(--line);
-  background:rgba(255,255,255,.75);
-}
-.askbar input{
-  flex:1;
-  border:1px solid var(--line);
-  border-radius:17px;
-  padding:15px 16px;
-  outline:none;
-  font-size:14px;
-}
-.askbar input:focus{border-color:rgba(44,117,255,.35);box-shadow:0 0 0 4px rgba(44,117,255,.08)}
-.askbar button{
-  border:0;
-  border-radius:17px;
-  background:var(--navy);
-  color:white;
-  padding:0 22px;
-  cursor:pointer;
-  font-weight:950;
-}
-
-.section{
-  max-width:1240px;
-  margin:0 auto;
-  padding:56px 30px;
-}
-.section-title{max-width:780px;margin-bottom:26px}
-.section-title.inline{
-  max-width:none;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:24px;
-}
-h2{
-  margin:0;
-  color:var(--navy);
-  font-size:38px;
-  line-height:1.24;
-  letter-spacing:-.045em;
-  word-break:keep-all;
-}
-.scenario-grid{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:14px;
-}
-.scenario{
-  text-align:left;
-  border:1px solid var(--line);
-  border-radius:24px;
-  padding:18px;
-  min-height:158px;
-  background:rgba(255,255,255,.75);
-  cursor:pointer;
-  transition:.18s;
-}
-.scenario:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(16,35,63,.11)}
-.scenario span{
-  display:inline-grid;
-  place-items:center;
-  width:36px;height:36px;
-  border-radius:13px;
-  background:linear-gradient(135deg,#fff0f1,#e7f5ff);
-  color:var(--red);
-  font-weight:950;
-}
-.scenario b{display:block;margin-top:18px;font-size:18px;color:var(--navy)}
-.scenario em{display:block;margin-top:8px;font-style:normal;color:var(--muted);font-size:12px;line-height:1.5;font-weight:800}
-
-.search-mini input{
-  min-width:320px;
-  border:1px solid var(--line);
-  border-radius:17px;
-  padding:14px 16px;
-  outline:none;
-}
-.kb-list{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-}
-.kb-item{
-  background:rgba(255,255,255,.76);
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:18px;
-  min-height:180px;
-}
-.kb-item .cat{
-  display:inline-block;
-  padding:6px 9px;
-  border-radius:999px;
-  background:#fff0f1;
-  color:var(--red);
-  font-size:11px;
-  font-weight:950;
-}
-.kb-item h3{margin:14px 0 8px;color:var(--navy);font-size:17px;letter-spacing:-.02em}
-.kb-item p{margin:0;color:var(--muted);font-size:13px;line-height:1.55;word-break:keep-all}
-.kb-item .pages{margin-top:14px;color:#334155;font-size:12px;font-weight:900}
-
-.ops-card{
-  display:grid;
-  grid-template-columns:1.05fr .95fr;
-  gap:34px;
-  background:linear-gradient(135deg,var(--navy),#293a66);
-  color:white;
-  border-radius:32px;
-  padding:34px;
-  box-shadow:var(--shadow);
-}
-.ops-card h2{color:white}
-.ops-card p{color:#dbeafe;line-height:1.75;word-break:keep-all}
-.ops-card ul{margin:0;padding:0;list-style:none;display:grid;gap:12px}
-.ops-card li{
-  background:rgba(255,255,255,.10);
-  border:1px solid rgba(255,255,255,.16);
-  border-radius:18px;
-  padding:14px 16px;
-  font-weight:850;
-  color:#eff6ff;
-}
-
-@media(max-width:1060px){
-  .hero{grid-template-columns:1fr}
-  .scenario-grid,.kb-list{grid-template-columns:repeat(2,1fr)}
-}
-@media(max-width:760px){
-  .topbar{padding:0 18px}
-  .topbar nav{display:none}
-  .brand img{width:76px}
-  .hero{padding-top:46px}
-  h1{font-size:42px}
-  h2{font-size:29px}
-  .scenario-grid,.kb-list,.ops-card{grid-template-columns:1fr}
-  .section-title.inline{display:block}
-  .search-mini input{min-width:0;width:100%;margin-top:18px}
-}
-
-</style>
+    :root{
+      --navy:#071a33;
+      --navy-2:#0d2a4d;
+      --red:#e3222d;
+      --red-2:#ffedf0;
+      --blue:#edf4ff;
+      --sky:#dbeafe;
+      --mint:#e9fbf4;
+      --yellow:#fff6d8;
+      --paper:#fbfcff;
+      --line:#d8e0ec;
+      --text:#1f2937;
+      --muted:#64748b;
+      --white:#ffffff;
+      --shadow:0 18px 50px rgba(7,26,51,.12);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at top left, rgba(227,34,45,.13), transparent 30%),
+        radial-gradient(circle at top right, rgba(13,42,77,.18), transparent 34%),
+        linear-gradient(180deg,#f6f8fc 0%,#eef3f9 100%);
+      color:var(--text);
+      font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic","Segoe UI",Arial,sans-serif;
+      -webkit-font-smoothing:antialiased;
+      word-break:keep-all;
+    }
+    button,input,textarea,select{font-family:inherit}
+    .app{
+      width:min(1460px,96vw);
+      min-height:calc(100vh - 40px);
+      margin:20px auto;
+      display:grid;
+      grid-template-columns:330px minmax(0,1fr);
+      gap:18px;
+    }
+    .side,.main{
+      background:rgba(255,255,255,.88);
+      border:1px solid rgba(216,224,236,.9);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      overflow:hidden;
+      backdrop-filter:blur(12px);
+    }
+    .side{
+      display:flex;
+      flex-direction:column;
+      min-height:760px;
+    }
+    .brand{
+      padding:26px 24px 22px;
+      background:linear-gradient(145deg,var(--navy) 0%,#102e55 62%,#173c6a 100%);
+      color:var(--white);
+      position:relative;
+      overflow:hidden;
+    }
+    .brand:after{
+      content:"";
+      position:absolute;
+      width:180px;height:180px;border-radius:999px;
+      border:34px solid rgba(255,255,255,.07);
+      right:-78px;top:-52px;
+    }
+    .logoRow{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+    .logoMark{
+      width:48px;height:48px;border-radius:16px;
+      background:linear-gradient(135deg,#fff 0%,#f7f7f8 58%,#ffccd1 100%);
+      color:var(--navy);
+      display:grid;place-items:center;
+      font-weight:900;letter-spacing:-.08em;font-size:20px;
+      box-shadow:0 10px 24px rgba(0,0,0,.16);
+    }
+    .logoText{line-height:1.08}
+    .logoText strong{display:block;font-size:20px;letter-spacing:-.04em}
+    .logoText span{display:block;margin-top:5px;font-size:12px;color:#c8d7ea;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+    .brand p{position:relative;z-index:1;margin:22px 0 0;color:#e8eef8;line-height:1.55;font-size:14px}
+    .versionPill{
+      position:relative;z-index:1;
+      display:inline-flex;align-items:center;gap:8px;
+      margin-top:18px;padding:8px 11px;border-radius:999px;
+      background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
+      font-size:12px;font-weight:800;color:#fff;
+    }
+    .dot{width:8px;height:8px;border-radius:99px;background:var(--red);box-shadow:0 0 0 4px rgba(227,34,45,.2)}
+    .sideBlock{padding:18px 18px;border-bottom:1px solid var(--line)}
+    .sideBlock h3{margin:0 0 12px;font-size:14px;letter-spacing:-.02em;color:var(--navy)}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}
+    .chip,.quickBtn,.actionBtn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:#26364b;
+      border-radius:999px;
+      padding:9px 12px;
+      font-size:13px;
+      font-weight:750;
+      cursor:pointer;
+      transition:.18s ease;
+      line-height:1;
+    }
+    .chip:hover,.quickBtn:hover,.actionBtn:hover{transform:translateY(-1px);border-color:#a9bad2;box-shadow:0 8px 18px rgba(7,26,51,.08)}
+    .chip.active{background:var(--navy);color:white;border-color:var(--navy)}
+    .guideList{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+    .guideList li{
+      background:#f8fafc;border:1px solid #e5eaf2;border-radius:15px;
+      padding:11px 12px;font-size:13px;line-height:1.45;color:#40506a;
+    }
+    .guideList b{color:var(--navy)}
+    .privacyBox{
+      margin-top:auto;
+      padding:18px;
+      background:linear-gradient(180deg,#fff7f8 0%,#fff 100%);
+      border-top:1px solid #ffd9de;
+    }
+    .privacyBox h3{margin:0 0 8px;color:var(--red);font-size:14px}
+    .privacyBox p{margin:0;color:#7a3440;line-height:1.5;font-size:12.8px}
+    .main{display:flex;flex-direction:column;min-height:760px}
+    .topbar{
+      min-height:104px;
+      display:flex;align-items:center;justify-content:space-between;gap:18px;
+      padding:24px 26px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(255,255,255,.94) 0%,rgba(251,252,255,.94) 100%);
+    }
+    .topbar h1{margin:0;font-size:30px;color:var(--navy);letter-spacing:-.055em;line-height:1.14}
+    .topbar p{margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.5}
+    .topActions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+    .actionBtn.primary{background:var(--red);color:#fff;border-color:var(--red)}
+    .actionBtn.dark{background:var(--navy);color:#fff;border-color:var(--navy)}
+    .workspace{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 360px;
+      min-height:656px;
+    }
+    .chatWrap{display:flex;flex-direction:column;min-width:0;background:#f8fbff}
+    .notice{
+      margin:18px 22px 0;
+      padding:14px 15px;
+      border:1px solid #cfe0fa;
+      background:linear-gradient(135deg,#f3f8ff 0%,#ffffff 100%);
+      border-radius:17px;
+      color:#36506e;
+      font-size:13.5px;
+      line-height:1.52;
+    }
+    .notice b{color:var(--navy)}
+    .messages{
+      flex:1;overflow:auto;padding:18px 22px 22px;scroll-behavior:smooth;
+    }
+    .msg{display:flex;gap:11px;margin:16px 0;align-items:flex-start}
+    .msg.user{justify-content:flex-end}
+    .avatar{
+      width:36px;height:36px;border-radius:14px;display:grid;place-items:center;
+      flex:0 0 36px;font-weight:900;font-size:13px;
+    }
+    .bot .avatar{background:var(--navy);color:white}
+    .user .avatar{background:#e2e8f0;color:#334155;order:2}
+    .bubble{
+      max-width:min(760px,85%);
+      background:#fff;border:1px solid #e3eaf4;border-radius:20px;
+      padding:15px 16px;box-shadow:0 8px 22px rgba(7,26,51,.06);
+      line-height:1.58;font-size:14.3px;
+    }
+    .user .bubble{background:var(--navy);color:white;border-color:var(--navy);border-top-right-radius:8px}
+    .bot .bubble{border-top-left-radius:8px}
+    .bubble h4{margin:0 0 10px;color:var(--navy);font-size:15px;letter-spacing:-.02em}
+    .user .bubble h4{color:white}
+    .bubble p{margin:8px 0}
+    .bubble ul,.bubble ol{margin:8px 0 0;padding-left:20px}
+    .bubble li{margin:4px 0}
+    .answerGrid{display:grid;gap:10px;margin-top:10px}
+    .answerCard{
+      border:1px solid #e2e8f0;background:#fbfdff;border-radius:16px;padding:12px 13px;
+    }
+    .answerCard strong{display:block;color:var(--navy);font-size:13.5px;margin-bottom:5px}
+    .answerCard.process{background:#f8fbff;border-color:#cfe0fa}
+    .answerCard.warn{background:#fff8f8;border-color:#ffd1d8}
+    .answerCard.ok{background:#f2fbf6;border-color:#c8efda}
+    .answerCard.note{background:#fffaf0;border-color:#f8df9b}
+    .miniTags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+    .miniTag{font-size:12px;font-weight:800;color:#41546e;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:999px;padding:5px 8px}
+    .quickArea{
+      border-top:1px solid var(--line);background:#fff;padding:14px 18px 16px;
+    }
+    .quickArea .quickTitle{font-size:12px;color:var(--muted);font-weight:800;margin:0 0 9px 4px}
+    .quickBtns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .composer{display:flex;gap:10px;align-items:flex-end}
+    textarea{
+      flex:1;min-height:48px;max-height:118px;resize:vertical;
+      border:1px solid #cfd8e6;border-radius:17px;padding:14px 15px;
+      font-size:14px;line-height:1.45;outline:none;background:#fbfdff;color:var(--text);
+    }
+    textarea:focus{border-color:#8fb0de;box-shadow:0 0 0 4px rgba(59,130,246,.1)}
+    .sendBtn{
+      min-width:96px;height:48px;border:0;border-radius:17px;background:var(--red);color:#fff;
+      font-weight:900;cursor:pointer;box-shadow:0 10px 20px rgba(227,34,45,.2)
+    }
+    .sendBtn:hover{filter:brightness(.98);transform:translateY(-1px)}
+    .panel{
+      border-left:1px solid var(--line);
+      background:linear-gradient(180deg,#ffffff 0%,#fbfcff 100%);
+      padding:20px 18px;
+      overflow:auto;
+    }
+    .panelSection{margin-bottom:18px}
+    .panelSection h3{margin:0 0 10px;font-size:15px;color:var(--navy);letter-spacing:-.03em}
+    .flow{display:grid;gap:9px}
+    .flowStep{
+      position:relative;padding:12px 12px 12px 44px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;
+      min-height:50px;
+    }
+    .stepNo{
+      position:absolute;left:12px;top:12px;width:23px;height:23px;border-radius:9px;background:var(--navy);color:white;
+      display:grid;place-items:center;font-size:12px;font-weight:900;
+    }
+    .flowStep b{display:block;font-size:13px;color:#24344c;margin-bottom:2px}
+    .flowStep span{display:block;font-size:12.3px;color:#65758b;line-height:1.35}
+    .caseTable{width:100%;border-collapse:separate;border-spacing:0 8px;font-size:12.5px}
+    .caseTable td{padding:10px 9px;background:#f8fafc;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;vertical-align:top;line-height:1.38}
+    .caseTable td:first-child{border-left:1px solid #e2e8f0;border-radius:13px 0 0 13px;font-weight:900;color:var(--navy);width:80px}
+    .caseTable td:last-child{border-right:1px solid #e2e8f0;border-radius:0 13px 13px 0;color:#4b5d73}
+    .statusCard{
+      padding:14px;border-radius:18px;border:1px solid #e2e8f0;background:#fff;
+      display:grid;gap:8px;font-size:13px;color:#4a5f78;line-height:1.45;
+    }
+    .statusCard b{color:var(--navy)}
+    .footerNote{font-size:11.7px;color:#738197;line-height:1.45;margin-top:10px}
+    .toast{
+      position:fixed;right:24px;bottom:24px;background:var(--navy);color:#fff;padding:13px 15px;border-radius:14px;
+      box-shadow:0 18px 38px rgba(7,26,51,.2);font-size:13px;font-weight:800;opacity:0;pointer-events:none;transform:translateY(10px);transition:.22s ease;
+      z-index:99;
+    }
+    .toast.show{opacity:1;transform:translateY(0)}
+    .hide{display:none!important}
+    @media (max-width:1080px){
+      .app{grid-template-columns:1fr}.side{min-height:auto}.workspace{grid-template-columns:1fr}.panel{border-left:0;border-top:1px solid var(--line)}
+      .topbar{align-items:flex-start;flex-direction:column}.topActions{justify-content:flex-start}
+    }
+    @media (max-width:640px){
+      .app{width:100%;margin:0;min-height:100vh}.side,.main{border-radius:0}.topbar h1{font-size:24px}.bubble{max-width:92%}.composer{flex-direction:column}.sendBtn{width:100%}
+    }
+    @media print{
+      body{background:#fff}.app{width:100%;margin:0;display:block}.side,.topActions,.quickArea,.panel,.notice{display:none!important}.main{box-shadow:none;border:0}.topbar{border-bottom:2px solid #111}.messages{overflow:visible;padding:12px}.bubble{box-shadow:none;max-width:100%;page-break-inside:avoid}.msg.user{display:none}.avatar{display:none}.bot .bubble{border-color:#aaa}.topbar h1{font-size:22px}.topbar p{font-size:12px}
+    }
+  </style>
 </head>
 <body>
-  <div class="orb orb-a"></div>
-  <div class="orb orb-b"></div>
-  <div class="orb orb-c"></div>
-
-  <header class="topbar">
-    <a class="brand" href="#">
-      <img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22240%22%20height%3D%2286%22%20viewBox%3D%220%200%20240%2086%22%20role%3D%22img%22%20aria-label%3D%22MISTO%20logo%22%3E%0A%20%20%3Crect%20width%3D%22240%22%20height%3D%2286%22%20fill%3D%22none%22/%3E%0A%20%20%3Ctext%20x%3D%220%22%20y%3D%2255%22%20font-family%3D%22Arial%20Black%2C%20Impact%2C%20sans-serif%22%20font-size%3D%2254%22%20font-weight%3D%22900%22%20letter-spacing%3D%22-2%22%20fill%3D%22%23E30613%22%3Emisto%3C/text%3E%0A%20%20%3Ctext%20x%3D%224%22%20y%3D%2278%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22700%22%20fill%3D%22%23111827%22%3EMisto%20Korea%20LTD.%3C/text%3E%0A%3C/svg%3E" alt="MISTO" />
-      <div>
-        <strong>MISTO HR Assistant</strong>
-        <span>Guidebook-based HR Agent</span>
-      </div>
-    </a>
-    <nav>
-      <a href="#assistant">Assistant</a>
-      <a href="#scenarios">Scenarios</a>
-      <a href="#knowledge">Knowledge</a>
-      <a href="#ops">Ops Note</a>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero" id="assistant">
-      <div class="hero-copy">
-        <p class="eyebrow">NEW JOINER EXPERIENCE</p>
-        <h1>물어보면 바로 안내하는<br><span>사내 HR 도우미</span></h1>
-        <p class="lead">
-          가이드북, 근태 CASE, GERP, 복리후생, 업무지원 내용을 기반으로
-          신입·인턴·구성원의 반복 문의를 빠르게 처리하는 MISTO HR Assistant 프로토타입입니다.
-        </p>
-        <div class="hero-actions">
-          <button class="primary" data-question="일반 연차는 어떤 CASE로 상신해야 해?">연차 CASE 물어보기</button>
-          <button class="secondary" data-question="급여명세서는 어디서 조회해?">급여명세서 조회</button>
-        </div>
-        <div class="stats">
-          <div><b id="kbCount">0</b><span>curated topics</span></div>
-          <div><b>92</b><span>guidebook pages</span></div>
-          <div><b>Beta</b><span>static prototype</span></div>
-        </div>
-      </div>
-
-      <section class="assistant-card" aria-label="HR Assistant demo">
-        <div class="assistant-head">
-          <div class="bot-avatar">HR</div>
-          <div>
+  <div class="app">
+    <aside class="side">
+      <section class="brand">
+        <div class="logoRow">
+          <div class="logoMark">M</div>
+          <div class="logoText">
             <strong>MISTO HR Assistant</strong>
-            <span>문서 기반 답변 · 페이지 근거 표시</span>
-          </div>
-          <em>Internal</em>
-        </div>
-
-        <div class="messages" id="messages">
-          <div class="msg bot">
-            <b>안녕하세요. MISTO HR Assistant입니다.</b><br>
-            연차, GERP, 제증명, 급여명세서, 복리후생, 업무지원 관련 질문을 입력해 주세요.
-            <small>예: “검진 휴가는 CASE 몇으로 올려?”, “MetaPay 로그인은 어떻게 해?”</small>
+            <span>People Operation Guide</span>
           </div>
         </div>
-
-        <div class="suggestions">
-          <button data-question="검진이나 경조휴가는 CASE 몇으로 상신해?">검진/경조 CASE</button>
-          <button data-question="신입연차는 언제 발생하고 언제 소멸돼?">신입연차</button>
-          <button data-question="GERP에서 휴가 신청하는 방법 알려줘">휴가 신청</button>
-          <button data-question="제증명 발급 어디서 해?">제증명</button>
-        </div>
-
-        <form class="askbar" id="askForm">
-          <input id="questionInput" placeholder="질문을 입력하세요. 예: 연차 취소는 어떻게 해?" autocomplete="off" />
-          <button type="submit">Ask</button>
-        </form>
+        <p>연차·근태·ERP 개인정보·증빙 제출 문의를 업무 처리 관점으로 정리하는 HR 가이드 챗봇입니다.</p>
+        <div class="versionPill"><span class="dot"></span> V2 · Process Driven</div>
       </section>
-    </section>
 
-    <section class="section scenario-wrap" id="scenarios">
-      <div class="section-title">
-        <p class="eyebrow">SCENARIO ROUTER</p>
-        <h2>상황별로 먼저 분류하고, 필요한 조치만 안내합니다.</h2>
-      </div>
-      <div class="scenario-grid">
-        <button class="scenario" data-question="일반 연차 신청 방법 알려줘"><span>01</span><b>일반 연차</b><em>첨부/수신처 없이 CASE 1·2</em></button>
-        <button class="scenario" data-question="검진이나 경조휴가는 어떻게 신청해?"><span>02</span><b>검진·경조</b><em>첨부 및 인사팀 수신처 확인</em></button>
-        <button class="scenario" data-question="연차 신청을 취소하고 싶어"><span>03</span><b>연차 취소</b><em>상세 → 품의취소 → 기안</em></button>
-        <button class="scenario" data-question="예비군 민방위는 근태 신청 어떻게 해?"><span>04</span><b>예비군/민방위</b><em>공가 선택 · 증빙 첨부</em></button>
-        <button class="scenario" data-question="근무시간을 9시 출근으로 바꾸고 싶어"><span>05</span><b>근무타입 변경</b><em>월 단위 신청 · 직상위자 결재</em></button>
-        <button class="scenario" data-question="급여명세서는 어디서 확인해?"><span>06</span><b>급여명세서</b><em>MetaPay에서 상세 확인</em></button>
-      </div>
-    </section>
+      <section class="sideBlock">
+        <h3>업무 유형</h3>
+        <div class="chips" id="intentChips">
+          <button class="chip active" data-intent="all">전체</button>
+          <button class="chip" data-intent="leave">연차</button>
+          <button class="chip" data-intent="attendance">근태</button>
+          <button class="chip" data-intent="erp">ERP</button>
+          <button class="chip" data-intent="privacy">개인정보</button>
+          <button class="chip" data-intent="payroll">급여</button>
+        </div>
+      </section>
 
-    <section class="section knowledge" id="knowledge">
-      <div class="section-title inline">
-        <div>
-          <p class="eyebrow">KNOWLEDGE BASE</p>
-          <h2>가이드북 기반 지식베이스</h2>
-        </div>
-        <div class="search-mini">
-          <input id="kbSearch" placeholder="지식베이스 검색: 연차, GERP, 복지..." />
-        </div>
-      </div>
-      <div class="kb-list" id="kbList"></div>
-    </section>
-
-    <section class="section ops" id="ops">
-      <div class="ops-card">
-        <div>
-          <p class="eyebrow">IMPLEMENTATION NOTE</p>
-          <h2>지금 버전은 ‘프론트 프로토타입’입니다.</h2>
-          <p>
-            현재는 브라우저에서 바로 실행되는 정적 사이트이며, 가이드북 기반 키워드/상황 분류로 답변합니다.
-            실제 운영형 AI로 만들려면 사내망 또는 Teams에 배포하고, 서버에서 문서 검색(RAG)과 AI API를 연결하면 됩니다.
-          </p>
-        </div>
-        <ul>
-          <li>외부 이미지 의존 없이 MISTO 로고를 SVG로 구현</li>
-          <li>가이드북 주요 항목을 지식베이스로 구조화</li>
-          <li>답변마다 관련 페이지 번호와 신뢰도 표시</li>
-          <li>개인정보/예외 케이스는 HR 확인 문구로 방어</li>
+      <section class="sideBlock">
+        <h3>V2 답변 원칙</h3>
+        <ul class="guideList">
+          <li><b>1. CASE 판단</b><br>질문을 연차·근태·개인정보·급여 등 실무 유형으로 먼저 분류합니다.</li>
+          <li><b>2. 처리 순서</b><br>담당자가 바로 안내할 수 있도록 신청 경로, 승인자, 제출물, 기한을 분리합니다.</li>
+          <li><b>3. 예외 관리</b><br>사전 승인 누락, 출퇴근 누락, 증빙 미제출 등 리스크 항목을 따로 표시합니다.</li>
+          <li><b>4. 보안 방어</b><br>주민등록번호, 계좌번호, 비밀번호 등은 채팅창 입력을 제한하고 ERP 보안 화면 입력만 안내합니다.</li>
         </ul>
-      </div>
-    </section>
-  </main>
+      </section>
 
-  <script>
-window.MISTO_KB = [
-  {
-    "id": "brand-welcome",
-    "category": "회사소개",
-    "title": "MISTO HR Assistant 안내",
-    "pages": [
-      1,
-      2,
-      3,
-      6,
-      7
-    ],
-    "keywords": [
-      "미스토",
-      "misto",
-      "회사",
-      "브랜드",
-      "인재상",
-      "welcome",
-      "헤리티지",
-      "휠라",
-      "fila",
-      "소개"
-    ],
-    "answer": "MISTO HR Assistant는 New Joiner Guide Book을 기반으로 온보딩, 업무시스템, 복리후생, 업무지원, 기타지원 문의를 빠르게 안내하기 위한 HR 도우미입니다. 미스토코리아는 110년 이상 헤리티지를 가진 FILA 브랜드를 기반으로 하며, 고객의 문제를 빠르고 정확하게 파악하고 주도적으로 해결하는 인재상을 강조합니다."
-  },
-  {
-    "id": "groupware-overview",
-    "category": "업무시스템",
-    "title": "그룹웨어 주요 메뉴",
-    "pages": [
-      9,
-      10,
-      11
-    ],
-    "keywords": [
-      "그룹웨어",
-      "메일",
-      "outlook",
-      "아웃룩",
-      "전자결재",
-      "e-accounting",
-      "법인카드",
-      "통합게시",
-      "itsm",
-      "동호회",
-      "복지플러스",
-      "휴가관리",
-      "잔여연차"
-    ],
-    "answer": "그룹웨어는 공지 확인, 전자결재 등 사내 업무가 이루어지는 통합 플랫폼입니다. 주요 메뉴는 메일, 전자결재, e-Accounting, 통합게시, ITSM이며, 시스템 바로가기에서 FILA 자사몰, GERP, 복지플러스로 이동할 수 있습니다. 휴가관리 영역에서는 잔여연차 일수도 확인할 수 있습니다."
-  },
-  {
-    "id": "gerp-overview",
-    "category": "업무시스템",
-    "title": "GERP / ESS 사용 범위",
-    "pages": [
-      12,
-      13
-    ],
-    "keywords": [
-      "gerp",
-      "erp",
-      "ess",
-      "인사관리",
-      "근태관리",
-      "평가관리",
-      "휴가",
-      "근태",
-      "시간외",
-      "초과근무",
-      "외근",
-      "근무시간변경"
-    ],
-    "answer": "GERP는 휴가 신청 및 근태 현황을 관리하는 사내 인사관리 시스템입니다. ESS에는 인사관리, 근태관리, 평가관리 기능이 있으며, 휴가/근태 신청, 시간외근무 신청, 외근 신청, 근로시간 단축, 근무시간 변경 신청 등을 처리할 수 있습니다."
-  },
-  {
-    "id": "working-hours",
-    "category": "근태",
-    "title": "근무시간 및 근무타입 변경",
-    "pages": [
-      15
-    ],
-    "keywords": [
-      "근무시간",
-      "출근",
-      "퇴근",
-      "08",
-      "09",
-      "10",
-      "유연근무",
-      "근무타입",
-      "근무시간변경",
-      "월단위",
-      "8시간",
-      "주40"
-    ],
-    "answer": "기본 근무시간은 1일 8시간, 주 40시간 기준입니다. 근무타입은 08:00~17:00(기본), 09:00~18:00, 10:00~19:00 중 선택할 수 있으며, 월 단위로 변경 신청이 가능합니다. 신청 경로는 GERP > ESS > 근태관리 > 근무시간변경신청이며, 결재라인은 본인 기안 후 직상위자 결재입니다."
-  },
-  {
-    "id": "annual-leave-policy",
-    "category": "연차",
-    "title": "연차제도 핵심",
-    "pages": [
-      16
-    ],
-    "keywords": [
-      "연차",
-      "신입연차",
-      "기본연차",
-      "근속연차",
-      "입사",
-      "만근",
-      "80%",
-      "15일",
-      "11개",
-      "근속"
-    ],
-    "answer": "가이드북상 연차는 신입연차, 기본연차, 근속연차로 구분됩니다. 신입연차는 신규입사자가 입사일 기준 1개월 만근 시 1일씩 발생하며 한도는 11개입니다. 기본연차는 1년 이상 재직자에게 근무일수 비례로 부여되며 80% 이상 출근 시 15일 기준입니다. 근속연차는 만 3년 이상 재직자에게 계속근로연수 매 2년에 대해 1일씩 가산됩니다."
-  },
-  {
-    "id": "leave-case",
-    "category": "연차/결재",
-    "title": "휴가/근태 결재선 CASE",
-    "pages": [
-      17,
-      18
-    ],
-    "keywords": [
-      "case",
-      "CASE",
-      "케이스",
-      "결재선",
-      "전결규정",
-      "수신처",
-      "인사팀",
-      "직상위자",
-      "차상위자",
-      "후결",
-      "대결",
-      "검진",
-      "경조",
-      "일반연차"
-    ],
-    "answer": "휴가/근태 결재선은 CASE 1~4로 운영됩니다. CASE 1은 본인(기안자) > 직상위자(결재자)이며 인사팀 열람입니다. CASE 2는 본인 > 직상위자 > 차상위자이며 인사팀 열람입니다. CASE 3은 본인 > 직상위자, 수신처 인사팀입니다. CASE 4는 본인 > 직상위자 > 차상위자, 수신처 인사팀입니다. 일반연차는 CASE 1 또는 CASE 2, 검진·경조 등 일반연차가 아닌 휴가는 CASE 3 또는 CASE 4를 사용합니다. 결재선을 수기로 수정하는 경우 수신처를 인사팀으로 지정해야 합니다."
-  },
-  {
-    "id": "leave-application",
-    "category": "연차/근태",
-    "title": "휴가/근태 신청 방법",
-    "pages": [
-      18,
-      19
-    ],
-    "keywords": [
-      "휴가신청",
-      "근태신청",
-      "연차신청",
-      "신청방법",
-      "조회",
-      "날짜선택",
-      "근태그룹",
-      "근태유형",
-      "품의요청",
-      "단체휴무",
-      "선연차"
-    ],
-    "answer": "휴가/근태 신청 경로는 GERP > ESS > 근태관리 > 휴가/근태관리 > 휴가/근태신청입니다. 조회 버튼 클릭 후 날짜를 선택하고, 근태그룹과 근태유형을 선택한 뒤 근태정보를 입력하여 품의요청하면 됩니다. 일반연차는 별도 첨부파일 및 수신처 지정이 필요 없고, 검진·경조 등 기타 휴가는 첨부파일 및 수신처 지정이 필요합니다. 단체휴무일은 별도 상신이 필요 없습니다."
-  },
-  {
-    "id": "military-leave",
-    "category": "근태",
-    "title": "예비군/민방위 근태 신청",
-    "pages": [
-      20
-    ],
-    "keywords": [
-      "예비군",
-      "민방위",
-      "훈련",
-      "공가",
-      "훈련통지서",
-      "교육훈련",
-      "증빙"
-    ],
-    "answer": "예비군/민방위는 GERP > ESS > 근태관리 > 휴가/근태관리 > 휴가/근태신청에서 근태그룹을 훈련, 근태종류를 공가(예비군 등)로 선택합니다. 훈련 소요시간과 시작시간을 선택하고, 사유를 입력한 뒤 품의신청을 진행합니다. 품의서 제목은 '훈련종류_일자' 형식으로 변경하고, 교육훈련통지서 등 증빙자료를 첨부해야 합니다."
-  },
-  {
-    "id": "leave-history-cancel",
-    "category": "연차/근태",
-    "title": "휴가 신청내역 조회 및 취소",
-    "pages": [
-      21,
-      22
-    ],
-    "keywords": [
-      "신청내역",
-      "결재현황",
-      "연차취소",
-      "휴가취소",
-      "취소방법",
-      "상세",
-      "품의취소",
-      "기안"
-    ],
-    "answer": "휴가/근태 신청내역은 GERP > ESS > 근태관리 > 휴가/근태관리 > 휴가/근태신청에서 조회기간을 지정하고 조회 버튼을 눌러 확인합니다. 연차를 취소하려면 휴가신청 내역 조회 후 취소하려는 휴가일정을 클릭하고 상세로 들어가 상단의 품의취소 버튼을 선택한 뒤, 취소 대상이 맞는지 재확인하고 기안 버튼으로 취소 품의를 상신합니다."
-  },
-  {
-    "id": "new-leave-extension",
-    "category": "연차",
-    "title": "신입연차 사용기한 연장",
-    "pages": [
-      24
-    ],
-    "keywords": [
-      "신입연차",
-      "연장",
-      "사용기한",
-      "만료",
-      "erp@mistobrand.com",
-      "잔여연차",
-      "동의",
-      "소멸"
-    ],
-    "answer": "신입연차는 입사일 기준 1년 기한 내 미사용 시 소멸됩니다. 단, 별도 연장신청을 통해 입사 이듬해 12월 31일까지 사용기한 연장이 가능합니다. 안내 메일을 확인한 뒤 GERP > 휴가/근태신청 화면에서 조회 버튼을 누르고, 신입연차연장신청 버튼을 클릭한 후 동의란 체크 및 제출을 진행합니다."
-  },
-  {
-    "id": "certificates-metapay",
-    "category": "제증명/급여",
-    "title": "제증명 발급 및 MetaPay",
-    "pages": [
-      25,
-      26
-    ],
-    "keywords": [
-      "제증명",
-      "증명서",
-      "재직증명서",
-      "경력증명서",
-      "급여명세서",
-      "근로소득",
-      "원천징수",
-      "metapay",
-      "메타페이",
-      "비밀번호"
-    ],
-    "answer": "제증명은 그룹웨어 > METAPAY 클릭 > 로그인 > 제증명신청 > 증명서 선택 경로로 발급합니다. 발급 가능한 서류에는 경력증명서, 급여명세서, 재직증명서, 근로소득원천징수영수증 등이 있습니다. 로그인 정보는 가이드북 기준 ID는 fk+사번 형식이며, 최초/기본 비밀번호 관련 내용은 보안상 HR 안내에 따라 확인하는 것을 권장합니다."
-  },
-  {
-    "id": "salary-slip",
-    "category": "급여",
-    "title": "급여명세서 조회 및 지급일",
-    "pages": [
-      27,
-      28
-    ],
-    "keywords": [
-      "급여",
-      "월급",
-      "명세서",
-      "급여명세서",
-      "지급일",
-      "25일",
-      "소급",
-      "10일",
-      "입사자"
-    ],
-    "answer": "급여명세서는 그룹웨어 > METAPAY 클릭 > 로그인 > 급여명세서 클릭 > 상세내역 확인 경로로 조회합니다. 급여는 매월 25일 지급되며, 1일부터 당월 말일까지의 급여가 지급됩니다. 단, 매월 10일 이후 입사자는 익월 급여에 소급 지급됩니다."
-  },
-  {
-    "id": "it-equipment",
-    "category": "업무지원",
-    "title": "직무별 IT 집기 지급",
-    "pages": [
-      14
-    ],
-    "keywords": [
-      "노트북",
-      "랩탑",
-      "그램",
-      "x1",
-      "carbon",
-      "맥",
-      "mac",
-      "디자이너",
-      "마케터",
-      "포토그래퍼",
-      "집기",
-      "전산장비"
-    ],
-    "answer": "직무별 IT 집기는 업무 특성에 따라 지급 기준이 다릅니다. 일반사무는 LG Gram, MD/기획/마케팅은 X1 Carbon, 디자인 직무는 고사양 장비, 예외 지급으로 Mac이 안내되어 있습니다. 운영상 필요에 따라 동일 또는 유사 사양의 다른 모델로 지급될 수 있습니다."
-  },
-  {
-    "id": "benefit-overview",
-    "category": "복리후생",
-    "title": "복리후생 주요 항목",
-    "pages": [
-      2,
-      30
-    ],
-    "keywords": [
-      "복리후생",
-      "복지",
-      "복지포인트",
-      "복지카드",
-      "경조",
-      "경조금",
-      "건강검진",
-      "건강상담",
-      "건강보험료",
-      "단체상해보험",
-      "콘도",
-      "생일",
-      "동호회",
-      "직원할인"
-    ],
-    "answer": "가이드북 복리후생 영역에는 경조휴가/경조금, 차량유지비·교통비·통신비 지원, FILA/Acushnet 직원할인, 복지포인트, 건강검진, 건강상담, 건강보험료 지원, 단체상해보험, 회사콘도, 생일자 축하, 동호회 등이 포함되어 있습니다. 세부 금액이나 대상은 해당 복지 페이지 또는 HR 담당자 확인이 필요합니다."
-  },
-  {
-    "id": "office-support",
-    "category": "업무지원",
-    "title": "업무지원 주요 항목",
-    "pages": [
-      3
-    ],
-    "keywords": [
-      "위임전결",
-      "회의실",
-      "아웃룩",
-      "사원증",
-      "명함",
-      "개인법인카드",
-      "아톡",
-      "내선전화",
-      "법인차량",
-      "비상품구매",
-      "법무",
-      "사업자등록증"
-    ],
-    "answer": "업무지원 영역에는 위임전결규정, 아웃룩 회의실 예약, 사원증 발급/재발급, 명함 신청, 개인 법인카드 신청, 아톡비즈 모바일 내선전화, 법인차량 이용 가이드, 비상품 구매 프로세스, 법무감사팀 안내사항, 사업자등록증 등이 포함되어 있습니다."
-  },
-  {
-    "id": "etc-support",
-    "category": "기타지원",
-    "title": "오피스 라이프 기타지원",
-    "pages": [
-      3
-    ],
-    "keywords": [
-      "holiday",
-      "calendar",
-      "사무실",
-      "층별",
-      "공용공간",
-      "점심시간",
-      "밀케어",
-      "meal",
-      "제휴업체",
-      "담당자"
-    ],
-    "answer": "기타지원 영역에는 MISTO Holiday Calendar, 사무실 층별 안내 및 공용공간 안내, 층별 점심시간 안내, 밀케어(MEAL CARE), 본사 인근 제휴업체 안내, 각 파트별 담당자 정보가 포함되어 있습니다."
-  }
-];
-window.MISTO_PAGES = [
-  {
-    "page": 1,
-    "text": "New Joiner Guide Book\nWELCOME\nMisto Korea LTD."
-  },
-  {
-    "page": 2,
-    "text": "STEP 01\nContents\n미스토코리아소개|1911년부터이어온헤리티지\n회사연혁\n미스토코리아브랜드\n인재상\n더건강하게더즐겁게미스토복지한눈에보기\n경조휴가/경조금규정\n차량유지비/교통비&통신비지원\nFILA/Acushnet 직원할인\n복지포인트(복지카드)\n건강검진지원\n건강상담\n건강보험료지원\n단체상해보험\n회사콘도& 생일자축하\n동호회\nSTEP 03\n1\n2\n3\n24\n25\n30\n31\n35\n39\n42\n43\n44\n45\n46\n복리후생|놓치면아까운복지모음\nSTEP 02\n업무시스템| 인사팀에서알려주는유용한TIP\n그룹웨어& GERP 소개\n직무별IT 집기지급현황\n근무시간및근태신청방법\n제증명발급방법\n4\n9 \n10\n20"
-  },
-  {
-    "page": 3,
-    "text": "업무지원|필요할때마다찾아보게되는알쓸신잡\n위임전결규정\n아웃룩회의실예약현황확인및방법\n사원증발급/ 재발급\n명함신청\n개인법인카드신청\n아톡비즈모바일내선전화\n법인차량이용가이드\n비상품구매프로세스\n법무감사팀안내사항\n미스토코리아사업자등록증\n기타지원|당신의오피스라이프는소중하니까\nMISTO Holiday Calendar\n사무실층별안내& 공용공간안내\n층별점심시간안내\n밀케어(MEAL CARE)\n본사인근제휴업체안내\n각파트별담당자\nContents\n49\n50\n55\n56\n57\n61\n62\n63\n64\n65\n66\n67\n70\n71\n75\n77\n부록|단체상해보험\n단체상해보험보장내용\n78\nSTEP 04\nSTEP 05\nSTEP 06"
-  },
-  {
-    "page": 4,
-    "text": "MISTOKOREA 소개\nSTEP 01\n|1911년부터이어온헤리티지\nMisto Korea LTD."
-  },
-  {
-    "page": 5,
-    "text": "1911\n이태리비엘라에서섬유제조업시작\n1973\n테니스를통한스포츠마케팅시장진출\n1991\nFILAKOREA 설립\n2007\n전세계FILA 상표권인수\n2010\nKOSPI 상장\n2015\nRenewal “FILA ODYSSEY 2020”\n2022\n“Winning Together”\n5개년전략\n2025\nMISTOKOREA\n(미스토코리아) 사명변경\n2026\n글로벌확장\n1\n회사연혁\nMISTOKOREA 소개"
-  },
-  {
-    "page": 6,
-    "text": "MISTOKOREA 소개\n휠라(FILA) 브랜드\n2\nChange the Game with Team FILA\n110년이상의헤리티지를가진\n미스토코리아\n(FILA)의일원이되신것을진심으로환영합니다.\nWinning Together(함께하는즐거움, 함께하는성장)의\n첫걸음이시작되었습니다\n.\n고객의문제를빠르고정확하게파악하여\n주도적으로해결하는미스토코리아\n(FILA)인으로성장하시길바랍니다.\n함께하는여정이오랫동안가슴뛸수있길기원합니다.\n대표이사김지헌드림"
-  },
-  {
-    "page": 7,
-    "text": "고객을먼저생각하고, 문제(Needs)를정확하게찾아\n주도적으로해결하며함께더나은결과를만들어냅니다.\n고객의문제(Needs)를\n정확하고빠르게\n찾아낼수있는사람\n우리의고객이누구인지\n아는사람\n개인의성과보다\n팀의승리를위해\n협업할수있는사람\n스스로해결해내는\n주도적인사람\n3\n인재상\nMISTOKOREA 소개"
-  },
-  {
-    "page": 8,
-    "text": "업무시스템\nSTEP 02\n|인사팀에서알려주는유용한TIP\nMisto Korea LTD."
-  },
-  {
-    "page": 9,
-    "text": "MISTO 그룹웨어설명\n업무시스템\n❶\n❸\n❷\n❹\n❺\n①메일\n-누르면Outlook 메일웹버전으로이동합니다. 수신/발신메일확인이가능합니다\n②전자결재\n-품의서양식을사용하여품의를올리거나, 현황확인이가능합니다.\n③e-Accounting\n-법인카드/일반경비신청이가능하며, 법인카드사용내역도확인가능합니다.\n④통합게시\n-공지사항을올리는공간이며, 다양한정보와타부서안내사항확인가능합니다.\n⑤ITSM \n-IT 인프라, 프론트/백오피스접근권한을요청할수있습니다.\n4\n• 그룹웨어: 사이트*링크는컨트롤누른채로클릭하시거나\n, 마우스휠로클릭하시면새창으로연결됩니다.\n-그룹웨어는공지확인및전자결재등모든사내업무가이루어지는통합플랫폼입니다.\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 10,
-    "text": "MISTO 그룹웨어설명\n업무시스템\n5\n①품의확인\n-미결, 완료, 열람/회람을간편하게볼수있습니다.\n②자원예약현황확인\n-법인차량예약현황을확인하거나클릭시예약화면으로이동합니다.\n③동호회\n-동호회현황및클릭시자동으로커뮤니티화면으로이동합니다.\n❶\n❸\n❷\n담당자: 인사팀김석은님, 임승준님\n• 그룹웨어: 사이트*링크는컨트롤누른채로클릭하시거나\n, 마우스휠로클릭하시면새창으로연결됩니다."
-  },
-  {
-    "page": 11,
-    "text": "MISTO 그룹웨어설명\n업무시스템\n6\n❶\n❸\n❷\n①시스템바로가기\n-FILA 자사몰, GERP, 복지플러스로이동할수있습니다.\n②인사시스템바로가기\n-메타페이접속혹은휴가/외근신청사이트화면으로이동합니다.\n③휴가관리\n-잔여연차일수확인이가능합니다.\n담당자: 인사팀김석은님, 임승준님\n• 그룹웨어: 사이트*링크는컨트롤누른채로클릭하시거나\n, 마우스휠로클릭하시면새창으로연결됩니다."
-  },
-  {
-    "page": 12,
-    "text": "GERP 설명\n업무시스템\n7\n• ESS\n-인사관리/ 근태관리/ 평가관리\n(1) 인사관리\n-개인인사정보조회및변경\n-휴/복직신청\n-임산부신청\n(2) 근태관리\n-휴가/근태신청및신청내역확인\n-시간외근무신청및외근신청\n-근로시간단축, 근무시간변경신청\n(3) 평가관리\n-개인/역량목표수립및내역확인\n-중간점검및이동평가\n-다면평가및정기평가기능\n• GERP : 사이트*링크는컨트롤누른채로클릭하시거나\n, 마우스휠로클릭하시면새창으로연결됩니다.\n담당자: 인사팀김석은님, 임승준님\n-GERP는휴가신청및근태현황을관리하는사내인사관리시스템입니다\n."
-  },
-  {
-    "page": 13,
-    "text": "GERP 설명\n업무시스템\n❶\n❷\n①GERP 홈화면-바로가기: 휴가/근태신청\n-휴가/근태신청화면으로바로이동합니다.\n②바로가기: 시간외근무신청등록\n-초과근무시, 시간외근무신청등록을통해품의서를작성할수있습니다.\n8\n담당자: 인사팀김석은님, 임승준님\n• GERP : 사이트*링크는컨트롤누른채로클릭하시거나\n, 마우스휠로클릭하시면새창으로연결됩니다."
-  },
-  {
-    "page": 14,
-    "text": "직무별IT 집기지급현황\n업무시스템\n9\n• IT 집기지급현황\n구분\n랩탑\n(노트북)​\n주요사양\n주요부서기준\n비고\nType A\n(일반사무)\nLG Gram\nCPU I5 / 512G / 16G\n14인치(or 15인치)\n전략본부\nFILA사업본부(영업등)\nD-Biz본부\n업무용\n표준사양\nType B\n(MD/기획,마케팅)\nX1Carbon\nCPU I7 / 512G / 32G\n14인치\n신발및의류기획MD​\n마케팅(담당업무에따름)\n-\nType C\n(Designer)\nGU603,\nLEGION\nCPU I9 / 1TB / 32G\n15인치\nUW, KIDS 디자인팀\n-\nType D\n(예외지급)\nMac\nCPU M / 512G /24G\n15인치or 14인치\n디자이너, 마케터, 포토그래퍼인사팀별도문의\n-당사전산장비업무편의개선을위하여다음과같이지급기준을안내드립니다\n.\n* 운영상필요에따라동일또는유사사양의다른모델로지급될수있습니다.\n담당자: 인사팀위상우님"
-  },
-  {
-    "page": 15,
-    "text": "근무시간및근태신청방법\n• 근무시간\n①1일8시간(08:00~17:00) / 주40시간\n②근무타입\n-WLB향상을위한유연근무제를운영하고있습니다. \n월단위의근무타입변경신청이가능하며, 부서내사전협의하여사용신청권장합니다.\n-08:00~17:00 (기본)\n-09:00~18:00 \n-10:00~19:00\n③근무타입변경신청방법\n-ESS → 근태관리→ 근무시간변경신청→근무구분란근무타입선택→ 품의요청\n-월단위(1회) 변경신청가능\n-결재라인: 본인(기안) – 직상위자(결재)\n근무시간변경신청\nGERP > ESS> 근태관리\n❶\n❷\n업무시스템\n10\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 16,
-    "text": "GERP 명칭: 발생일수(①+②+③)\n구분\n①신입연차\n②기본연차\n③근속연차\n지\n급\n대\n상\n신규입사자\n근로기준법제60조개정\n’17.5.29 이후입사시적용\n1년이상재직자\n(근무비례)\n만3년이상재직자\n지\n급\n시\n점\n입사일기준만근시지급\n매년1월1일\n매년1월1일\n지\n급\n조\n건\n입사일기준1개월만근시\n1일지급\n근무일수비례지급\n-80% 이상출근시, \n15일지급\n계속근로연수매2년에대해\n1일을가산하여지급\n-최대25일\n(②기본연차+③근속연차= 최대25일)\n지\n급\n한\n도\n11개\n15개\n10개(근속연차)\n발생일수상한: 최대25개\n(②기본+③근속)\n지\n급\n예\n시\n4월2일입사시,\n5월2일에1일발생\n15일x 전년도재직일수\n/ 365일\n3년차(만2년) 15개\n4년차(만3년) 15개+ 1개\n5년차(만4년) 15개+ 1개\n6년차(만5년) 15개+ 2개\n사\n용\n기\n한\n입사일로부터1년\n(기한내미사용시소멸)\n12월31일\n(기한내미사용시소멸)\n12월31일\n(기한내미사용시소멸)\n*뒷페이지연차신청방법참고\n연차제도안내\n11\n업무시스템\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 17,
-    "text": "휴가/근태결재선케이스정리\n12\n업무시스템\n담당자: 인사팀김석은님, 임승준님\n구분\n결재선\nCASE 1\n본인(기안자) > 직상위자(결재자)\n인사팀열람\nCASE 2\n본인(기안자) > 직상위자(결재자) > 차상위자(본부장/사업부장/실장) \n인사팀열람\nCASE 3\n본인(기안자) > 직상위자(결재자)\n수신처: 인사팀\nCASE 4\n본인(기안자) > 직상위자(결재자) > 차상위자(본부장/사업부장/실장)\n수신처: 인사팀\n• 휴가/근태신청시, 전결규정케이스정리\n-품의요청클릭시, 상단전결규정클릭하여CASE를확인하여휴가/근태신청\n-일반연차의경우, CASE 1 orCASE 2를클릭하여기안\n-검진, 경조휴가등일반연차가아닌경우, CASE 3 or CASE 4를클릭하여기안\n*결재선을수기로수정할경우에는반드시수신처: 인사팀으로지정부탁드립니다\n."
-  },
-  {
-    "page": 18,
-    "text": "휴가/근태신청안내TAB\n13\n업무시스템\n담당자: 인사팀김석은님, 임승준님\n• 휴가/근태신청시, 상단신청안내TAB 참고\n-일반연차의경우, 따로첨부파일및수신처지정X\n-검진/경조등이외휴가일경우에는첨부파일및수신처지정O\n-근태그룹에맞추어신청안내TAB을확인하시어, 상신부탁드리겠습니다\n.\n*차상위자결재가필요하신경우, CASE 2 or CASE 4로지정하여상신부탁드리겠습니다\n.\nex) 일반연차의경우,\n결재선: 기안자(본인) – 결재자(직상위자) / 인사팀열람/회람로가이드\n❶"
-  },
-  {
-    "page": 19,
-    "text": "조회\n❶\n날짜선택\n근태정보입력\n근태그룹/유형선택\n※ 사용예정일수\n미반영상태\n❺\n①조회버튼클릭\n②근태신청하고자하는날짜선택\n③근태그룹(연차) 선택→ 근태유형선택→ 신청버튼클릭\n④근태정보를입력하고품의요청\n⑤결재선: 본인(기안) – 직상위자(결재)\n※ 단체휴무일은상신필요없음(전사일괄반영)\n※ 선연차는익년발생연차의50% 를초과하지않음\n휴가/근태신청방법\n❷\n❸\n❹\n14\n업무시스템\n• GERP > ESS > 근태관리> 휴가/근태관리> 휴가/근태신청\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 20,
-    "text": "• GERP > ESS > 근태관리> 휴가/근태관리> 휴가/근태신청\n제목변경: 훈련종류_일자\n시간(H) + 시작시간선택\n사유입력\n품의신청\n①휴가/근태신청> 훈련> 공가(예비군등) 선택\n②훈련소요시간+ 시작시간선택\n③시간: 훈련시간+ α (이동시간)\n훈련일시요약\n- 훈련일자: 2025.09.16 시작시간: 09:00 -종료시간: 16:00\n④품의신청\n⑤품의서제목변경: 훈련종류_일자\n예) 민방위훈련_2025.09.16 교육훈련통지서등증빙자료첨부\n❷\n❸\n❺\n근태그룹(훈련) – 근태종류(공가-예비군등)\n❶\n훈련통지서첨부\n❻\n❹\n예비군/민방위근태신청방법\n15\n업무시스템\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 21,
-    "text": "신청이력확인가능\n결재현황확인가능\n조회기간선택\n조회\n❶\n❷\n①조회기간지정\n②조회버튼클릭\n③신청이력및결재현황확인가능\n휴가/근태신청내역조회\n16\n업무시스템\n• GERP > ESS > 근태관리> 휴가/근태관리> 휴가/근태신청\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 22,
-    "text": "조회\n상세클릭\n품의취소\n❹\n취소하고자하는연차내용을재확인후기안버튼클릭❺\n①조회버튼클릭> 휴가신청내역조회\n②취소희망하는휴가일정클릭\n③상세버튼클릭\n④휴가내역을확인후상단의품의취소버튼클릭\n⑤취소하고자하는휴가일정이맞는재확인후, 기안버튼을클릭하여취소품의상신\n❶\n❸\n연차취소방법\n취소희망일정클릭\n❷\n17\n업무시스템\n• GERP > ESS > 근태관리> 휴가/근태관리> 휴가/근태신청\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 23,
-    "text": "미결함\n신청일자확인/ 선연차는익년발생연차의50% 초과하지않도록관리\n50% 초과시, 담당자문의\n①미결함> 휴가근태신청품의클릭\n②신청일자확인\n-선연차는익년발생연차의50% 를초과하지않도록권장\n③잔여일수확인-결재\n❶\n❷\n잔여일수확인\n❸\n휴가결재방법(직책자기준)\n18\n업무시스템\n• 그룹웨어> 전자결재> 미결함> 신청일자확인> 잔여일수확인\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 24,
-    "text": "신입연차연장신청\n동의선택\n신입연차만료안내메일확인\n잔여연차개수\n❶\n조회\n①이메일안내확인(보낸사람: erp@mistobrand.com)\n②GERP > 휴가/근태신청화면접속> 조회버튼클릭\n③신입연차연장신청버튼클릭\n④신입연차연장신청동의> 동의란체크> 제출\n※ 신입연차의경우입사일기준1년기한내미사용시소멸됩니다.\n※ 단, 별도연장신청을통해입사이듬해12월31일까지사용기한연장이\n가능합니다.\n❷\n❹\n❸\n19\n만료예정일\n신입연차사용기한연장방법\n업무시스템\n• GERP > ESS > 근태관리> 휴가/근태관리> 휴가/근태신청\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 25,
-    "text": "급여MetaPay\n❶\nID : fk+사번(ex.fk10000)\nPW : 주민번호뒷자리\n20\n• 제증명발급절차(1)\n❷\n제증명발급방법\n업무시스템\n담당자: 인사팀김석은님, 임승준님\n-그룹웨어> METAPAY 클릭> 로그인> 제증명신청클릭> 증명서선택\n-발급가능한제증명: 경력증명서, 급여명세서, 재직증명서, 근로소득원천징수영수증\n등"
-  },
-  {
-    "page": 26,
-    "text": "제증명발급방법\n제증명신청\n❸\n증명서선택\n❹\n21\n• 제증명발급절차(2)\n업무시스템\n담당자: 인사팀김석은님, 임승준님\n-그룹웨어> METAPAY 클릭> 로그인> 제증명신청클릭> 증명서선택\n-발급가능한제증명: 경력증명서, 급여명세서, 재직증명서, 근로소득원천징수영수증\n등"
-  },
-  {
-    "page": 27,
-    "text": "급여MetaPay\n❶\nID : fk+사번(ex.fk10000)\nPW : 주민번호뒷자리\n22\n❷\n제증명발급방법\n업무시스템\n담당자: 인사팀김석은님, 임승준님\n• 급여명세서조회(1)\n-그룹웨어> METAPAY 클릭> 로그인> 급여명세서클릭> 상세내역확인\n-급여지급일: 매월25일지급(1일~당월말일분까지\n)\n*단, 매월10일이후입사자는익월급여에소급지급합니다."
-  },
-  {
-    "page": 28,
-    "text": "급여명세서보기\n❸\n23\n• 급여명세서조회(2)\n제증명발급방법\n업무시스템\n-그룹웨어> METAPAY 클릭> 로그인> 급여명세서클릭> 상세내역확인\n-급여지급일: 매월25일지급(1일~당월말일분까지\n)\n*단, 매월10일이후입사자는익월급여에소급지급합니다.\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 29,
-    "text": "STEP 03\nMisto Korea LTD.\n| 놓치면아까운복지모음\n복리후생"
-  },
-  {
-    "page": 30,
-    "text": "더건강하게더즐겁게\n미스토복지한눈에보기\n복리후생\n24\n구분\n내용\n혜택환산액\n이용방법\n복지포인트제도\n(FILA 복지카드)\n건강관리/건강시설/자기개발\n문화레저여행\n/공연관람/가정친화\n120만원/년(직책/근속연수상이)\n복지플러스(APP)\n공통\n600,000 원\n건강검진\n200,000 원\n근속년수\n5년미만\n5~10년미만\n10~15년미만\n15년이상\n200,000\n300,000\n400,000\n500,000\n직책\n팀원\n팀장\n사업부장/실장\n-\n200,000\n300,000\n400,000\n-\n경조금지원\n각종경조사경조금및경조휴가\n경조관련페이지참고\n그룹웨어결재작성\n차량유지비\n당사차량등록시유지비지원\n차량미등록시교통비지원\n180만원/년\n66만원/년\n담당자문의및\n관련서류제출\n통신비\n-\n36만원/년\n아톡비즈설치혹은\n개인모바일폰\n자사제품할인\n소비자가50% 할인\n200 만원/년\n지정매장혹은자사몰\nACUSHNET 할인\n제품별할인가상이\n(사이트확인)\n30% (제품별상이)\n지정매장혹은자사몰\n건강보험료지원\n금연서약시건강보험료지원\n연봉3,500 만원이하: 100% 지원\n연봉3,500 만원초과: 50% 지원\n담당자문의및\n관련서류제출\n건강상담\n매월정기건강상담지원\n공지확인및건강검진결과지동봉하여\n상담진행(예약필수)\n담당자문의\n단체상해보험\n대상자: 직원, 배우자, 자녀\n가입내역별상이(실비청구)\n보험금신청서작성\n사내동호회지원\n축구/농구/러닝/테니스/댄스\n약12만원/년\n각동호회총무문의\n조/중식제공\n현물지원(구내식당)\n현물\n밀케어(아워홈)\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 31,
-    "text": "복리후생\n경조휴가/경조금규정\n-지급대상: 전임직원(재직)\n*단, 본인출산시출산휴가기간중또는복직후한달내경조금신청가능\n-지급기준: 경조휴가는발생일기준100% 지급\n*경조금은경조발생일기준6개월미만근속대상에는경조금지급하지않습니다.\n*6개월이상1년미만의대상자께는지급기준금의50% 를지급합니다.\n*경조휴가는발생일을기준으로지급됩니다. 품의상신시참고부탁드립니다\n.\n-경조금신청가능기간: 경조발생일기준1개월내신청\nex) 부모회갑: 1966년7월6일생→ 2026 년7월6일기준1개월내신청\n25\n구분\n사유\n지급액(원)\n경조화환\n휴가일수\n증빙서류\n결혼\n본인\n500,000\nO\n5일\n청첩장\nor\n가족관계증명서\n/등본\n자녀\n400,000\n1일\n형제,자매\n-\n1일\n회갑\n부모/배우자부모\n400,000\n1일\n회갑\n26년기준1966년생\n칠순\n부모/배우자부모\n400,000\n1일\n칠순\n26년기준1957년생\n조의\n본인\n1,000,000\nO\n-\n사망진단서/부고장\n배우자\n500,000\nO\n5일\n사망진단서/부고장\nand\n가족관계증명서\n/등본\n부모/배우자부모\n500,000\nO\n5일\n조부모/외조부모\n200,000\nO\n3일\n형제자매/배우자형제자매\n-\n3일\n기타(종형제,형제자매의배우자)\n-\n1일\n출산\n본인(배우자) 출산\n200,000\n본인:90일\n다태아:120일\n배우자:20일\n(출산후120일이내시용)\n(3회분할가능)\n출생증명서\nor\n주민등록등본\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 32,
-    "text": "여기에수식을입력하십시오\n.\n복리후생\n경조휴가/경조금규정\n• 경조금신청방법\n26\ne-Accounting 접속\n> 직원경비신청\n> 일반경비신청\n❶\n제목: 경조금신청_(구분/사유)_(신청자이름) ❷\n금액, 신청일자지정\n❸\n코스트센터: 인사팀\n❺\n표준적요: 복리후생비(경조금)❹\n세금코드: XX(매입/부과세무관)\n❻\n경조사구분/사유입력❼\n경조사증빙문서추가❽\n담당자: 인사팀김석은님, 임승준님\n-그룹웨어> e-Accounting > 직원경비신청> 일반경비신청\n> [표준적요: 복리후생비(경조금) / 청구금액: 작성/ 증빙서류첨부]\n*절차완료시, 결재선: 본인– 직상위자/ 합의: 인사팀임승준> 인사팀장"
-  },
-  {
-    "page": 33,
-    "text": "복리후생\n경조휴가/경조금규정\n27\nGERP > ESS > 근태관리> 휴가/근태관리> 휴가/근태신청\n> 해당날짜클릭\n❶\n근태그룹> 경조휴가\n❷\n근태종류선택\n❸\n• 경조휴가신청방법\n-GERP > ESS > 근태관리> 휴가/근태관리> 휴가/근태신청> 휴가/근태신청등록\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 34,
-    "text": "복리후생\n경조휴가/경조금규정\n• 경조휴가신청방법\n28\n발생일자선택\n(=생일, 결혼식일자등)\n❹\n근태종료일자선택\n❺\n품의요청\n❼\n증빙문서첨부(파일명변경필요)\n❻\n-GERP > ESS > 근태관리> 휴가/근태관리> 휴가/근태신청> 휴가/근태신청등록\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 35,
-    "text": "복리후생\n경조휴가/경조금규정\n29\n• 경조휴가신청방법\n증빙문서첨부\n❾\n제목\n[경조휴가] 경조사유형(OO팀홍길동) \n❽\n결재선지정\n: 기안자(본인) – 결재자(직상위자)\n❿\n-GERP > ESS > 근태관리> 휴가/근태관리> 휴가/근태신청> 휴가/근태신청등록\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 36,
-    "text": "차량유지비/교통비& 통신비지원\n복리후생\n30\n• 차량유지비/교통비& 통신비\n차량유지비\n교통비\n당사차량등록시유지비지원\n차량미등록시교통비지원\n180만원/년\n66만원/년\n담당자문의및\n관련서류제출\n통신비\n-\n36만원/년\n아톡비즈설치혹은\n개인모바일폰\n담당자: 인사팀김석은님, 임승준님\n-차량유지비/교통비\n입사시, 관련서류를제출하게되며급여에자동으로지급됩니다. \n지원금액은1년단위이며, 월할계산하여반영됩니다.\n- 통신비\n입사시, 복리후생비용으로자동으로지급됩니다.\n지원금액은1년단위이며, 월할계산하여반영됩니다."
-  },
-  {
-    "page": 37,
-    "text": "• 온라인이용방법\n-공식홈페이지(Fila.co.kr) > 회원가입> 로그인> 팝업창“사원로그인” 선택\n-신규입사시, 가입하신ID에구매한도(年200 만원)가적용됩니다.\n※ 세법개정으로인해임직원할인금액이연간240 만원이상시과세가적용될수있습니다\n.\n• 오프라인이용방법(‘26.5월매장기준)\n-결제시, 사원번호및사원증/명함을확인하면50% 할인가적용받을수있습니다.\n브랜드\n매장명\n매장주소\n매장연락처\nFILA\n서울직영점\n서울중구명동8길9\n02-774-3748\n동대문두타점\n서울중구장충단로275 B1 \n동대문두타휠라\n02-3398 -4456\n현대중동점\n경기부천시길주로180 \n현대백화점중동점U-FLEX 4층\n032 -632 -2671\n롯데잠실점\n서울송파구올림픽로240 \n롯데백화점잠실점7층\n02-2143-7557\nKIDS\n수원스타필드\n경기수원시장안구수성로175 \n스타필드수원점3층\n031-690 -1356\n현대천호점\n서울강동구천호대로1005 현대백화점8층\n02-2225-7941\n언더웨어\n홈플러스상암월드컵점\n서울마포구성산동515 \n홈플러스상암월드컵점2층\n010-8936 -3211\n31\n복리후생\n임직원자사제품50% 할인지원(사원판매)\n*매장상황에따라변동될수있습니다.\n담당자: 인사팀최주영님"
-  },
-  {
-    "page": 38,
-    "text": "사원판매구매한도증액신청은1년에최대100만원까지가능합니다.\n업무연락전수신접수완결후영업일기준3일이내에증액이완료되며, \n증액이되지않을경우담당자에게연락부탁드립니다\n.\n①담당자에게연락: 인사팀최주영\n②결재라인: 본인– 직상위자\n③수신처: 인사팀\n-사번\n-이름\n-현재잔여한도(10% 미만일경우신청가능) \n-희망증액한도: (최대100만원)\n※ 잔여한도스크린샷첨부필수\n④사원판매구매한도는1/1자에200 만원이부여됩니다.\n-구매한도증액신청할경우, 최대100만원에한하여지급됩니다.\n32\n복리후생\n사원판매구매한도증액방법\n결재라인: 본인– 직상위자\n❶\n❷\n업무연락전기재\n❸\n수신처: 인사팀\n담당자: 인사팀최주영님\n• 사원판매구매한도증액프로세스"
-  },
-  {
-    "page": 39,
-    "text": "• 업무처리절차\n33\n• 업무연락전양식\n복리후생\n사원판매잔여한도교환방법\n결재라인\n결재자: 양도하는직원\n기안자: 양도받는직원\n❶\n수신처: 인사팀\n❷\n현황및신청내용\n확인\n❸\n담당자: 인사팀최주영님\n-교환대상직원간의합의\n-업무연락전작성: 기안자는양도받는직원, 결재자는양도하는직원\n-품의결재완료시, 결재일로부터3일이내반영\n-결재라인기안: 양도받는직원\n-결재: 양도하는직원\n-수신: 인사팀수신(담당자가접수하여인사팀장확인)\n-내용– 이미지가이드참고\n-소속및성명\n-잔여한도금액현황\n-교환신청금액"
-  },
-  {
-    "page": 40,
-    "text": "• ACUSHNET KOREA 임직원몰: 사이트\n-입사후만3개월이경과하면직원가로구매가능\n-등록은아쿠쉬네트코리아\n측등록일정에따라계정생성시기가다소지연될수있음\n-아쿠쉬네트계정은생성완료후인사팀에서개별안내드립니다\n.\n-로그인정보: ID는사번, 비밀번호는핸드폰번호뒷자리4자리\n*보안을위해반드시비밀번호변경부탁드립니다\n.\n*연간구매수량한도확인: HOME > MYPAGE > 정보수정하단확인\n*배송주소는초기세팅시본사주소로기본세팅되어있습니다.\n-배송주소변경희망시\n[ GERP > ESS > \n인사관리> 개인정보변경신청> 인사팀담당자확인후반영]\n※ 타이틀리스트/ 풋조이오프라인몰구매방법\n: 사원증지참한본인방문(지인단독구매는불가합니다)\n34\n*재고상황에따라제품수급이원활하지않을수있습니다.\n*중도입사자는연간한도내에서월할계산하여포인트지급합니다.\n*구매하시는품목별로할인율이다르게적용될수있습니다.\n*배송지는거주지(자택) 혹은본사둘중한개의주소로만가능합니다.\n복리후생\nACUSHNET 직원할인\n담당자: 인사팀최주영님\n브랜드\n구매처\n제품\n할인율\n연간한도\n타이틀리스트\n타이틀리스트역삼점\n타이틀리스트\n어패럴\n소매가30%\n500 만원\n타이틀리스트시티투어밴\n풋조이\n풋조이도산점\nFJ 전품목\n400 만원\n*링크는컨트롤누른채로클릭하시거나\n, 마우스휠로클릭하시면새창으로연결됩니다."
-  },
-  {
-    "page": 41,
-    "text": "• 지원내용\n*입사(복직) 후, 삼성카드발급신청링크를통해카드발급신청부탁드립니다\n.\n• 포인트사용신청안내\n기본\n전임직원\n포인트\n공통600,000 원+ 건강검진200,000 원\n근속년수\n5년미만\n5~10년미만\n10~15년미만\n15년이상\n원\n200,000 원\n300,000 원\n400,000 원\n500,000 원\n직책\n팀원\n팀장\n사업부장/본부장\n원\n200,000 원\n300,000 원\n400,000 원\n35\n복리후생\n복지포인트(복지카드)\n담당자: 인사팀최주영님\n-건강관리/ 건강시설/ 자기계발/ 문화레저/ 여행등\n-삼성개인카드발급후비용사용후복지사이트에서비용정산\n-연간기본60만원+ 건강검진20만원+ 근속년수및직책에따라추가포인트산정\n-중도입사자(복직자)의경우입사(복직)월을기준으로만근가정하에‘월할’지급\n• 포인트지급기준\n-오프라인사용\n삼성카드로결제하여이용이가능합니다\n-온라인사용\n복지플러스APP 설치후, 온라인사이트에서필요물품을구매할수있습니다.\n* 이용/결제후반드시‘포인트사용신청’을하셔야지급된포인트에서결제가가능합니다.\n* 연말오프라인이용결제시, 인사팀최주영에게문의부탁드립니다\n."
-  },
-  {
-    "page": 42,
-    "text": "36\n복리후생\n복지포인트(복지카드)\n메인화면복지포인트클릭\n❶\n포인트사용신청클릭\n❷\n담당자: 인사팀최주영님\n• 포인트사용신청방법\n-복지플러스APP 로그인> 메인화면복지포인트클릭\n> 포인트사용신청클릭및사용내역조회/선택> ‘포인트사용신청\n’ 클릭\n*사진속화면은모바일어플접속기준입니다."
-  },
-  {
-    "page": 43,
-    "text": "37\n복리후생\n복지포인트(복지카드)\n포인트사용신청화면에서조회\n및신청항목클릭\n❸\n팝엄내에서확인클릭\n❺\n아래로스크롤\n> 포인트사용신청클릭\n❹\n담당자: 인사팀최주영님\n• 포인트사용신청방법\n-복지플러스APP 로그인> 메인화면복지포인트클릭\n> 포인트사용신청클릭및사용내역조회/선택> ‘포인트사용신청\n’ 클릭\n*사진속화면은모바일어플접속기준입니다."
-  },
-  {
-    "page": 44,
-    "text": "38\n복리후생\n복지포인트(복지카드)\n신청결과조회확인\n> 메인화면상에서차감후잔여포인트확인가능\n❻\n잔여포인트확인가능\n❼\n담당자: 인사팀최주영님\n• 포인트사용신청방법\n-복지플러스APP 로그인> 메인화면복지포인트클릭\n> 포인트사용신청클릭및사용내역조회/선택> ‘포인트사용신청\n’ 클릭\n*사진속화면은모바일어플접속기준입니다."
-  },
-  {
-    "page": 45,
-    "text": "• 건강검진: 사이트\n-ID/PW : 사번/생년월일8자리\n-2026 년도운영: 2026.09.30 까지예약및검진\n-검진신청방법\n1) 비타브릿지사이트접속> 카테고리> 건강> 건강검진> 예약\n검진보기> 검진기관정보> 병원선택후검진항목보기\n2) 검진시간: 공가제공(4시간)\n3) 기준향상: 종합검진수준보장\n4) 검진비용: 20만원(복지포인트)\n-공가사용방법: GERP > ESS > 휴가/근태관리> 휴가/근태신청\n(근태그룹: 검진/ 근태구분: 건강검진)\n*증빙은예약내역첨부부탁드립니다\n.\n39\n복리후생\n건강검진지원\n근태유형: 오전/오후선택\n❸\n사유: 건강검진\n❹\n근태구분: 건강검진\n❷\n근태그룹: 검진\n❶\n담당자: 인사팀최주영님\n*링크는컨트롤누른채로클릭하시거나\n, 마우스휠로클릭하시면새창으로연결됩니다."
-  },
-  {
-    "page": 46,
-    "text": "40\n복리후생\n건강검진지원\n결재션: 기안자(본인) – 결재자(직상위자)\n❺\n예약내역첨부\n❻\n• 건강검진: 사이트\n담당자: 인사팀최주영님\n*링크는컨트롤누른채로클릭하시거나\n, 마우스휠로클릭하시면새창으로연결됩니다."
-  },
-  {
-    "page": 47,
-    "text": "• 건강검진기관안내\n-검진기관\nKMI 검진센터: 광화문/ 여의도/ 강남/ 수원\n협력병원: 송파서울병원/ GC녹십자아이메드\n/ 우리원헬스케어\n41\n복리후생\n건강검진지원\n분류\n검진기관명\n위치\nKMI 검진센터\nKMI 광화문\n서울특별시종로구세종대로149\n(광화문빌딩B1층, 3층, 4층)\nKMI 여의도\n서울특별시영등포구국제금융로2길24 \n(여의도동, BNK 금융타워13-15층, 17층,18층)\nKMI 강남\n서울특별시강남구테헤란로411\n(삼성동, 성담빌딩2-10층)\nKMI 수원\n경기도수원시권선동동수원로232\n(권선동, 1층수원검진센터\n)\n협력병원\n송파서울병원\n서울특별시송파구오금로290 (가락동)\nGC녹십자아이메드\n서울특별시성동구왕십리로241 서울숲더샵GF층\n우리원헬스케어\n서울특별시중구청계천로100 (수표동99번지) \n시그니처타워서관2층\n담당자: 인사팀최주영님"
-  },
-  {
-    "page": 48,
-    "text": "• 건강상담\n-건강상담: 매월정기1회진행\n-2026 년부터건강검진결과지를동봉해야상담이가능합니다.\n-장소: 본사2층Unique Room\n*매월간호사님이방문하여상담진행(4월/7월/10월은의사선생님도함께방문)\n-접수방법: 예약필수, 인사팀신정훈님앞접수(팀즈/메일)시확정\n-접수가능기간: 공지게시이후~ (종료일은매월다르며, 공지참고부탁드립니다\n.)\n42\n복리후생\n건강상담\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 49,
-    "text": "• 건강보험료지원\n-건강보험료지원금\n금연서약시, 4대보험중‘건강보험료’를지원합니다. \n*흡연3회적발시, 지원대상에서제외함\n*입사시, 금연서약서를제출한신규입사자의경우만근한월부터지원\n*퇴직자의경우일할계산하여지원\n43\n복리후생\n건강보험료지원\n-지원기준\n구분\n연봉3,500 만원이하\n연봉3,500 만원초과\n지급기준\n100%\n50%\n담당자: 인사팀김석은님, 임승준님"
-  },
-  {
-    "page": 50,
-    "text": "• 단체상해보험이란\n?\n-대상및지원사항: 임직원본인및배우자, 자녀\n-가족추가가입시, 가족관계증명서또는주민등록등본을인사담당자에게제출해주세요\n*담당자: 인사팀위상우(simon.wi@mistobrand.com)\n• 가입절차\n• 보험금청구절차및문의사항\n44\n-Mcare 접속후, 사용자등록> 회사이메일인증> 회원가입진행\n-임직원본인은보험자동가입처리됩니다.\n-배우자혹은자녀의경우가족관계증명서혹은주민등록등본담당자에게첨부\n-부모, 형제자매는가입대상에서제외됩니다.\n복리후생\n단체상해보험\n담당자: 인사팀위상우님\n-개인실비보험가입되어있는보험사별로개별청구하셔야합니다. (비례보상가능)\n*가입보장내역및구비서류항목은부록파트에첨부된자료확인부탁드립니다\n."
-  },
-  {
-    "page": 51,
-    "text": "• 회사콘도– 리조트예약방법\n• 생일자축하– 기프티콘/반반차지급\n①성수기\n-여름/겨울성수기추첨내용에따라그룹웨어게시판을통한사전안내후접수\n-추첨후당첨시개별안내, 낙첨자는사후빈구좌발생시개별안내후예약\n②비성수기\n-분기1회공지, 인사팀신정훈님에게신청내용기입후메일혹은팀즈문의\n(예약숙소명, 객실타입, 예약희망일자\n, 인원수)\n-지역/숙소타입에따라가능여부, 불가능할시대체숙소등개별안내\n-생일월첫째주월요일문자메세지(MMS)를통해“해피콘25,000 원권” 발송\n생일인월에1회2시간조기퇴근가능(반반차지급)\n생일반반차신청은경조휴가신청방법프로세스확인부탁드립니다\n.\n(생일반반차는생일인달에사용가능합니다.)\n45\n*문의사항은인사팀신정훈님에게연락부탁드립니다\n.\n복리후생\n회사콘도& 생일자축하\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 52,
-    "text": "46\n매치포인트(테니스)\n-임원진: 회장편집샵팀정규용님| 총무영업기획팀이기안님\n-회원수: 37명(2026.04 기준)\n-주요활동: 매주1회활동(화요일)\n• 동호회가입방법\n①각동호회회장/총무에게가입의사전달(메일/팀즈)\n②그룹웨어– 커뮤니티– 동호회커뮤니티접속– 커뮤니티검색– 회원가입신청\n그룹웨어접속후커뮤니티클릭\n❶\n동호회검색\n❷\n회원가입신청\n❸\n복리후생\n동호회\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 53,
-    "text": "47\n토네이도(축구)\n-임원진: 회장글로벌풋웨어개발\n팀강민환님| 총무글로벌풋웨어개발팀\n강석재님\n-회원수: 22명(2026.04 기준)\n-주요활동: 월2회활동\nFRC(러닝)\n-임원진: 회장미스토어패럴김영근님| 총무의류디자인실직할이고은님\n-회원수: 33명(2026.04 기준)\n-주요활동: 매주1회활동(수요일)\n복리후생\n동호회\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 54,
-    "text": "48\nDU ORE(댄스)\n-임원진: 회장기획팀(K) 서유림님| 총무기획팀(K) 서유림님\n-회원수: 12명(2026.04 기준)\n-주요활동: 정기운동(매주1회)\nFORZA (농구)\n-임원진: 회장인사팀신정훈님| 총무영업팀(K) 김기송님\n-회원수: 20명(2026.04 기준)\n-주요활동: 월2회활동\n복리후생\n동호회\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 55,
-    "text": "Misto Korea LTD.\nSTEP 04\n| 필요할때마다찾아보게되는알쓸신잡\n업무지원"
-  },
-  {
-    "page": 56,
-    "text": "• 위임전결규정\n-경로: 그룹웨어> 통합게시> 사규> 일반규정> 위임전결규정\n> 오른쪽상단엑셀파일다운로드\n-내용: 직무권한을직위별로위임한규정\n-목적: 권한과책임의한계를명확화, 신속한의사결정, 업무능률향상등\n-비고: 별도규정이없는한본규정에따르며, 본규정에없는사항은대표님품의필요\n49\n업무지원\n위임전결규정\n담당자: 인사팀이진희님"
-  },
-  {
-    "page": 57,
-    "text": "• 아웃룩회의실현황확인하는방법(1F,2F)\n50\n아웃룩앱접속및캘린더선택> 일정추가\n❶\n디렉터리에서추가\n❷\n업무지원\n아웃룩회의실예약현황확인\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 58,
-    "text": "• 아웃룩회의실현황확인하는방법(1F,2F)\n51\n본인계정선택\n❸\n1F : Convention\n2F : Unique\n2F : Challenge\n2F : Disruptor\n2F : Pioneer\n2F : Leader\n2F : Sensation\n검색및추가\n❹\n업무지원\n아웃룩회의실예약현황확인\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 59,
-    "text": "• 아웃룩회의실현황확인하는방법(1F,2F)\n52\n회의실별예약현황확인가능\nEx) 2F Unique\n❺\n업무지원\n아웃룩회의실예약현황확인\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 60,
-    "text": "• 1층/2층회의실위치\n53\n업무지원\n아웃룩회의실예약현황확인\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 61,
-    "text": "• 아웃룩회의실예약\n회의실선택\n❶\n회의실찾기를통해추가검색❷\n건물명: MISTO Holdings로설정\n❸\n사용가능으로표시된일정중예약할회의실선택\n> 저장\n❹\n54\n업무지원\n아웃룩회의실예약방법\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 62,
-    "text": "• 사원증신청\n입사시\n-인사팀에서개별제작하여제공해드립니다\n.\n-사원증으로식사이용이가능합니다. (조식/중식)\n-당일발급어려울시, 방문증으로우선사용후사원증제작완료시전달\n-사원증수령후, 오전10시~ 11시, 오후2시~ 3시사이지하1층영양사님사무실방문\n> 사원증등록절차진행(불이행시, 구내식당리더기태깅불가)\n분실로인한재제작시\n-인사팀신정훈님앞개별요청\n-요청시에는사번/영문이름같이작성후요청해주세요.\n*출입을위한지문등록은사원증수령후인사팀신정훈님에게연락후방문하여등록이가능합니다.\n*분실로인한재제작시수령은3층인사팀으로내방부탁드립니다\n.\n55\n업무지원\n사원증발급신청방법\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 63,
-    "text": "• 명함신청\n-그룹웨어> 전자결재> 명함신청의뢰서작성(1인결재) > 인사팀담당자확인\n*신청결재완료후D+14일내별도안내하여제공해드립니다\n. \n*이메일/휴대폰번호/사내번호필수작성\n(명함은최소10개이상시발주됩니다)\n전자결재> 신청서> 명함신청의뢰서선택\n❶\n직원검색후공란작성> 이메일/CP/사내번호필수작성\n❷\n56\n업무지원\n명함발급신청\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 64,
-    "text": "• 법인카드발급신청\n-미스토코리아에서는교통결제기능여부에따라\n \n \n \n2가지종류의법인카드를운영중입니다\n \n \n \n.-잦은외근이나출장으로인해대중교통이용이필요하신경우\n \n \n \n \n \n \n \n, 1\n번\nURL\n그외의경우\n \n \n2번\nURL\n로발급진행부탁드립니다\n \n \n \n.-파견직\n/계약직의경우\n \n,업무연락전실장\n \n/사업부장전결시발급가능합니다\n \n \n \n \n.\n-미스토코리아에서는\n교통결제기능여부에따라2가지종류의법인카드를운영중입니다. \n-잦은외근이나출장으로인해대중교통이용이필요하신경우, 1번URL\n그외의경우2번URL로발급진행부탁드립니다.\n-파견직/계약직의경우, 업무연락전실장/사업부장전결시발급가능합니다.\n법인카드\n신청링크\n \n(교통카드\no)\n법인카드\n신청링크\n(교통카드o)\n법인카드\n신청링크\n \n(교통카드\nx)\n법인카드\n신청링크\n(교통카드x)\n57\n업무지원\n법인카드발급신청\n담당자: 자금팀김혜화님\n❶\n❷\n*링크는컨트롤누른채로클릭하시거나\n, 마우스휠로클릭하시면새창으로연결됩니다."
-  },
-  {
-    "page": 65,
-    "text": "58\n업무지원\n법인카드발급신청\n담당자: 자금팀김혜화님\n• 법인카드발급신청"
-  },
-  {
-    "page": 66,
-    "text": "59\n업무지원\n법인카드발급신청\n담당자: 자금팀김혜화님\n• 법인카드발급신청"
-  },
-  {
-    "page": 67,
-    "text": "60\n업무지원\n법인카드발급신청\n담당자: 자금팀김혜화님\n• 법인카드발급신청"
-  },
-  {
-    "page": 68,
-    "text": "• 아톡비즈어플설치방법\n회사에서자리마다설치된유선전화가아닌모바일내선전화를지원합니다. \n아래안드로이드/IOS 앱설치방법을참고하셔서앱을설치하신후내선전화서비스를이용하실수있습니다.\n아톡비즈화면\n-구글플레이스토어또는앱스토어에서[아톡비즈] 검색\n> [아톡비즈기업용] 설치\n-개인내선번호: 02-3470 -9*** (입사시개별안내) \n-로그인정보\nID : fila****(내선번호뒤4자리)\nPW : 06fila****(내선번호뒤4자리)\n※ 사내연락시조직도내\n소속으로연락처검색및연락가능\n61\n업무지원\n아톡비즈모바일내선전화\n담당자: 인사팀위상우님"
-  },
-  {
-    "page": 69,
-    "text": "• 예약방법\n-그룹웨어> 자원예약> 예약신청> 인사팀승인후이용\n-인사팀방문하여파우치수령(운행일지, 공용카드, 차량키)\n-자원예약메뉴는그룹웨어메인화면스크롤후확인가능\n• 교통범칙금\n-교통법규위반시벌과금개인부담원칙\n-벌과금은기한내납부및통보받은즉시처리\n-고지서에적힌계좌로송금(급여차감불가합니다.)\n-반복위반시배차가제한될수있습니다.\n• 사고처리\n-대인/대물사고발생시인명구조, 보험사연락후차량관리담당자에게즉시보고\n-사고경위서를작성하여소속본부장결재후인사팀에접수\n-차량관리담당자: 인사팀위상우(010-6283 -0141)\n-사고접수: 1599-9111 (SK렌터카)\n-대인/대물사고외의긁힘등은인사팀에파우치반납시보고\n• 주차위치\n-카니발: 본사지상1층대로변(출입구) 주차장(총2대)\n카니발1호차: 223허5826 / 카니발2호차: 230호412\n-아반떼: 본사지하3층주차장(총1대)\n아반떼: 230호4306\n-평일18시이후및주말복귀불가시인사팀사전보고\n• 주유방법\n-회사공용카드사용하여연료충전후반납(차량운행일지작성필수)\n-유종: 카니발– 디젤/ 아반떼– 휘발유\n-차량사용후쓰레기및개인소지품등모두정리\n-차량운행일지속공용카드확인후결제\n62\n업무지원\n법인차량이용가이드\n담당자: 인사팀위상우님"
-  },
-  {
-    "page": 70,
-    "text": "• 비상품구매프로세스\n63\n업무지원\n비상품구매프로세스\n담당자: 인사팀이진희님\n-사업에필요한물품·용역등에대한대외구매업무의방법및기준과절차는\n전사게시판의전사구매규정을확인부탁드립니다\n.\n-경로: 그룹웨어> 통합게시> 사규> 일반규정> 전사구매규정"
-  },
-  {
-    "page": 71,
-    "text": "• 윤리경영\n그룹웨어> 통합게시> 사규> 윤리규정\n미스토코리아주식회사는윤리경영을실천하기위해\n윤리규정을게시하고, 아래의사항들을이행하고있습니다.\n윤리규정게시판내\n①행동강령\n②윤리실천지침\n③문책양정기준\n④제보자보호및포상지침\n⑤거래투명성확보를위한임직원실천지침\n⑥부정청탁금지규정등을게시하고있습니다.\n사전리스크예방을위해아래의항목을수행하고있습니다.\n①윤리교육및윤리실천서약서징구\n②온라인제보센터운영\n③지속적인준법교육\n④내부회계관리시스템\n운영\n• 금품(선물) 신고프로그램운영\n업무와관련하여협력업체나이해관계자로부터\n금전이나선물을수수하여서는안됩니다.\n다만, 불가피하게수수한경우반드시3영업일이내\n<금품(선물) 접수신고서>를작성하여법무감사팀에서면으로신고하여야합니다.\n그룹웨어> 통합게시> Legal&Compliance> 금품접수신고서\n64\n업무지원\n법무감사팀안내사항\n담당자: 법무감사팀김윤재님"
-  },
-  {
-    "page": 72,
-    "text": "65\n업무지원\n미스토코리아사업자등록증\n담당자: 회계팀최승준님\n• 사업자등록증확인방법\n통합게시우측상단검색창에‘사업자등록증\n’ 검색\n❶\n최근게시물클릭\n❷\n첨부파일클릭\n> 사업자등록증확인\n❸\n-그룹웨어> 통합게시> 우측상단‘사업자등록증’ 검색> 게시물클릭> 첨부파일확인"
-  },
-  {
-    "page": 73,
-    "text": "Misto Korea LTD.\nSTEP 05\n| 당신의오피스라이프는소중하니까\n기타지원"
-  },
-  {
-    "page": 74,
-    "text": "MISTO는매년Holiday Calendar를운영하고있습니다. \n단체연차일은별도근태신청없이일괄반영되며, 업무및개인휴가계획수립에미리참고하시기바랍니다.\n*26년기준: 1/2, 5/4, 12/31총3일단체휴무일로개인연차가소진됩니다.\n단, 창립기념일7/10은별도개인연차소진되지않습니다.\n66\n기타지원\nMISTO Holiday Calendar\n담당자: 인사팀최주영님"
-  },
-  {
-    "page": 75,
-    "text": "• 사무실층별안내\n10F\n미스토홀딩스/ 미팅룸(공용)\n9F\n미스토홀딩스\n8F\n키즈사업부\n7F\n언더웨어사업부\n, 미스토어패럴\n6F\n의류기획실, 의류디자인실\n, 고객지원팀\n5F\n글로벌풋웨어기획실\n, 글로벌풋웨어디자인실\n리테일영업사업부\n, 홀세일영업사업부\n4F\n디지털비즈니스본부\n, 마케팅실\n3F\n전략본부\n2F\n미팅룸(공용) \n*사용예약은회의실예약페이지참고\n1F\n카페, 컨벤션홀\nB1F\n구내식당, 문서수발실\n67\n기타지원\n사무실층별안내\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 76,
-    "text": "68\n기타지원\n공용공간안내\n• 남성휴게실\n-남성휴게실위치: 지하1층엘리베이터우측통로> 직진> 여성휴게실우측\n담당자: 인사팀신정훈님\n남성휴게실"
-  },
-  {
-    "page": 77,
-    "text": "69\n기타지원\n공용공간안내\n• 여성휴게실\n-여성휴게실위치: 지하1층엘리베이터우측통로> 직진> 바로보이는문\n담당자: 인사팀신정훈님\n여성휴게실\n휴게실이용시, 팻말을꼭사용하여\n공실/재실구분부탁드립니다\n."
-  },
-  {
-    "page": 78,
-    "text": "원활한식당이용을위해층별점심시간을구분하여운영하고있습니다. \n층별점심시간은분기단위로조정되며상세내용은아래를참고해주시기바랍니다.\n70\n구분\n11:30~12:30\n12:00~13:00\n1~3월\n3층,4층,5층\n6층,7층,8층\n4~6월\n6층,7층,8층\n3층,4층,5층\n고객지원팀\n7~9월\n3층,4층,5층\n고객지원팀\n6층,7층,8층\n10~12월\n6층,7층,8층\n3층,4층,5층\n고객지원팀\n기타지원\n층별점심시간안내\n담당자: 인사팀위상우님"
-  },
-  {
-    "page": 79,
-    "text": "밀케어다운로드및회원가입\n❶\n71\n기타지원\n밀케어가입및인증방법\n• 밀케어가입및인증\n담당자: 인사팀위상우님\n-Google 플레이스토어/ Apple앱스토어> 밀케어검색및다운로드\n*사진속화면은모바일접속기준입니다."
-  },
-  {
-    "page": 80,
-    "text": "점포고객인증클릭\n❷\n‘미스토홀딩스\n’ 검색\n❸\n72\n기타지원\n밀케어가입및인증방법\n담당자: 인사팀위상우님\n• 밀케어가입및인증\n-Google 플레이스토어/ Apple앱스토어> 밀케어검색및다운로드\n*사진속화면은모바일접속기준입니다."
-  },
-  {
-    "page": 81,
-    "text": "미스토코리아선택\n❹\n사번입력\n❺\n73\n기타지원\n밀케어가입및인증방법\n소속명을누를시, 4번사진처럼아래팝업확인\n담당자: 인사팀위상우님\n• 밀케어가입및인증\n-Google 플레이스토어/ Apple앱스토어> 밀케어검색및다운로드\n*사진속화면은모바일접속기준입니다."
-  },
-  {
-    "page": 82,
-    "text": "최초화면에서스마트오더클릭\n❶\n원하는음료선택및결제\n제조완료시카카오톡알림으로확인가능\n❷\n74\n기타지원\n밀케어사이렌오더이용방법\n담당자: 인사팀위상우님\n• 사내카페모바일앱이용방법\n-사내카페이용시, 밀케어APP으로사이렌오더가가능합니다.\n*사진속화면은모바일접속기준입니다."
-  },
-  {
-    "page": 83,
-    "text": "본사인근제휴업체를운영하고있으며미스토코리아임직원분들은할인혜택을\n받으실수있습니다. 제휴업체는앞으로점차확대할예정입니다.\n• 제휴피트니스센터/ 운영시간\n75\n기타지원\n본사인근제휴업체안내\n-에이치짐신설동역점: 서울특별시종로구숭인동길21 지하1층\n-스포애니신설동역점: 서울특별시동대문구천호대로3 지하1층\n-업타운피트니스신설점: 서울특별시동대문구왕산로22 지하1층\n업체명\n금액\n(6개월)\n금액\n(12개월)\n추가혜택\n비고\n에이치짐신설동역점\n330,000 원\n> 264,000 원\n480,000 원\n> 396,000 원\nSpecial PT 제공(20분)\n(6개월4회, 12개월6회)\n유니폼50% 할인\n요가/스피닝/에어로빅등\n다양한G.X 운영\n건식사우나구비\n스포애니신설동역점\n308,000 원\n> 246,400 원\n462,000 원\n> 352,400 원\n1개월추가증정\n스포애니타지점월10회이용가능\n유니폼무료(신년이벤트)\n연중무휴24시간운영\n애니패스이용권구매시\n전지점무제한이용가능\n업타운휘트니스신설점\n330,000 원\n> 220,000 원\n495,000 원\n> 340,000 원\n가입비면제\n운동복, 수건무료제공\n정규PT 수업2회제공\n최고급머신보유\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 84,
-    "text": "본사인근제휴업체를운영하고있으며미스토코리아임직원분들은할인혜택을\n받으실수있습니다. 제휴업체는앞으로점차확대할예정입니다.\n• 8891 카페\n76\n기타지원\n본사인근제휴업체안내\n-서울특별시성북구보문로13길8 1층\n-미스토코리아임직원인증시, 전메뉴10% 할인\n담당자: 인사팀신정훈님"
-  },
-  {
-    "page": 85,
-    "text": "77\n기타지원\n각파트별담당자\n담당자\n구분\n부서\n이름\n파트\n인사팀\n김석은\n임승준\n그룹웨어&GERP\n제증명발급\n근무시간\n휴가/근태\n경조규정\n차량유지비/교통비&통신비지원\n건강보험료지원금\n인사팀\n신정훈\n건강상담\n회사콘도& 생일자축하\n동호회\n사원증/지문등록\n명함발급\n제휴업체\n인사팀\n위상우\n직무별IT집기\n단체상해보험\n아톡비즈모바일내선전화\n법인차량\n밀케어\n인사팀\n최주영\n사원판매(자사몰, 아쿠쉬네트)\n복지포인트(복지카드)\n건강검진지원\n법무감사팀\n김윤재\n법무관련지원\n자금팀\n김혜화\n법인카드신청/발급\n회계팀\n최승준\n미스토코리아사업자등록증"
-  },
-  {
-    "page": 86,
-    "text": "Misto Korea LTD.\nSTEP 06\n| 단체상해보험\n부록"
-  },
-  {
-    "page": 87,
-    "text": "• 단체상해보험공통가입보장\n78\n부록\n담당자: 인사팀위상우님"
-  },
-  {
-    "page": 88,
-    "text": "• 단체상해보험TYPE A : 실손의료비형\n79\n부록\n담당자: 인사팀위상우님"
-  },
-  {
-    "page": 89,
-    "text": "• 단체상해보험TYPE B : 치과치료비형\n80\n부록\n담당자: 인사팀위상우님"
-  },
-  {
-    "page": 90,
-    "text": "• 단체상해보험TYPE C : 정액의료비형\n81\n부록\n담당자: 인사팀위상우님"
-  },
-  {
-    "page": 91,
-    "text": "82\n부록\n담당자: 인사팀위상우님"
-  },
-  {
-    "page": 92,
-    "text": "Wenn du glaubst, dass du mit deinen Träumen etwas tun kannst, dann fang an.\nIn dem Mut, neue Dinge zu beginnen, lauern deine Genialität, deine Fähigkeiten und Wunder.\n꿈을품고무언가할수있다고믿는다면, 그것을시작하라.\n새로운일을시작하는용기속에는당신의천재성과능력, 그리고기적이숨어있다\n-Johann Wolfgang von Goethe -\nMisto Korea LTD.\n2026.0 7.06 字기준작성되어배포되었습니다\n."
-  }
-];
+      <section class="privacyBox">
+        <h3>민감정보 입력 금지</h3>
+        <p>이 화면에는 주민등록번호 전체, 계좌번호 전체, 비밀번호, 가족의 상세 개인정보를 입력하지 마세요. 필요한 경우 ERP·사내 승인된 보안 경로에서만 처리합니다.</p>
+      </section>
+    </aside>
 
-</script>
-  <script>
-const KB = window.MISTO_KB || [];
-const PAGES = window.MISTO_PAGES || [];
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1>MISTO HR Assistant V2</h1>
+          <p>FAQ형 요약 답변이 아니라, 실제 HR 담당자가 안내할 수 있는 <b>업무처리형 답변</b>으로 정리합니다.</p>
+        </div>
+        <div class="topActions">
+          <button class="actionBtn" id="copyLastBtn">최근 답변 복사</button>
+          <button class="actionBtn" id="clearBtn">대화 초기화</button>
+          <button class="actionBtn primary" id="printBtn">인쇄/PDF</button>
+        </div>
+      </header>
 
-const $ = (sel) => document.querySelector(sel);
-const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+      <section class="workspace">
+        <section class="chatWrap">
+          <div class="notice"><b>운영 메모</b> · 가이드북 원문 연동 전에도 사용할 수 있도록 Rule 기반으로 구성했습니다. 사내 규정이 별도로 있는 항목은 최종적으로 해당 규정을 우선 적용하세요.</div>
+          <div class="messages" id="messages"></div>
+          <div class="quickArea">
+            <p class="quickTitle">자주 쓰는 업무 질문</p>
+            <div class="quickBtns">
+              <button class="quickBtn" data-q="연차를 사용하려면 어떤 순서로 처리해야 하나요?">연차 신청 절차</button>
+              <button class="quickBtn" data-q="출근 체크를 누락했을 때 어떻게 정정해야 하나요?">출근 누락 정정</button>
+              <button class="quickBtn" data-q="ERP 개인정보 업데이트는 어떤 항목을 확인해야 하나요?">ERP 개인정보 업데이트</button>
+              <button class="quickBtn" data-q="가족 정보를 등록할 때 주민등록번호 뒷자리도 입력해야 하나요?">가족정보 등록</button>
+              <button class="quickBtn" data-q="반차와 외출은 어떤 기준으로 안내하면 되나요?">반차/외출 기준</button>
+              <button class="quickBtn" data-q="증빙서류를 제출해야 하는 케이스를 정리해줘">증빙서류 케이스</button>
+            </div>
+            <div class="composer">
+              <textarea id="input" placeholder="예: 신입 인턴이 가족정보 ERP 업데이트를 해야 하는데, 어떤 식으로 안내하면 될까?"></textarea>
+              <button class="sendBtn" id="sendBtn">전송</button>
+            </div>
+          </div>
+        </section>
 
-const messages = $("#messages");
-const form = $("#askForm");
-const input = $("#questionInput");
-const kbList = $("#kbList");
-const kbSearch = $("#kbSearch");
-$("#kbCount").textContent = KB.length;
+        <aside class="panel">
+          <section class="panelSection">
+            <h3>표준 답변 구조</h3>
+            <div class="flow">
+              <div class="flowStep"><span class="stepNo">1</span><b>문의 유형 판단</b><span>연차·근태·ERP·급여·증빙 중 어디에 해당하는지 분류</span></div>
+              <div class="flowStep"><span class="stepNo">2</span><b>CASE 분기</b><span>정상 신청, 사후 정정, 예외 승인, 민감정보 포함 여부 확인</span></div>
+              <div class="flowStep"><span class="stepNo">3</span><b>처리 프로세스</b><span>신청 경로 → 승인자 → 제출물 → 마감기한 순서 안내</span></div>
+              <div class="flowStep"><span class="stepNo">4</span><b>주의사항</b><span>개인정보·증빙·급여 영향·반려 가능 사유 고지</span></div>
+            </div>
+          </section>
 
-function normalize(s){
-  return (s || "")
-    .toLowerCase()
-    .replace(/\s+/g, "")
-    .replace(/[.,!?~·|/()\[\]{}<>:;'"“”‘’]/g, "");
-}
+          <section class="panelSection">
+            <h3>CASE 판단 예시</h3>
+            <table class="caseTable" aria-label="CASE 판단 예시">
+              <tr><td>연차</td><td>사전 신청 원칙. 잔여 연차, 팀 승인, 업무 공백 여부 확인.</td></tr>
+              <tr><td>반차</td><td>오전/오후 기준을 명확히 하고 근무시간 산정 기준 확인.</td></tr>
+              <tr><td>근태</td><td>출퇴근 누락·지각·조퇴·외근은 사유와 증빙을 남겨 정정.</td></tr>
+              <tr><td>ERP</td><td>주소, 연락처, 계좌, 가족정보 등 변경 항목별 입력 경로 안내.</td></tr>
+              <tr><td>보안</td><td>주민등록번호·계좌번호 등은 채팅창 수집 금지. ERP 보안 화면만 사용.</td></tr>
+            </table>
+          </section>
 
-function escapeHTML(str){
-  return String(str).replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[m]));
-}
+          <section class="panelSection">
+            <h3>현재 버전</h3>
+            <div class="statusCard">
+              <div><b>Version</b> · V2.0</div>
+              <div><b>Mode</b> · 업무처리형 / 프로세스형</div>
+              <div><b>Scope</b> · 연차, 근태, ERP 개인정보, 증빙, 급여 기본 문의</div>
+              <div><b>Security</b> · 민감정보 입력 차단 및 안전 경로 안내</div>
+            </div>
+            <p class="footerNote">내부 가이드북 문구를 추가하면 답변 데이터셋을 더 촘촘하게 확장할 수 있습니다.</p>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast">처리되었습니다.</div>
 
-function tokenScore(query, item){
-  const nq = normalize(query);
-  const title = normalize(item.title);
-  const category = normalize(item.category);
-  let score = 0;
+<script>
+(function(){
+  const messages = document.getElementById('messages');
+  const input = document.getElementById('input');
+  const sendBtn = document.getElementById('sendBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const printBtn = document.getElementById('printBtn');
+  const copyLastBtn = document.getElementById('copyLastBtn');
+  const toast = document.getElementById('toast');
+  let lastBotText = '';
+  let activeIntent = 'all';
 
-  if(nq.includes(title) || title.includes(nq)) score += 8;
-  if(nq.includes(category) || category.includes(nq)) score += 3;
+  const escapeHtml = (str) => String(str)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
 
-  for(const key of item.keywords || []){
-    const nk = normalize(key);
-    if(!nk) continue;
-    if(nq.includes(nk)) score += 5;
-    else if(nk.includes(nq) && nq.length >= 2) score += 2;
+  function showToast(text){
+    toast.textContent = text;
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'), 1600);
   }
 
-  // partial chunks from page content for fallback signal
-  const words = query.split(/\s+/).filter(w => w.length > 1);
-  const combined = normalize([item.title, item.category, item.answer, ...(item.keywords||[])].join(" "));
-  for(const w of words){
-    const nw = normalize(w);
-    if(nw && combined.includes(nw)) score += 1;
+  function addMessage(role, html, plainText){
+    const msg = document.createElement('div');
+    msg.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    avatar.textContent = role === 'user' ? '나' : 'HR';
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.innerHTML = html;
+    msg.appendChild(avatar);
+    msg.appendChild(bubble);
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+    if(role === 'bot') lastBotText = plainText || bubble.innerText;
   }
-  return score;
-}
 
-function searchRawPages(query){
-  const nq = normalize(query);
-  if(!nq) return [];
-  return PAGES.map(p => {
-    const nt = normalize(p.text);
-    let score = 0;
-    const words = query.split(/\s+/).filter(w => w.length > 1);
-    for(const w of words){
-      if(nt.includes(normalize(w))) score += 1;
+  function formatAnswer(title, cards, tags){
+    const cardHtml = cards.map(c=>`<div class="answerCard ${c.type||''}"><strong>${escapeHtml(c.head)}</strong>${c.body}</div>`).join('');
+    const tagHtml = tags && tags.length ? `<div class="miniTags">${tags.map(t=>`<span class="miniTag">${escapeHtml(t)}</span>`).join('')}</div>` : '';
+    return `<h4>${escapeHtml(title)}</h4><div class="answerGrid">${cardHtml}</div>${tagHtml}`;
+  }
+
+  function hasSensitiveInfo(q){
+    const compact = q.replace(/[\s-]/g,'');
+    const rrnLike = /\d{6}[1-4]\d{6}/.test(compact);
+    const longAccountLike = /\d{10,}/.test(compact);
+    const passwordLike = /(비밀번호|패스워드|password|pwd|pw)\s*[:：=]/i.test(q);
+    return rrnLike || passwordLike || (longAccountLike && /(계좌|주민|등록번호|번호|통장|은행)/.test(q));
+  }
+
+  function detectIntent(q){
+    if(activeIntent !== 'all') return activeIntent;
+    if(/연차|월차|반차|휴가|휴무|휴직|외출|조퇴/.test(q)) return 'leave';
+    if(/근태|출근|퇴근|지각|결근|누락|정정|외근|출장|재택/.test(q)) return 'attendance';
+    if(/ERP|개인정보|주소|연락처|가족|계좌|주민등록|주민번호|사번/.test(q)) return 'erp';
+    if(/급여|월급|공제|4대보험|소득세|원천|연말정산|수당/.test(q)) return 'payroll';
+    if(/증빙|서류|제출|첨부|확인서|등본|가족관계/.test(q)) return 'document';
+    return 'general';
+  }
+
+  function privacyAnswer(){
+    return formatAnswer('민감정보 포함 가능성이 있어 안전 경로로 안내합니다', [
+      {type:'warn', head:'판단', body:'입력 내용에 주민등록번호, 계좌번호, 비밀번호 등 민감정보가 포함되었거나 포함될 가능성이 있습니다. 이 챗봇 화면에서는 해당 정보를 수집하지 않는 것이 원칙입니다.'},
+      {type:'process', head:'처리 절차', body:'① 채팅창 입력을 중단합니다.<br>② ERP 또는 회사가 지정한 보안 입력 화면으로 이동합니다.<br>③ 필요한 항목만 직접 입력합니다.<br>④ HR 담당자는 입력 완료 여부만 확인하고, 번호 전체를 메신저나 메일로 요구하지 않습니다.'},
+      {type:'note', head:'지원자/임직원 안내 문구', body:'“개인정보 보호를 위해 주민등록번호 전체 또는 계좌번호 전체는 메신저·메일로 전달하지 마시고, ERP 내 지정된 항목에 직접 입력 부탁드립니다.”'},
+      {type:'ok', head:'HR 체크포인트', body:'처리 완료 여부, 누락 항목, 제출 기한만 확인하고 원본 민감정보를 별도로 저장하지 않습니다.'}
+    ], ['민감정보 방어', 'ERP 입력', '메일 수집 금지']);
+  }
+
+  const answers = {
+    leave(q){
+      const isHalf = /반차/.test(q);
+      const isOut = /외출|조퇴/.test(q);
+      const title = isHalf ? '반차 사용 문의 처리 기준' : isOut ? '외출·조퇴 문의 처리 기준' : '연차 사용 문의 처리 기준';
+      return formatAnswer(title, [
+        {type:'ok', head:'CASE 판단', body:isHalf ? '반차는 오전/오후 중 어느 시간대에 사용하는지, 사전 승인을 받았는지, 근무시간 산정 기준과 충돌하지 않는지를 먼저 확인합니다.' : isOut ? '외출·조퇴는 개인 사유인지, 업무상 사유인지, 사전 승인 여부와 근태 시스템 반영 필요 여부를 구분합니다.' : '연차는 원칙적으로 사전 신청 건입니다. 잔여 연차, 팀 내 업무 공백, 승인권자 확인이 먼저 필요합니다.'},
+        {type:'process', head:'처리 프로세스', body:'① ERP/근태 시스템에서 휴가 신청 메뉴 확인<br>② 사용일자와 사용 단위 선택<br>③ 사유 입력은 과도하게 상세히 쓰지 않고 필요한 수준으로 작성<br>④ 팀장 또는 승인권자 승인<br>⑤ 승인 완료 후 캘린더/팀 공유 필요 여부 확인'},
+        {type:'note', head:'필요 확인 항목', body:'잔여 연차, 사용 가능 단위, 사전 승인 여부, 업무 인수인계 필요 여부, 팀별 공유 방식입니다.'},
+        {type:'warn', head:'주의사항', body:'사후 신청은 반려되거나 근태 정정으로 분류될 수 있습니다. 병가·경조 등 별도 증빙이 필요한 휴가는 일반 연차와 분리해서 안내하는 것이 안전합니다.'}
+      ], ['사전 승인', '잔여 연차 확인', '팀 공유', '증빙 분리']);
+    },
+    attendance(q){
+      const missed = /누락|안 찍|미체크|정정/.test(q);
+      const late = /지각|조퇴|결근/.test(q);
+      return formatAnswer(missed ? '출퇴근 누락 정정 처리 기준' : late ? '지각·조퇴·결근 근태 처리 기준' : '근태 문의 처리 기준', [
+        {type:'ok', head:'CASE 판단', body:missed ? '출퇴근 기록 자체가 누락된 건인지, 실제 근무시간이 달라진 건인지 먼저 구분합니다. 단순 체크 누락이면 근태 정정 프로세스로 안내합니다.' : late ? '지각·조퇴·결근은 사유, 사전 보고 여부, 승인권자 확인 여부, 급여/근태 반영 여부를 함께 확인합니다.' : '근태 문의는 출퇴근 기록, 승인 상태, 사유 증빙, 급여 반영 가능성을 분리해서 봐야 합니다.'},
+        {type:'process', head:'처리 프로세스', body:'① 근태 시스템에서 해당 일자 확인<br>② 정정 신청 또는 HR 문의 접수<br>③ 실제 출근·퇴근 시간과 사유 작성<br>④ 승인권자 확인<br>⑤ HR이 근태 반영 결과 확인'},
+        {type:'note', head:'필요 자료', body:'정정 대상 일자, 실제 근무시간, 누락 사유, 승인권자 확인 내용, 필요 시 업무 수행 증빙입니다.'},
+        {type:'warn', head:'주의사항', body:'반복 누락은 단순 오류가 아니라 근태 관리 이슈로 볼 수 있습니다. 안내 시 “이번 건 정정”과 “향후 재발 방지”를 함께 전달하는 것이 좋습니다.'}
+      ], ['근태 정정', '승인권자 확인', '사유 기록', '재발 방지']);
+    },
+    erp(q){
+      const family = /가족|주민|등본|가족관계/.test(q);
+      return formatAnswer(family ? 'ERP 가족정보 등록 처리 기준' : 'ERP 개인정보 업데이트 처리 기준', [
+        {type:'ok', head:'CASE 판단', body:family ? '가족정보 등록은 일반 연락처 변경보다 민감도가 높습니다. 가족관계, 주민등록번호 입력 필요 여부, 증빙 제출 여부를 구분해서 안내합니다.' : 'ERP 개인정보 업데이트는 주소, 연락처, 계좌, 비상연락처, 가족정보 등 항목별로 입력 위치와 검증 방식이 다릅니다.'},
+        {type:'process', head:'처리 프로세스', body:family ? '① ERP 내 가족정보 메뉴 접속<br>② 가족 구성원 정보 입력<br>③ 주민등록번호가 필요한 항목은 ERP 보안 화면에서만 직접 입력<br>④ 저장 후 누락 항목 확인<br>⑤ 증빙 제출이 필요한 경우 지정 경로로 제출' : '① ERP 접속<br>② 개인정보/인사정보 메뉴 확인<br>③ 변경 항목별 최신 정보 입력<br>④ 저장 후 반영 상태 확인<br>⑤ HR 요청 항목이 남아 있으면 기한 내 보완'},
+        {type:'note', head:'안내 문구 예시', body:family ? '“ERP 내 가족정보 입력 시 필요한 항목은 시스템에서 직접 입력 부탁드립니다. 개인정보 보호를 위해 주민등록번호 전체는 메일이나 메신저로 전달하지 말아주세요.”' : '“ERP 개인정보는 급여, 4대보험, 증명서 발급 등과 연결될 수 있으므로 공지된 기한 내 최신 정보로 업데이트 부탁드립니다.”'},
+        {type:'warn', head:'주의사항', body:'주민등록번호, 계좌번호, 가족의 상세 개인정보는 채팅·메일 본문에 쓰지 않도록 안내합니다. HR은 입력 완료 여부와 누락 항목만 확인하는 방식이 안전합니다.'}
+      ], family ? ['가족정보', '주민등록번호', 'ERP 보안입력', '증빙'] : ['개인정보 업데이트', 'ERP', '급여 연동', '기한 준수']);
+    },
+    payroll(q){
+      return formatAnswer('급여·공제 문의 처리 기준', [
+        {type:'ok', head:'CASE 판단', body:'급여 문의는 기본급, 수당, 비과세/과세 항목, 4대보험, 소득세, 정산월을 나누어 확인해야 합니다. 단순 금액 문의라도 개인정보와 급여정보가 섞일 수 있습니다.'},
+        {type:'process', head:'처리 프로세스', body:'① 문의 대상 월 확인<br>② 급여명세서 항목 구분<br>③ 과세/비과세 여부 확인<br>④ 4대보험 및 원천세 반영 여부 확인<br>⑤ 정정 필요 시 급여 담당자에게 근거 자료와 함께 전달'},
+        {type:'note', head:'필요 확인 항목', body:'근무기간, 계약 형태, 수당 발생월, 지급월, 비과세 항목 여부, 4대보험 가입 여부, 부양가족 수입니다.'},
+        {type:'warn', head:'주의사항', body:'개인의 급여명세서, 주민등록번호, 계좌번호 전체는 공개 채팅창에 입력하지 않도록 안내합니다. 추정 계산은 가능하지만 최종 지급액은 급여 담당자의 확정 자료가 우선입니다.'}
+      ], ['급여명세서', '과세/비과세', '4대보험', '원천세']);
+    },
+    document(q){
+      return formatAnswer('증빙서류 제출 CASE 정리', [
+        {type:'ok', head:'CASE 판단', body:'증빙은 휴가, 경조, 가족정보, 급여/보험, 근태 정정 등 어떤 업무에 연결되는지 먼저 분류합니다.'},
+        {type:'process', head:'처리 프로세스', body:'① 필요한 증빙 종류 확인<br>② 제출 경로 확인<br>③ 파일명 또는 제출자 식별 정보 최소화<br>④ HR 확인 후 보완 요청 여부 안내<br>⑤ 보관 기간과 접근 권한은 내부 기준에 따름'},
+        {type:'note', head:'자주 필요한 증빙', body:'가족관계 확인 서류, 경조 관련 증빙, 병가 관련 확인서, 근태 정정 증빙, 급여/보험 반영에 필요한 서류 등입니다.'},
+        {type:'warn', head:'주의사항', body:'서류에 주민등록번호 뒷자리 등 불필요한 민감정보가 포함되어 있으면 마스킹본 제출 가능 여부를 먼저 확인합니다. 단, ERP 필수 입력 항목은 시스템 안내 기준을 따릅니다.'}
+      ], ['증빙', '제출경로', '마스킹', '보관권한']);
+    },
+    general(q){
+      return formatAnswer('문의 내용을 업무처리형으로 정리했습니다', [
+        {type:'ok', head:'분류', body:'현재 질문은 특정 업무 유형이 명확하지 않습니다. HR 안내에서는 먼저 연차, 근태, ERP, 급여, 증빙, 기타 문의 중 하나로 분류하는 것이 좋습니다.'},
+        {type:'process', head:'권장 답변 방식', body:'① 문의 목적 확인<br>② 필요한 처리 경로 안내<br>③ 제출 자료와 기한 안내<br>④ 예외·주의사항 고지<br>⑤ 담당자 확인이 필요한 부분 분리'},
+        {type:'note', head:'사용 예시', body:'“이 건은 먼저 ERP 개인정보 업데이트 건으로 분류됩니다. 아래 순서대로 처리해주시고, 주민등록번호 등 민감정보는 시스템 내에서만 입력 부탁드립니다.”'},
+        {type:'warn', head:'확인 필요', body:'사내 가이드북에 별도 기준이 있는 경우, 이 답변보다 가이드북 원문과 최신 공지가 우선입니다.'}
+      ], ['업무분류', '절차화', '가이드북 우선']);
     }
-    if(nt.includes(nq)) score += 6;
-    return {...p, score};
-  }).filter(p => p.score > 0).sort((a,b) => b.score - a.score).slice(0,3);
-}
-
-function classifyGuardrail(query){
-  const q = normalize(query);
-  if(["주민등록번호","주민번호","계좌","비밀번호","password","pw","개인정보"].some(k => q.includes(normalize(k)))){
-    return "개인정보 또는 보안정보가 포함될 수 있는 문의입니다. 사이트에서 민감정보를 입력하지 말고, 필요한 경우 HR 담당자 또는 공식 시스템에서 확인해 주세요.";
-  }
-  return "";
-}
-
-function findAnswer(query){
-  const guard = classifyGuardrail(query);
-  const ranked = KB.map(item => ({...item, score: tokenScore(query, item)}))
-    .sort((a,b) => b.score - a.score);
-
-  const top = ranked[0];
-  const raw = searchRawPages(query);
-  const confidence = !top || top.score <= 0 ? "낮음" : top.score >= 8 ? "높음" : "중간";
-
-  if(top && top.score > 0){
-    let answer = top.answer;
-    if(guard) answer = guard + "<br><br>" + answer;
-
-    // If query is ambiguous and multiple close topics appear
-    const close = ranked.filter(r => r.score > 0 && r.id !== top.id).slice(0,2);
-    if(confidence !== "높음" && close.length){
-      answer += "<br><br><b>추가로 관련 있을 수 있는 항목</b>: " + close.map(c => c.title).join(", ");
-    }
-
-    return {
-      title: top.title,
-      category: top.category,
-      answer,
-      pages: top.pages,
-      confidence,
-      relatedPages: raw.map(r => r.page)
-    };
-  }
-
-  if(raw.length){
-    const preview = raw.map(r => `<b>p.${r.page}</b> ${escapeHTML(r.text.slice(0,180)).replace(/\n/g," ")}`).join("<br>");
-    return {
-      title: "가이드북 원문 검색 결과",
-      category: "검색",
-      answer: (guard ? guard + "<br><br>" : "") + "정리된 FAQ에는 없지만, 가이드북 원문에서 아래 내용이 검색되었습니다.<br><br>" + preview + "<br><br>정확한 처리 기준이 필요한 경우 HR 담당자에게 확인해 주세요.",
-      pages: raw.map(r => r.page),
-      confidence: "중간",
-      relatedPages: raw.map(r => r.page)
-    };
-  }
-
-  return {
-    title: "확인 필요",
-    category: "Fallback",
-    answer: (guard ? guard + "<br><br>" : "") + "현재 지식베이스에서 명확한 답변을 찾지 못했습니다. 질문을 조금 더 구체화해 주세요. 예: '일반연차 CASE', '급여명세서 조회', '근무시간 변경', '예비군 공가 신청'. 실제 운영형에서는 이 지점에서 HR 담당자 연결 또는 추가 문서 검색으로 넘어가도록 설계합니다.",
-    pages: [],
-    confidence: "낮음",
-    relatedPages: []
   };
-}
 
-function addMsg(type, html){
-  const div = document.createElement("div");
-  div.className = `msg ${type}`;
-  div.innerHTML = html;
-  messages.appendChild(div);
-  messages.scrollTop = messages.scrollHeight;
-}
+  function getBotAnswer(q){
+    if(hasSensitiveInfo(q)) return privacyAnswer();
+    const intent = detectIntent(q);
+    const fn = answers[intent] || answers.general;
+    return fn(q);
+  }
 
-function ask(question){
-  if(!question.trim()) return;
-  addMsg("user", escapeHTML(question));
-  setTimeout(() => {
-    const result = findAnswer(question);
-    const meta = [
-      `<span>분류: ${escapeHTML(result.category)}</span>`,
-      `<span>신뢰도: ${escapeHTML(result.confidence)}</span>`,
-      result.pages.length ? `<span>가이드북 p.${result.pages.join(", p.")}</span>` : ""
-    ].filter(Boolean).join("");
-    addMsg("bot", `
-      <div class="answer-title">${escapeHTML(result.title)}</div>
-      <div>${result.answer}</div>
-      <div class="meta">${meta}</div>
-    `);
-  }, 280);
-}
+  function send(q){
+    const text = (q || input.value).trim();
+    if(!text) return;
+    addMessage('user', escapeHtml(text));
+    input.value = '';
+    setTimeout(()=> addMessage('bot', getBotAnswer(text)), 180);
+  }
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const q = input.value.trim();
-  input.value = "";
-  ask(q);
-});
-
-$$("[data-question]").forEach(btn => {
-  btn.addEventListener("click", () => ask(btn.dataset.question));
-});
-
-function renderKB(filter=""){
-  const nf = normalize(filter);
-  kbList.innerHTML = "";
-  KB.filter(item => {
-    if(!nf) return true;
-    return normalize([item.title, item.category, item.answer, ...(item.keywords||[])].join(" ")).includes(nf);
-  }).forEach(item => {
-    const card = document.createElement("article");
-    card.className = "kb-item";
-    card.innerHTML = `
-      <span class="cat">${escapeHTML(item.category)}</span>
-      <h3>${escapeHTML(item.title)}</h3>
-      <p>${escapeHTML(item.answer.slice(0,150))}${item.answer.length > 150 ? "..." : ""}</p>
-      <div class="pages">Source: p.${item.pages.join(", p.")}</div>
-    `;
-    card.addEventListener("click", () => ask(item.title));
-    kbList.appendChild(card);
+  sendBtn.addEventListener('click', ()=>send());
+  input.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); }
+  });
+  document.querySelectorAll('.quickBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>send(btn.dataset.q));
+  });
+  document.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      activeIntent = chip.dataset.intent;
+      showToast(`업무 유형: ${chip.textContent}`);
+    });
+  });
+  clearBtn.addEventListener('click', ()=>{
+    messages.innerHTML = '';
+    init();
+    showToast('대화를 초기화했습니다.');
+  });
+  printBtn.addEventListener('click', ()=>window.print());
+  copyLastBtn.addEventListener('click', async ()=>{
+    if(!lastBotText){ showToast('복사할 답변이 없습니다.'); return; }
+    try{
+      await navigator.clipboard.writeText(lastBotText);
+      showToast('최근 답변을 복사했습니다.');
+    }catch(e){
+      showToast('브라우저 권한상 복사에 실패했습니다.');
+    }
   });
 
-  if(!kbList.children.length){
-    kbList.innerHTML = `<article class="kb-item"><span class="cat">검색</span><h3>검색 결과 없음</h3><p>다른 키워드로 검색해 주세요.</p></article>`;
+  function init(){
+    addMessage('bot', formatAnswer('안녕하세요. MISTO HR Assistant V2입니다', [
+      {type:'ok', head:'사용 방식', body:'연차, 근태, ERP 개인정보, 가족정보, 증빙, 급여 문의를 입력하면 실무 처리 순서에 맞춰 답변합니다.'},
+      {type:'process', head:'V2 개선점', body:'요약형 답변을 줄이고, CASE 판단 → 처리 프로세스 → 필요 자료 → 주의사항 구조로 안내합니다.'},
+      {type:'warn', head:'보안 안내', body:'주민등록번호 전체, 계좌번호 전체, 비밀번호 등은 이 화면에 입력하지 마세요. ERP 보안 화면 또는 회사 지정 경로를 사용해야 합니다.'}
+    ], ['업무처리형', 'CASE 분기', '민감정보 방어']), '안녕하세요. MISTO HR Assistant V2입니다. 연차, 근태, ERP 개인정보, 가족정보, 증빙, 급여 문의를 입력하면 실무 처리 순서에 맞춰 답변합니다.');
   }
-}
-renderKB();
-kbSearch.addEventListener("input", e => renderKB(e.target.value));
-
+  init();
+})();
 </script>
 </body>
 </html>
